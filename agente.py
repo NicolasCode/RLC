@@ -56,7 +56,7 @@ class Car(Agent):
         # initial values
         super().__init__()
         self.angle = 0 
-        self.range_angle = 369
+        self.range_angle = 360
         self.speed = 0
 
         # sensor values
