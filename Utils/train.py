@@ -1,8 +1,6 @@
 import Utils.utils as utils
 from os import path
 import gymnasium as gym
-import Environments as E
-from Environments.GridWorld.GridWorld import Gridworld
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
@@ -50,10 +48,6 @@ class TrainRun :
                                         render_mode=render_mode,\
                                         continuous=False
                                           )
-        elif 'Gridworld' in self.env_name:
-           size = int(self.env_name.split('-')[1])
-           mode = self.env_name.split('-')[2]
-           self.environment = Gridworld(size=size, mode=mode)
         else:
             print(self.env_name, self.env_name in ['MountainCar-v0'])
             raise Exception('Unknown environment. Please modify TrainRun.load_env() to include it.')

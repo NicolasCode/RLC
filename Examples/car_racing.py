@@ -17,7 +17,7 @@ def test():
         state_interpreter=gym_interpreter1,\
         agent=agent,\
         model_name='Sarsa',\
-        num_rounds=150,\
+        num_rounds=150+80,\
         num_episodes=1
         )
     # Show the untrained agent
