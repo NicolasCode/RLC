@@ -100,3 +100,45 @@ class FFN_D(torch.nn.Module):
         # Propagate to output layer
         out = self.fc4(out)
         return out
+    
+
+''' Convolutional network '''
+class CNN_CarRacing(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = torch.nn.Conv2d(3, 10, kernel_size=3, stride=1, padding=1)
+        self.maxpool1 = torch.nn.MaxPool2d(stride=2, kernel_size=2)
+        
+        self.conv2 = torch.nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1)
+        self.maxpool2 = torch.nn.MaxPool2d(stride=2, kernel_size=2)
+        
+        self.fc1 = torch.nn.Linear( 11520 , 2024)
+        self.fc2 = torch.nn.Linear( 2024 , 5 )
+
+    def forward(self, x_in):
+        out = self.conv1(x_in)
+        out = self.maxpool1(out)
+
+        out = self.conv2(out)
+        out = self.maxpool2(out)
+
+        out = torch.flatten(out)
+
+        out = self.fc1(out)
+        out = self.fc2(out)
+
+        return out
+
+''' 
+# Create an instance of the CNN model
+model = CNN()
+
+# Dummy input tensor with shape (batch_size, channels, height, width)
+input_tensor = torch.randn(1, 3, 96, 96)
+
+# Forward pass
+output = model(input_tensor)
+
+print("Input shape:", input_tensor.shape)
+print("Output shape:", output.shape)
+'''

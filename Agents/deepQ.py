@@ -4,7 +4,27 @@ Classes for implementing the Q functions with neural networks
 import torch
 import numpy as np
 from os import path
-from Agents.networks import FFN, FFN_D
+from Agents.networks import FFN, FFN_D, CNN_CarRacing
+
+class Uniform_testQ():
+    '''
+    Defines a Q function that returns 0 for all state, action pairs
+    '''
+    def __init__(self, parameters):
+        self.action = 0
+        self.nA= parameters["nA"]
+
+    def model(self, state):
+        return torch.Tensor([1 if i == self.action else 0 for i in range(self.nA)]).unsqueeze(axis=0)
+
+    def predict(self, state, action):
+        return 3
+    
+    def learn(self, state, action, update, alpha):
+        pass
+
+    def reset(self):
+        pass
 
 class NN_as_Q():
     '''
@@ -97,4 +117,13 @@ class FFNQ_D(NN_as_Q):
             hidden_size_3=parameters["hidden_size_3"],
             output_size=parameters["output_size"]
             )
+        super().__init__(parameters, model)
+
+
+class CNN(NN_as_Q):
+    '''
+    Defines a convolutional Network implementing a Q function
+    '''
+    def __init__(self, parameters):
+        model = CNN_CarRacing()
         super().__init__(parameters, model)

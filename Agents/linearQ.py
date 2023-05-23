@@ -13,7 +13,7 @@ class UniformQ():
         pass
 
     def predict(self, state, action):
-        return 0
+        return 3
     
     def learn(self, state, action, update, alpha):
         pass

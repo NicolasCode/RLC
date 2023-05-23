@@ -1,7 +1,7 @@
 from Utils.train import TrainRun
-from Agents.agentsCS import SarsaCS
-from Agents.linearQ import UniformQ
-from Utils.interpreters import gym_interpreter1
+from Agents.agentsCS import DQN 
+from Agents.deepQ import Uniform_testQ, CNN
+from Utils.interpreters import gym_interpreter2
 from Utils.utils import Plot
 import pandas as pd
 
@@ -10,14 +10,14 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_SarsaCS()
+    agent = load_DQN()
     # Create train-and-run object
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
-        state_interpreter=gym_interpreter1,\
+        state_interpreter=gym_interpreter2,\
         agent=agent,\
-        model_name='Sarsa',\
-        num_rounds=150+80,\
+        model_name='DQN',\
+        num_rounds=150+80 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -25,9 +25,9 @@ def test():
     act.run()
 
 
-def load_SarsaCS():
+def load_DQN():
     '''
-    Creates a SarsaCS agent with the given parameters
+    Creates a DQN agent with the given parameters
     '''
     # Set parameters
     parameters = {"numDims":2,\
@@ -35,15 +35,13 @@ def load_SarsaCS():
                   "gamma":1,\
                   "epsilon":0.1,\
                   "alpha":0.1,\
-                  "numTilings":8,\
-                  "numTiles":[10, 10],\
-                  "scaleFactors":[\
-                    {"min":-1.2,\
-                    "max":0.6},
-                    {"min":-0.07,\
-                      "max":0.07}]
+                  "c": 2,\
+                  "len_sample":1,\
                     }
     # Create function to approximate Q
-    Q = UniformQ(parameters=parameters)
+    # Q = Uniform_testQ(parameters=parameters)
+    # Q.action = 3 # Agent has to gas
+    Q = CNN(parameters=parameters)
     # Create and retur agent
-    return SarsaCS(parameters, Q)   
+    return DQN(parameters, Q)   
+
