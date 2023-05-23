@@ -24,6 +24,18 @@ def gym_interpreter1(state):
         state = state
     return state
 
+def gym_interpreter2(state):
+    '''
+    Cleans the state and get only the state space.
+    When states come from gymnasium, they contain 
+    additional info besides the state space. 
+    '''
+    if isinstance(state,tuple):
+        state = state[0]
+
+    state = np.transpose(state, (2,0,1))
+    return state   
+
 def gridW_nS_interpreter(state):
     '''
     Interprets Gridworld state as a ravel index.
