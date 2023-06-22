@@ -1,5 +1,5 @@
 from Utils.train import TrainRun
-from Agents.agentsCS import DQN 
+from Agents.agentsCS import DQN, OnlineQN
 from Agents.deepQ import Uniform_testQ, CNN
 from Utils.interpreters import gym_interpreter2
 from Utils.utils import Plot
@@ -10,24 +10,52 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN()
+    agent = load_OnlineQN(from_file=True)
     # Create train-and-run object
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter=gym_interpreter2,\
         agent=agent,\
-        model_name='DQN',\
-        num_rounds=150+80 ,\
+        model_name='OnlineQN',\
+        num_rounds=1500 ,\
         num_episodes=1
         )
     # Show the untrained agent
     print('Showing the untrained agent...')
     act.run()
 
-
-def load_DQN():
+def run():
     '''
-    Creates a DQN agent with the given parameters
+    Shows a episode of trained Racing car
+    '''
+    pass
+
+
+def train():
+    '''
+    Shows a random episode of the Mountain Car
+    '''
+    # Create agent
+    agent = load_OnlineQN()
+    # Create train-and-run object
+    act = TrainRun(\
+        env_name = 'CarRacing-v2',\
+        state_interpreter=gym_interpreter2,\
+        agent=agent,\
+        model_name='OnlineQN',\
+        num_rounds=500 ,\
+        num_episodes=1000
+        )
+    # Show the untrained agent
+    print('Training agent...')
+    act.train()    
+
+    act.agent.Q.save()
+    act.run()
+
+def load_OnlineQN(from_file = False):
+    '''
+    Creates a OnlineQN agent with the given parameters
     '''
     # Set parameters
     parameters = {"numDims":2,\
@@ -42,6 +70,8 @@ def load_DQN():
     # Q = Uniform_testQ(parameters=parameters)
     # Q.action = 3 # Agent has to gas
     Q = CNN(parameters=parameters)
+    if from_file:
+        Q.load()
     # Create and retur agent
-    return DQN(parameters, Q)   
+    return OnlineQN(parameters, Q)   
 

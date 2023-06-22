@@ -36,6 +36,7 @@ class NN_as_Q():
         self.loss_fn = torch.nn.MSELoss()
         self.losses = []
         self.model_file = path.join('data', 'ffn.pt')
+        self.model_file_trained = path.join('data', 'ffn_trained.pt')
         self.model = model
         # Save model for when reset is executed
         torch.save(self.model.state_dict(), self.model_file)
@@ -47,7 +48,10 @@ class NN_as_Q():
             # Gets predicted Q values
             Qs = self.model(torch.from_numpy(state).float())
             # Transforms to list
-            Qs = Qs.data.numpy()[0]
+            if len(Qs.shape) > 1:
+                Qs = Qs[0]
+
+            Qs = Qs.data.numpy()  
         return Qs[action]
     
     def learn(self, state, action, update, alpha):
@@ -127,3 +131,10 @@ class CNN(NN_as_Q):
     def __init__(self, parameters):
         model = CNN_CarRacing()
         super().__init__(parameters, model)
+
+    def save(self):
+        torch.save(self.model.state_dict(), self.model_file_trained)
+
+    def load(self):
+        self.model.load_state_dict(torch.load(self.model_file_trained))
+        self.model.eval()

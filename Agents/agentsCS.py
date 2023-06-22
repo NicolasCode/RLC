@@ -202,9 +202,10 @@ class OnlineQN(SarsaCS) :
         with torch.no_grad():
             # Gets predicted Q values
             Qs = self.Q.model(torch.from_numpy(state).float())
+            if len(Qs.shape) > 1:
+                Qs = Qs[0] 
             # Transforms to list
-            Qs = Qs.data.numpy()[0]
-            # print('Qs', Qs)
+            Qs = Qs.data.numpy() 
         # Determines max Q
         maxQ = max(Qs)
         # Determines ties with maxQ

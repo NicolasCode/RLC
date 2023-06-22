@@ -2,6 +2,8 @@
 Module with the state interpreters.
 '''
 import numpy as np
+import cv2
+import matplotlib.pyplot as plt
 
 def id_state(state):
     '''
@@ -33,7 +35,12 @@ def gym_interpreter2(state):
     if isinstance(state,tuple):
         state = state[0]
 
-    state = np.transpose(state, (2,0,1))
+    #print(state.shape)
+    state = cv2.resize(state, [32,32])    
+    state = cv2.cvtColor(state, cv2.COLOR_RGB2GRAY)
+    state = state/ 255
+    #plt.imshow(state, cmap="gray")
+    state = np.expand_dims(state, axis=0)
     return state   
 
 def gridW_nS_interpreter(state):

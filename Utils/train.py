@@ -48,6 +48,20 @@ class TrainRun :
                                         render_mode=render_mode,\
                                         continuous=False
                                           )
+                                          
+            special_reset = self.environment.reset
+            def reset():
+              state = self.environment.special_reset()
+              for i in range(80):
+                 self.environment.step(3)
+              state = self.environment.step(3)
+              return state
+              
+            setattr(self.environment, 'special_reset', special_reset)
+            setattr(self.environment, 'reset', reset)
+            
+            # Starting in frame 80
+
         else:
             print(self.env_name, self.env_name in ['MountainCar-v0'])
             raise Exception('Unknown environment. Please modify TrainRun.load_env() to include it.')
@@ -56,6 +70,9 @@ class TrainRun :
         '''
         Saves agent model to a file
         '''
+
+        # Save model for when reset is executed
+        #torch.save(self.model.state_dict(), self.model_file)
         pass
     
     def train(self):
