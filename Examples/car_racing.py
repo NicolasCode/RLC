@@ -1,7 +1,7 @@
 from Utils.train import TrainRun
 from Agents.agentsCS import DQN, OnlineQN
 from Agents.deepQ import Uniform_testQ, CNN
-from Utils.interpreters import gym_interpreter2
+from Utils.interpreters import gym_interpreter2, gym_interpreter3
 from Utils.utils import Plot
 import pandas as pd
 
@@ -14,7 +14,7 @@ def test():
     # Create train-and-run object
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
-        state_interpreter=gym_interpreter2,\
+        state_interpreter=gym_interpreter3,\
         agent=agent,\
         model_name='OnlineQN',\
         num_rounds=1500 ,\

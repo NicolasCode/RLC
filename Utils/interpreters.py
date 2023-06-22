@@ -43,6 +43,36 @@ def gym_interpreter2(state):
     state = np.expand_dims(state, axis=0)
     return state   
 
+def gym_interpreter3(state, last_state = None):
+    '''
+    Cleans the state and get only the state space.
+    When states come from gymnasium, they contain 
+    additional info besides the state space. 
+    '''
+    if isinstance(state,tuple):
+        state = state[0]
+
+    #print(state.shape)
+    state = cv2.resize(state, [32,32])    
+    state = cv2.cvtColor(state, cv2.COLOR_RGB2GRAY)
+    state = state/ 255
+    #plt.imshow(state, cmap="gray")
+    state = np.expand_dims(state, axis=0)
+    
+    if last_state is None:
+        return state
+    else:
+        # Superponer la imagen en stack sobre state
+        return state
+    
+    '''
+        stack = (state, state)
+    else:
+        stack = (stack[1], state)
+
+    return stack   
+    '''
+
 def gridW_nS_interpreter(state):
     '''
     Interprets Gridworld state as a ravel index.

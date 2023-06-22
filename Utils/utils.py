@@ -23,6 +23,7 @@ class Episode :
     def __init__(self, environment, agent, model_name:str, num_rounds:int, id:int=0, state_interpreter=id_state):
         self.environment = environment
         self.state_interpreter = state_interpreter
+        print(self.state_interpreter)
         self.agent = agent
         self.model_name = model_name
         self.num_rounds = num_rounds
@@ -51,8 +52,8 @@ class Episode :
         # Saves the action selected
         self.agent.actions.append(action)
         # Runs the environment and obtains the next_state, reward, done, info
-        result = self.environment.step(action)            
-        next_state = self.interpret_state(result[0])
+        result = self.environment.step(action)
+        next_state = self.interpret_state(result[0], last_state = self.agent.states[-1])
         reward = result[1]
         done = result[2]
         # Prints info
