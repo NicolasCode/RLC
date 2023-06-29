@@ -53,7 +53,7 @@ class Episode :
         self.agent.actions.append(action)
         # Runs the environment and obtains the next_state, reward, done, info
         result = self.environment.step(action)
-        next_state = self.interpret_state(result[0], last_state = self.agent.states[-1])
+        next_state = self.interpret_state(result[0])
         reward = result[1]
         done = result[2]
         # Prints info
@@ -203,7 +203,7 @@ class Episode :
         Interprets the state to do one or several tasks
         of reshaping and cleaning additional info
         '''
-        return self.state_interpreter(state)
+        return self.state_interpreter.interpret(state)
 
 class Plot :
     '''

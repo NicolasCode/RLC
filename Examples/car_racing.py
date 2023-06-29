@@ -1,7 +1,7 @@
 from Utils.train import TrainRun
 from Agents.agentsCS import DQN, OnlineQN
 from Agents.deepQ import Uniform_testQ, CNN
-from Utils.interpreters import gym_interpreter2, gym_interpreter3
+from Utils.interpreters import *
 from Utils.utils import Plot
 import pandas as pd
 
@@ -12,12 +12,13 @@ def test():
     # Create agent
     agent = load_OnlineQN(from_file=True)
     # Create train-and-run object
+    interpeter = gym_interpreter_3()
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
-        state_interpreter=gym_interpreter3,\
+        state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=1500 ,\
+        num_rounds=500 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -38,9 +39,10 @@ def train():
     # Create agent
     agent = load_OnlineQN()
     # Create train-and-run object
+    interpeter = gym_interpreter_3()
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
-        state_interpreter=gym_interpreter2,\
+        state_interpreter=interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
         num_rounds=500 ,\

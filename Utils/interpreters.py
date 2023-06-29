@@ -43,14 +43,18 @@ def gym_interpreter2(state):
     state = np.expand_dims(state, axis=0)
     return state   
 
-def gym_interpreter3(state, last_state = None):
+def gym_interpreter3(states):
     '''
     Cleans the state and get only the state space.
     When states come from gymnasium, they contain 
     additional info besides the state space. 
     '''
+    last_state = states[1]
+    state = states[0]
+
     if isinstance(state,tuple):
         state = state[0]
+
 
     #print(state.shape)
     state = cv2.resize(state, [32,32])    
@@ -62,6 +66,8 @@ def gym_interpreter3(state, last_state = None):
     if last_state is None:
         return state
     else:
+
+        state = np.add(0.4*last_state, state) 
         # Superponer la imagen en stack sobre state
         return state
     
@@ -72,6 +78,31 @@ def gym_interpreter3(state, last_state = None):
 
     return stack   
     '''
+
+class gym_interpreter_3:
+
+    def __init__(self):
+        self.last_state = np.zeros((32,32))
+        self.counter = 0
+        self.interval = 10
+
+    def interpret(self, state):
+        if isinstance(state,tuple):
+            state = state[0]
+    
+        state = cv2.resize(state, [32,32])    
+        state = cv2.cvtColor(state, cv2.COLOR_RGB2GRAY)
+        state = state/ 255
+        
+        if (self.counter % self.interval) == 0:
+            
+            state = np.add(0.4*self.last_state, state)
+
+            self.last_state = state
+            self.counter += 1
+
+        return np.expand_dims(state, axis=0)
+
 
 def gridW_nS_interpreter(state):
     '''
