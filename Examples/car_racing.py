@@ -10,7 +10,7 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_OnlineQN(from_file=True)
+    agent = load_OnlineQN(from_file=True, epsilon=0)
     # Create train-and-run object
     interpeter = gym_interpreter_3()
     act = TrainRun(\
@@ -18,7 +18,7 @@ def test():
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=500 ,\
+        num_rounds=200 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -46,7 +46,7 @@ def train():
         agent=agent,\
         model_name='OnlineQN',\
         num_rounds=500 ,\
-        num_episodes=1000
+        num_episodes=500
         )
     # Show the untrained agent
     print('Training agent...')
@@ -55,7 +55,7 @@ def train():
     act.agent.Q.save()
     act.run()
 
-def load_OnlineQN(from_file = False):
+def load_OnlineQN(from_file = False, epsilon = None):
     '''
     Creates a OnlineQN agent with the given parameters
     '''
@@ -63,7 +63,7 @@ def load_OnlineQN(from_file = False):
     parameters = {"numDims":2,\
                   "nA":5,\
                   "gamma":1,\
-                  "epsilon":0.1,\
+                  "epsilon":epsilon,\
                   "alpha":0.1,\
                   "c": 2,\
                   "len_sample":1,\

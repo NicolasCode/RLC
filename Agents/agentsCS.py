@@ -27,18 +27,40 @@ class AgentCS :
         assert(hasattr(Q, 'learn')), 'Q must be an object with a learn() method'
         assert(hasattr(Q, 'reset')), 'Q must be an object with a reset() method'
         self.Q = Q
+        self.numRound = 0
 
     def make_decision(self, state=None):
         '''
         Agent makes an epsilon greedy accion based on Q values.
         '''
-        if random.uniform(0,1) < self.epsilon:
+        epsilon = self._findEpsilon()
+
+        if random.uniform(0,1) < epsilon:
             return random.choice(range(self.nA))
         else:
             if state is None:
                 state = self.states[-1]
             return self.argmaxQ(state)        
 
+    def _findEpsilon(self):
+        if self.epsilon is None:
+                
+            self.numRound += 1
+            
+            if self.numRound < 100:
+                return 0.4
+            elif self.numRound < 200:
+                return 0.2 
+            elif self.numRound < 300:
+                return 0.1
+            elif self. numRound < 400:
+                return 0.05
+            else:
+                return 0
+            
+        else:
+            return self.epsilon
+        
     def restart(self):
         '''
         Restarts the agent for a new trial.
@@ -79,7 +101,12 @@ class AgentCS :
         '''
         pass
 
-
+class TargetNetwork(AgentCS):
+    '''
+    Target 
+    '''    
+    def __init__(self, parameters:dict, Q):
+        super().__init__(parameters, Q)
 
 class SarsaCS(AgentCS) :
     '''
