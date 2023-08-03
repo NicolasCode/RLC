@@ -66,6 +66,7 @@ class AgentCS :
         Restarts the agent for a new trial.
         Keeps the same Q for more learning.
         '''
+        self.numRound = 0
         self.states = []
         self.actions = []
         self.rewards = [np.nan]
@@ -326,7 +327,7 @@ class DQN(AgentCS) :
         # Determines Q values for all actions
         with torch.no_grad():
             # Gets predicted Q values
-            Qs = self.Q.model(torch.from_numpy(state).float())
+            Qs = self.Q_hat.model(torch.from_numpy(state).float())
             if len(Qs.shape) > 1:
                 Qs = Qs[0] 
             # Transforms to list
