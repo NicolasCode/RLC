@@ -4,6 +4,7 @@ import gymnasium as gym
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 
 class TrainRun :
     '''
@@ -72,7 +73,8 @@ class TrainRun :
         '''
 
         # Save model for when reset is executed
-        #torch.save(self.model.state_dict(), self.model_file)
+        # torch.save(self.model.state_dict(), self.model_file)
+        self.agent.Q.save()
         pass
     
     def train(self):
@@ -93,6 +95,7 @@ class TrainRun :
         print(f'Data saved to {self.file_csv}')
         # Save agent to file
         self.save_agent()
+        print(f'Model saved to {self.agent.Q.model_file_trained}')
         # Plot results
         p = utils.Plot(df)
         if self.num_episodes == 1:
@@ -143,7 +146,7 @@ class TrainRun :
                 state_interpreter=self.state_interpreter
                   )
           episode.run(verbose=4, learn=learn)
-        print('Number of rounds:', len(episode.agent.rewards) - 1)
+        print('Number of rounds:', episode.T - 1)
         print('Total reward:', np.nansum(episode.agent.rewards))
             
     def test(self, to_df=False):

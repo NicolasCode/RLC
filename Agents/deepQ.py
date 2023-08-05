@@ -4,7 +4,8 @@ Classes for implementing the Q functions with neural networks
 import torch
 import numpy as np
 from os import path
-from Agents.networks import FFN, FFN_D, CNN_CarRacing
+from Agents.networks import FFN, FFN_D, CNN_CarRacing, CNN_CarRacingL
+from collections import deque
 
 class Uniform_testQ():
     '''
@@ -57,17 +58,19 @@ class NN_as_Q():
     def learn(self, state, action, update, alpha):
         # Gets the predicted values by the network
         state_ = torch.from_numpy(state)
+        # print(f"State_ dims = {state_.size()}")
         qval = self.model(state_.float())
         # print('=>', qval, qval.shape)
         # Check if action is batch
-        if isinstance(action, list):
+        if isinstance(action, list) or isinstance(action, deque):
             # Confirm the number of actions
-            nA = self.parameters["output_size"]
+            nA = self.parameters["nA"]
             # Get the indices for the actions
             mask = torch.tensor([i*nA + a for i, a in enumerate(action)], dtype=torch.long)
-            # print('==>', mask)
+            # print('==>', mask.shape)
             # Keep only the q values corresponding to the actions
             X = torch.take(qval, mask)
+            # print(f"=> {X.shape}")
         else:
             # Keeps only the q value corresponding to the action
             X = qval.squeeze()[action]
@@ -103,7 +106,7 @@ class FFNQ(NN_as_Q):
         model = FFN(\
             input_size=parameters["input_size"],
             hidden_size=parameters["hidden_size"],
-            output_size=parameters["output_size"]
+            output_size=parameters["nA"]
             )
         super().__init__(parameters, model)
        
@@ -119,7 +122,7 @@ class FFNQ_D(NN_as_Q):
             hidden_size_1=parameters["hidden_size_1"],
             hidden_size_2=parameters["hidden_size_2"],
             hidden_size_3=parameters["hidden_size_3"],
-            output_size=parameters["output_size"]
+            output_size=parameters["nA"]
             )
         super().__init__(parameters, model)
 
@@ -130,6 +133,21 @@ class CNN(NN_as_Q):
     '''
     def __init__(self, parameters):
         model = CNN_CarRacing()
+        super().__init__(parameters, model)
+
+    def save(self):
+        torch.save(self.model.state_dict(), self.model_file_trained)
+
+    def load(self):
+        self.model.load_state_dict(torch.load(self.model_file_trained))
+        self.model.eval()
+
+class CNNL(NN_as_Q):
+    '''
+    Defines a convolutional Network implementing a Q function
+    '''
+    def __init__(self, parameters):
+        model = CNN_CarRacingL()
         super().__init__(parameters, model)
 
     def save(self):

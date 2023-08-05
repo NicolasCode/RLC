@@ -6,6 +6,7 @@ import numpy as np
 import random
 import torch
 from copy import deepcopy
+from collections import deque
 
 class AgentCS :
     '''
@@ -19,10 +20,12 @@ class AgentCS :
         self.gamma = self.parameters['gamma']
         self.epsilon = self.parameters['epsilon']
         self.alpha = self.parameters['alpha']
-        self.states = []
-        self.actions = []
-        self.rewards = [np.nan]
-        self.dones = [False]
+        self.states = deque(maxlen=32)
+        self.actions = deque(maxlen=32)
+        self.rewards = deque(maxlen=32)
+        self.rewards.append(np.nan)
+        self.dones = deque(maxlen=32)
+        self.dones.append(False)
         assert(hasattr(Q, 'predict')), 'Q must be an object with a predict() method'
         assert(hasattr(Q, 'learn')), 'Q must be an object with a learn() method'
         assert(hasattr(Q, 'reset')), 'Q must be an object with a reset() method'
@@ -47,13 +50,13 @@ class AgentCS :
                 
             self.numRound += 1
             
-            if self.numRound < 100:
+            if self.numRound < 20:
                 return 0.4
-            elif self.numRound < 200:
+            elif self.numRound < 40:
                 return 0.2 
-            elif self.numRound < 300:
+            elif self.numRound < 60:
                 return 0.1
-            elif self. numRound < 400:
+            elif self. numRound < 80:
                 return 0.05
             else:
                 return 0
@@ -67,10 +70,12 @@ class AgentCS :
         Keeps the same Q for more learning.
         '''
         self.numRound = 0
-        self.states = []
-        self.actions = []
-        self.rewards = [np.nan]
-        self.dones = [False]
+        self.states = deque(maxlen=32)
+        self.actions = deque(maxlen=32)
+        self.rewards = deque(maxlen=32)
+        self.rewards.append(np.nan)
+        self.dones = deque(maxlen=32)
+        self.dones.append(False)
 
     def reset(self):
         '''
@@ -192,8 +197,8 @@ class nStepCS(AgentCS) :
                 self.Q.learn(state, action, G, self.alpha)
 
         # Maintain working list of states and rewards
-        states = self.states + [next_state]
-        rewards = self.rewards + [reward]
+        states = self.states.append(next_state)
+        rewards = self.rewards.append(reward)
         # Check end of episode
         if done:
             # Update T with t + 1 
@@ -255,27 +260,29 @@ class DQN(AgentCS) :
     def __init__(self, parameters:dict, Q):
         super().__init__(parameters, Q)
         self.c = parameters["c"]
-        self.len_sample = parameters["len_sample"]
+        self.len_exp = parameters["len_exp"]
         self.Q_hat = deepcopy(Q)
+        self.len_mini_batch = parameters["len_mini_batch"]
 
     def update(self, next_state, reward, done):
         '''
         Agent updates Q with experience replay and updates target Q.
         '''
         n = len(self.actions)
-        k = self.len_sample
+        k = self.len_exp
         # Obtain indices for batch of experience
-        if n > k:
-            mask = random.sample(range(n), k)
+        if n < k:
+            #agent only learns with the enough experience
+            pass
         else:
-            mask = list(range(n))
-        # Get batch of experience
-        batch_states, batch_actions, batch_updates = self.create_batch(mask, next_state, reward, done)
-        # Update weights with batch
-        self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
-        # Check if it's turn to update the target network
-        if len(self.actions) % self.c == 0:
-            self.Q_hat = deepcopy(self.Q)
+            mask = random.sample(range(n), self.len_mini_batch)
+            # Get batch of experience
+            batch_states, batch_actions, batch_updates = self.create_batch(mask, next_state, reward, done)
+            # Update weights with batch
+            self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
+            # Check if it's turn to update the target network
+            if len(self.actions) % self.c == 0:
+                self.Q_hat = deepcopy(self.Q)
 
     def create_batch(self, mask:list, next_state, reward, done):
         '''
@@ -298,11 +305,11 @@ class DQN(AgentCS) :
         batch_actions = [self.actions[i] for i in range(len(self.actions)) if i in mask]
         # print('batch_actions:', batch_actions)
         # Get the updates for each corresponding action
-        states_ = self.states + [next_state]
+        states_ = [i for i in self.states] + [next_state]
         batch_next_states = [states_[i+1] for i in range(len(self.states)) if i in mask]
-        rewards_ = self.rewards + [reward]
+        rewards_ = [i for i in self.rewards] + [reward]
         batch_rewards = [rewards_[i+1] for i in range(len(self.states)) if i in mask]
-        dones_ = self.dones + [done]
+        dones_ = [i for i in self.dones] + [done]
         batch_dones = [dones_[i+1] for i in range(len(self.states)) if i in mask]
         batch_updates = [self.get_update(batch_next_states[i], batch_rewards[i], batch_dones[i]) for i in range(len(mask))]
         # batch_updates = torch.Tensor([batch_updates]).squeeze().detach()

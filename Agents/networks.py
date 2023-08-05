@@ -102,8 +102,43 @@ class FFN_D(torch.nn.Module):
         return out
     
 
-''' Convolutional network '''
+''' Convolutional networks '''
 class CNN_CarRacing(torch.nn.Module):
+    ''' Small CNN '''    
+    def __init__(self):
+        super().__init__()
+        # Recibiendo una imagen de  16*16*1 
+        self.conv1 = torch.nn.Conv2d(1,4, kernel_size=3,stride=1, padding=1)
+        self.maxpool1 = torch.nn.MaxPool2d(stride=2, kernel_size=2)
+
+        # Recibiendo tensor de 8*8*4 
+        self.conv2 = torch.nn.Conv2d(4,8, kernel_size=3,stride=1, padding=1)
+        self.maxpool2 = torch.nn.MaxPool2d(stride=2, kernel_size=2)
+
+        # Recibiendo tensor de 4*4*8
+        self.fc1 = torch.nn.Linear(128, 256)
+        self.fc2 = torch.nn.Linear(256,5)
+
+    def forward(self, x_in):
+        x_in = x_in.unsqueeze(dim=1)
+        out = self.conv1(x_in)
+        out = torch.nn.functional.relu(out)
+        out = self.maxpool1(out)
+
+        out = self.conv2(out)
+        out = torch.nn.functional.relu(out)
+        out = self.maxpool2(out)
+
+        out = torch.flatten(out, start_dim=1)
+
+        out = self.fc1(out)
+        out = torch.nn.functional.relu(out)
+        out = self.fc2(out)
+
+        return out
+
+class CNN_CarRacingL(torch.nn.Module):
+    '''Large CNN ''' 
     def __init__(self):
         super().__init__()
         self.conv1 = torch.nn.Conv2d(1, 10, kernel_size=3, stride=1, padding=1)
@@ -121,6 +156,7 @@ class CNN_CarRacing(torch.nn.Module):
         self.fc2 = torch.nn.Linear( 254 , 5 )
 
     def forward(self, x_in):
+        x_in = x_in.unsqueeze(dim=1)
         out = self.conv1(x_in)
         out = self.conv2(out)
         out = torch.nn.functional.relu(out)
@@ -131,7 +167,7 @@ class CNN_CarRacing(torch.nn.Module):
         out = torch.nn.functional.relu(out)
         out = self.maxpool2(out)
 
-        out = torch.flatten(out)
+        out = torch.flatten(out, start_dim=1)
 
         out = self.fc1(out)
         out = torch.nn.functional.relu(out)

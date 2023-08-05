@@ -88,6 +88,7 @@ class Episode :
             else:
                 break
         return self.to_pandas()
+        #return pd.DataFrame()
 
     def to_pandas(self) -> pd.DataFrame:
         '''
@@ -116,7 +117,8 @@ class Episode :
         data["action"] = []
         data["reward"] = []
         data["done"] = []
-        for r in range(self.T):
+        # for r in range(self.T):
+        for r in range(len(self.agent.rewards)):
             data["episode"].append(self.id)
             data["round"].append(r)
             data["state"].append(self.agent.states[r])

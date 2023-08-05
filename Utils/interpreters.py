@@ -81,16 +81,17 @@ def gym_interpreter3(states):
 
 class gym_interpreter_3:
 
-    def __init__(self):
-        self.last_state = np.zeros((32,32))
+    def __init__(self, size=32):
+        self.last_state = np.zeros((size,size))
         self.counter = 0
         self.interval = 10
+        self.size = size
 
     def interpret(self, state):
         if isinstance(state,tuple):
             state = state[0]
     
-        state = cv2.resize(state, [32,32])    
+        state = cv2.resize(state, [self.size,self.size])    
         state = cv2.cvtColor(state, cv2.COLOR_RGB2GRAY)
         state = state/ 255
         

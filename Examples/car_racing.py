@@ -10,15 +10,15 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_OnlineQN(from_file=True, epsilon=0)
+    agent = load_DQN(from_file=True, epsilon=0)
     # Create train-and-run object
-    interpeter = gym_interpreter_3()
+    interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=200 ,\
+        num_rounds=50 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -37,16 +37,16 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_OnlineQN()
+    agent = load_DQN()
     # Create train-and-run object
-    interpeter = gym_interpreter_3()
+    interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter=interpeter,\
         agent=agent,\
-        model_name='OnlineQN',\
-        num_rounds=500 ,\
-        num_episodes=500
+        model_name='DQN',\
+        num_rounds=150 ,\
+        num_episodes=100
         )
     # Show the untrained agent
     print('Training agent...')
@@ -66,7 +66,7 @@ def load_OnlineQN(from_file = False, epsilon = None):
                   "epsilon":epsilon,\
                   "alpha":0.1,\
                   "c": 2,\
-                  "len_sample":1,\
+                  "len_exp":1,\
                     }
     # Create function to approximate Q
     # Q = Uniform_testQ(parameters=parameters)
@@ -77,3 +77,25 @@ def load_OnlineQN(from_file = False, epsilon = None):
     # Create and retur agent
     return OnlineQN(parameters, Q)   
 
+def load_DQN(from_file = False, epsilon = None):
+    '''
+    Creates a DQN agent with the given parameters
+    '''
+    # Set parameters
+    parameters = {"numDims":2,\
+                  "nA":5,\
+                  "gamma":1,\
+                  "epsilon":epsilon,\
+                  "alpha":0.001,\
+                  "c": 32,\
+                  "len_exp":32,\
+                  "len_mini_batch":16,\
+                    }
+    # Create function to approximate Q
+    # Q = Uniform_testQ(parameters=parameters)
+    # Q.action = 3 # Agent has to gas
+    Q = CNN(parameters=parameters)
+    if from_file:
+        Q.load()
+    # Create and return agent
+    return DQN(parameters, Q)
