@@ -10,7 +10,7 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=True, epsilon=0)
+    agent = load_DQN(from_file=True, epsilon=0.001)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
@@ -18,12 +18,12 @@ def test():
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=50 ,\
+        num_rounds=250 ,\
         num_episodes=1
         )
     # Show the untrained agent
     print('Showing the untrained agent...')
-    act.run()
+    act.run(visual=True)
 
 def run():
     '''
@@ -37,7 +37,7 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN()
+    agent = load_DQN(from_file=False)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
@@ -45,7 +45,7 @@ def train():
         state_interpreter=interpeter,\
         agent=agent,\
         model_name='DQN',\
-        num_rounds=150 ,\
+        num_rounds=250 ,\
         num_episodes=100
         )
     # Show the untrained agent
@@ -87,9 +87,9 @@ def load_DQN(from_file = False, epsilon = None):
                   "gamma":1,\
                   "epsilon":epsilon,\
                   "alpha":0.001,\
-                  "c": 32,\
-                  "len_exp":32,\
-                  "len_mini_batch":16,\
+                  "c": 16,\
+                  "len_exp":16,\
+                  "len_mini_batch":8,\
                     }
     # Create function to approximate Q
     # Q = Uniform_testQ(parameters=parameters)

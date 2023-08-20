@@ -47,17 +47,38 @@ class TrainRun :
         elif self.env_name in ['CarRacing-v2']:
             self.environment = gym.make(self.env_name,\
                                         render_mode=render_mode,\
-                                        continuous=False
-                                          )
+                                        continuous=False,
+                                        lap_complete_percent = 0.1,\
+                                        domain_randomize = False,                                       
+                                        )
+            
+            special_step = self.environment.step
+            def step(action):
+              result = self.environment.special_step(action)
+
+              state = result[0]
+              reward = result[1]
+              done = result[2]
+
+              # Modificación de reward y done
+              reward = min(0, reward)
+              done = done or ((self.environment.tile_visited_count)/len(self.environment.track) > self.environment.lap_complete_percent)
+
+              if done:
+                 reward = 3
+
+              return (state,reward,done,result[3],result[4])
                                           
             special_reset = self.environment.reset
             def reset():
-              state = self.environment.special_reset()
+              state = self.environment.special_reset(options={"randomize":True}, seed=1)
               for i in range(80):
-                 self.environment.step(3)
-              state = self.environment.step(3)
+                 self.environment.step(4)
+              state = self.environment.step(4)
               return state
               
+            setattr(self.environment, 'special_step', special_step)
+            setattr(self.environment, 'step', step)
             setattr(self.environment, 'special_reset', special_reset)
             setattr(self.environment, 'reset', reset)
             

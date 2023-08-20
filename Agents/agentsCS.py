@@ -37,6 +37,7 @@ class AgentCS :
         Agent makes an epsilon greedy accion based on Q values.
         '''
         epsilon = self._findEpsilon()
+        # epsilon = self.epsilon
 
         if random.uniform(0,1) < epsilon:
             return random.choice(range(self.nA))
@@ -50,13 +51,13 @@ class AgentCS :
                 
             self.numRound += 1
             
-            if self.numRound < 20:
+            if self.numRound < 50:
                 return 0.4
-            elif self.numRound < 40:
+            elif self.numRound < 100:
                 return 0.2 
-            elif self.numRound < 60:
+            elif self.numRound < 150:
                 return 0.1
-            elif self. numRound < 80:
+            elif self. numRound < 200:
                 return 0.05
             else:
                 return 0

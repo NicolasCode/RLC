@@ -59,12 +59,16 @@ class Episode :
         # Prints info
         if verbose > 3:
             state = self.agent.states[-1]
-            print(f'\tThe state is => {state}')
+            # print(f'\tThe state is => {state}')
             print(f'\tAgent takes action => {action}')
-            print(f'\tThe state obtained is => {next_state}')
+            # print(f'\tThe state obtained is => {next_state}')
             print(f'\tThe reward obtained is => {reward}')
             print(f'\tEnvironment is finished? => {done}')
-        # Agent learns
+            print(f'\tLap percent => {self.environment.lap_complete_percent * 100} %')
+            print(f'\tEnviroment tiles visited => {self.environment.tile_visited_count} ( {self.environment.tile_visited_count/len(self.environment.track) * 100} %)')
+            print(f'\tEnviroment total tiles => {len(self.environment.track)}')
+            print(f'\tEnviroment new lap => {self.environment.new_lap}')
+            # Agent learns
         if learn:
             self.agent.update(next_state, reward, done)
         # Saves results
