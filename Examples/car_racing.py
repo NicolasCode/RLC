@@ -10,7 +10,7 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=True, epsilon=0.001)
+    agent = load_DQN(from_file=True, epsilon=0)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
@@ -18,12 +18,13 @@ def test():
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=250 ,\
+        num_rounds=60 ,\
         num_episodes=1
         )
     # Show the untrained agent
     print('Showing the untrained agent...')
     act.run(visual=True)
+    # act.test(to_df=True)
 
 def run():
     '''
@@ -37,7 +38,7 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=False)
+    agent = load_DQN(from_file=True, epsilon=None)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=16)
     act = TrainRun(\
@@ -45,7 +46,7 @@ def train():
         state_interpreter=interpeter,\
         agent=agent,\
         model_name='DQN',\
-        num_rounds=250 ,\
+        num_rounds=100 ,\
         num_episodes=100
         )
     # Show the untrained agent

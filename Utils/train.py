@@ -48,7 +48,7 @@ class TrainRun :
             self.environment = gym.make(self.env_name,\
                                         render_mode=render_mode,\
                                         continuous=False,
-                                        lap_complete_percent = 0.1,\
+                                        lap_complete_percent = 0.01,\
                                         domain_randomize = False,                                       
                                         )
             
@@ -61,11 +61,12 @@ class TrainRun :
               done = result[2]
 
               # Modificación de reward y done
-              reward = min(0, reward)
+              # reward = min(0, reward)
+              reward = -1
               done = done or ((self.environment.tile_visited_count)/len(self.environment.track) > self.environment.lap_complete_percent)
 
               if done:
-                 reward = 3
+                 reward = 0
 
               return (state,reward,done,result[3],result[4])
                                           
@@ -168,7 +169,7 @@ class TrainRun :
                   )
           episode.run(verbose=4, learn=learn)
         print('Number of rounds:', episode.T - 1)
-        print('Total reward:', np.nansum(episode.agent.rewards))
+        print('Total reward:', episode.agent.total_reward)
             
     def test(self, to_df=False):
         '''
@@ -187,7 +188,9 @@ class TrainRun :
         df = episode.simulate(num_episodes=self.num_episodes, learn=False)
         if to_df:
            # return dataframe
-           self.data = df
+          self.data = df
+          self.data.to_csv(self.file_csv)
+          print(f'Data saved to {self.file_csv}')
         else:
           # Plot results
           p = utils.Plot(df)

@@ -120,7 +120,9 @@ class CNN_CarRacing(torch.nn.Module):
         self.fc2 = torch.nn.Linear(256,5)
 
     def forward(self, x_in):
-        x_in = x_in.unsqueeze(dim=1)
+        if len(x_in.shape) == 3:
+            x_in = x_in.unsqueeze(dim=1)
+
         out = self.conv1(x_in)
         out = torch.nn.functional.relu(out)
         out = self.maxpool1(out)

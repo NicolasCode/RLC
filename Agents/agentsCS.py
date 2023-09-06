@@ -7,6 +7,8 @@ import random
 import torch
 from copy import deepcopy
 from collections import deque
+from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
 
 class AgentCS :
     '''
@@ -22,6 +24,7 @@ class AgentCS :
         self.alpha = self.parameters['alpha']
         self.states = deque(maxlen=32)
         self.actions = deque(maxlen=32)
+        self.total_reward = 0
         self.rewards = deque(maxlen=32)
         self.rewards.append(np.nan)
         self.dones = deque(maxlen=32)
@@ -50,15 +53,17 @@ class AgentCS :
         if self.epsilon is None:
                 
             self.numRound += 1
+
+            parameter = 100/5
             
-            if self.numRound < 50:
-                return 0.4
-            elif self.numRound < 100:
-                return 0.2 
-            elif self.numRound < 150:
-                return 0.1
-            elif self. numRound < 200:
-                return 0.05
+            if self.numRound < parameter*1:
+                return 0.6
+            elif self.numRound < parameter*2:
+                return 0.3 
+            elif self.numRound < parameter*3:
+                return 0.15
+            elif self. numRound < parameter*4:
+                return 0.075
             else:
                 return 0
             
@@ -75,6 +80,7 @@ class AgentCS :
         self.actions = deque(maxlen=32)
         self.rewards = deque(maxlen=32)
         self.rewards.append(np.nan)
+        self.total_reward = 0
         self.dones = deque(maxlen=32)
         self.dones.append(False)
 
@@ -251,8 +257,37 @@ class OnlineQN(SarsaCS) :
             print(opt_acts, maxQ)
             raise Exception('Oops')
 
+class ExperienceDataset(Dataset):
+    def __init__(self, agent, next_state, reward, done):
+        self.agent = agent
 
+        states = [state for state in agent.states]
+        self.states = np.array(states)
+        self.actions = [action for action in agent.actions]
 
+        next_states = [agent.states[i] for i in range(1, len(agent.states))] + [next_state]
+        next_states = np.array(next_states)
+        rewards = [agent.rewards[i] for i in range(1, len(agent.rewards))] + [reward]
+        dones = [agent.dones[i] for i in range(1, len(agent.dones))] + [done]
+
+        self.updates = [self.get_update(next_states[i], rewards[i], dones[i]) for i in range(len(self.states))]
+
+    def get_update(self, next_state, reward, done):
+        if done:
+            # Episode is finished. No need to bootstrap update
+            G = reward
+        else:
+            # Episode is active. Bootstrap update
+            next_action = self.agent.make_decision(next_state)
+            G = reward + self.agent.gamma * self.agent.Q_hat.predict(next_state, next_action)
+        return G    
+
+    def __len__(self):
+        return len(self.states)
+
+    def __getitem__(self, idx):
+        return self.states[idx], self.actions[idx], self.updates[idx]
+    
 class DQN(AgentCS) :
     '''
     Implements the Deep Q Network with 
@@ -276,14 +311,29 @@ class DQN(AgentCS) :
             #agent only learns with the enough experience
             pass
         else:
-            mask = random.sample(range(n), self.len_mini_batch)
+            # mask = random.sample(range(n), self.len_mini_batch)
             # Get batch of experience
-            batch_states, batch_actions, batch_updates = self.create_batch(mask, next_state, reward, done)
-            # Update weights with batch
-            self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
+            
+            # print(f'reward -> {reward}')
+            # print(f'done -> {done}')
+            ds_loader = self.create_DataLoader(next_state, reward, done)
+            for batch_states, batch_actions, batch_updates in ds_loader:
+                # Update weights with batch
+                # print(f" batch updates -> {batch_updates}")
+                self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
             # Check if it's turn to update the target network
             if len(self.actions) % self.c == 0:
                 self.Q_hat = deepcopy(self.Q)
+
+    def create_DataLoader(self, next_state, reward, done):
+        '''
+        Creates a DataLoader object with the experience of the agent.
+        '''
+        # Create dataset
+        ds = ExperienceDataset(self, next_state, reward, done)
+        # Create DataLoader
+        ds_loader = DataLoader(ds, batch_size=self.len_mini_batch, shuffle=True)
+        return ds_loader
 
     def create_batch(self, mask:list, next_state, reward, done):
         '''
@@ -317,15 +367,7 @@ class DQN(AgentCS) :
         # print('batch_updates:', batch_updates)
         return batch_states, batch_actions, batch_updates
 
-    def get_update(self, next_state, reward, done):
-        if done:
-            # Episode is finished. No need to bootstrap update
-            G = reward
-        else:
-            # Episode is active. Bootstrap update
-            next_action = self.make_decision(next_state)
-            G = reward + self.gamma * self.Q_hat.predict(next_state, next_action)
-        return G
+
 
     def argmaxQ(self, state):
         '''

@@ -57,31 +57,42 @@ class NN_as_Q():
     
     def learn(self, state, action, update, alpha):
         # Gets the predicted values by the network
-        state_ = torch.from_numpy(state)
+        if isinstance(state, np.ndarray):
+            state_ = torch.from_numpy(state)    
+        else:
+            state_ = state
+
         # print(f"State_ dims = {state_.size()}")
         qval = self.model(state_.float())
         # print('=>', qval, qval.shape)
         # Check if action is batch
-        if isinstance(action, list) or isinstance(action, deque):
+        # print("action = ", action, " and type = ", type(action), " and shape = ", action.shape)
+        if isinstance(action, list) or isinstance(action, deque) or isinstance(action, torch.Tensor):
             # Confirm the number of actions
             nA = self.parameters["nA"]
             # Get the indices for the actions
             mask = torch.tensor([i*nA + a for i, a in enumerate(action)], dtype=torch.long)
             # print('==>', mask.shape)
             # Keep only the q values corresponding to the actions
-            X = torch.take(qval, mask)
-            # print(f"=> {X.shape}")
+            Y_hat = torch.take(qval, mask)
+            # print(f"=> {Y_hat.shape}")
         else:
             # Keeps only the q value corresponding to the action
-            X = qval.squeeze()[action]
+            Y_hat = qval.squeeze()[action]
         # Adapts the update
+        # print("Update:", update,  " and shape -> ", update.shape)
         if isinstance(update, list):
             Y = torch.Tensor(update).detach()
+        elif isinstance(update, torch.Tensor):
+            Y = update.detach()
         else:
             Y = torch.Tensor([update]).squeeze().detach()
         # print('-->', qval, action, X, Y)
+        # Transforms to float Y_hat and Y
+        Y_hat = Y_hat.to(torch.float32)
+        Y = Y.to(torch.float32)
         # Determines the loss
-        loss = self.loss_fn(X, Y)
+        loss = self.loss_fn(Y_hat, Y)
         self.losses.append(loss.item())
         # Clears the gradient
         self.optimizer.zero_grad()

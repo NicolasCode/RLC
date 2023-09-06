@@ -5,6 +5,7 @@ Helper functions to gather, process and visualize data
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import torch
 from seaborn import lineplot, histplot
 from tqdm import tqdm
 from copy import deepcopy
@@ -59,7 +60,9 @@ class Episode :
         # Prints info
         if verbose > 3:
             state = self.agent.states[-1]
-            # print(f'\tThe state is => {state}')
+            print(f'\tThe state is => {state.mean()}, {state.min()}, {state.max()}, {state.std()}')
+            print(f'\tIs changing the state => {np.any(state != next_state)}')
+            print(f'\tNetwork Output => {self.agent.Q.model(torch.from_numpy(state).float())}')
             print(f'\tAgent takes action => {action}')
             # print(f'\tThe state obtained is => {next_state}')
             print(f'\tThe reward obtained is => {reward}')
@@ -74,6 +77,7 @@ class Episode :
         # Saves results
         self.agent.states.append(next_state)
         self.agent.rewards.append(reward)
+        self.agent.total_reward += reward
         self.agent.dones.append(done)
         # Updates round counter
         self.T += 1
@@ -121,6 +125,7 @@ class Episode :
         data["action"] = []
         data["reward"] = []
         data["done"] = []
+        data["total_reward"] = []
         # for r in range(self.T):
         for r in range(len(self.agent.rewards)):
             data["episode"].append(self.id)
@@ -129,6 +134,7 @@ class Episode :
             data["action"].append(self.agent.actions[r])
             data["reward"].append(self.agent.rewards[r])
             data["done"].append(self.agent.dones[r])
+            data["total_reward"].append(self.agent.total_reward)
         df = pd.DataFrame.from_dict(data)        
         df["model"] = self.model_name
         return df
@@ -301,8 +307,8 @@ class Plot :
             ax = histplot(x='reward', data=df)
         if file is not None:
             plt.savefig(file, dpi=300, bbox_inches="tight")
-        df = self.data.groupby(['model','episode']).reward.sum().reset_index()
-        total_reward = df.groupby('model').reward.mean()
+        df = self.data.groupby(['model','episode']).total_reward.unique().reset_index()
+        total_reward = df.groupby('model').total_reward.mean()
         print('Average sum of rewards:\n', total_reward)
         df = self.data.groupby(['model','episode']).done.sum().reset_index()
         success = df.groupby('model').done.mean()*100

@@ -84,7 +84,7 @@ class gym_interpreter_3:
     def __init__(self, size=32):
         self.last_state = np.zeros((size,size))
         self.counter = 0
-        self.interval = 10
+        self.interval = 1
         self.size = size
 
     def interpret(self, state):
@@ -97,7 +97,7 @@ class gym_interpreter_3:
         
         if (self.counter % self.interval) == 0:
             
-            state = np.add(0.4*self.last_state, state)
+            state = np.add(0.01*self.last_state, state)
 
             self.last_state = state
             self.counter += 1
