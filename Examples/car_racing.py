@@ -18,7 +18,7 @@ def test():
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=60 ,\
+        num_rounds=500 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -46,8 +46,8 @@ def train():
         state_interpreter=interpeter,\
         agent=agent,\
         model_name='DQN',\
-        num_rounds=100 ,\
-        num_episodes=100
+        num_rounds=200 ,\
+        num_episodes=500
         )
     # Show the untrained agent
     print('Training agent...')

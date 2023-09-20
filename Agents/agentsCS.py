@@ -318,11 +318,15 @@ class DQN(AgentCS) :
             # print(f'done -> {done}')
             ds_loader = self.create_DataLoader(next_state, reward, done)
             for batch_states, batch_actions, batch_updates in ds_loader:
+                # Transform tensors to gpu 
+                batch_actions = batch_actions.to("cuda")
+                batch_states = batch_states.to("cuda")
+                batch_updates = batch_updates.to("cuda")
                 # Update weights with batch
                 # print(f" batch updates -> {batch_updates}")
                 self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
             # Check if it's turn to update the target network
-            if len(self.actions) % self.c == 0:
+            if len(self.actions) % self.c == 0 or (done):
                 self.Q_hat = deepcopy(self.Q)
 
     def create_DataLoader(self, next_state, reward, done):
@@ -377,11 +381,12 @@ class DQN(AgentCS) :
         # Determines Q values for all actions
         with torch.no_grad():
             # Gets predicted Q values
-            Qs = self.Q_hat.model(torch.from_numpy(state).float())
+            tensor = torch.from_numpy(state).float().to("cuda")
+            Qs = self.Q_hat.model(tensor)
             if len(Qs.shape) > 1:
                 Qs = Qs[0] 
             # Transforms to list
-            Qs = Qs.data.numpy() 
+            Qs = Qs.data.to("cpu").numpy() 
         # Determines max Q
         maxQ = max(Qs)
         # Determines ties with maxQ

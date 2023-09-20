@@ -48,7 +48,7 @@ class TrainRun :
             self.environment = gym.make(self.env_name,\
                                         render_mode=render_mode,\
                                         continuous=False,
-                                        lap_complete_percent = 0.01,\
+                                        lap_complete_percent = 0.03,\
                                         domain_randomize = False,                                       
                                         )
             
