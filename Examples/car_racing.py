@@ -1,6 +1,6 @@
 from Utils.train import TrainRun
 from Agents.agentsCS import DQN, OnlineQN
-from Agents.deepQ import Uniform_testQ, CNN
+from Agents.deepQ import Uniform_testQ, CNN, CNNL
 from Utils.interpreters import *
 from Utils.utils import Plot
 import pandas as pd
@@ -12,13 +12,13 @@ def test():
     # Create agent
     agent = load_DQN(from_file=True, epsilon=0)
     # Create train-and-run object
-    interpeter = gym_interpreter_3(size=16)
+    interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='OnlineQN',\
-        num_rounds=500 ,\
+        num_rounds=250 ,\
         num_episodes=1
         )
     # Show the untrained agent
@@ -38,23 +38,25 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=True, epsilon=None)
+    agent = load_DQN(from_file=False, epsilon=None)
     # Create train-and-run object
-    interpeter = gym_interpreter_3(size=16)
+    interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter=interpeter,\
         agent=agent,\
         model_name='DQN',\
-        num_rounds=200 ,\
-        num_episodes=500
+        num_rounds=500 ,\
+        num_episodes=100
         )
     # Show the untrained agent
     print('Training agent...')
     act.train()    
-
-    act.agent.Q.save()
     act.run()
+
+    save = True if input("save model? (y/n)  ->  ").lower() == 'y' else False
+    if save:
+        act.agent.Q.save()
 
 def load_OnlineQN(from_file = False, epsilon = None):
     '''
@@ -72,7 +74,7 @@ def load_OnlineQN(from_file = False, epsilon = None):
     # Create function to approximate Q
     # Q = Uniform_testQ(parameters=parameters)
     # Q.action = 3 # Agent has to gas
-    Q = CNN(parameters=parameters)
+    Q = CNNL(parameters=parameters)
     if from_file:
         Q.load()
     # Create and retur agent
@@ -95,7 +97,7 @@ def load_DQN(from_file = False, epsilon = None):
     # Create function to approximate Q
     # Q = Uniform_testQ(parameters=parameters)
     # Q.action = 3 # Agent has to gas
-    Q = CNN(parameters=parameters)
+    Q = CNNL(parameters=parameters)
     if from_file:
         Q.load()
     # Create and return agent

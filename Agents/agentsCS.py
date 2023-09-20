@@ -34,6 +34,7 @@ class AgentCS :
         assert(hasattr(Q, 'reset')), 'Q must be an object with a reset() method'
         self.Q = Q
         self.numRound = 0
+        self.first_gas = False
 
     def make_decision(self, state=None):
         '''
@@ -51,19 +52,25 @@ class AgentCS :
 
     def _findEpsilon(self):
         if self.epsilon is None:
-                
-            self.numRound += 1
-
-            parameter = 100/5
             
+            self.numRound += 1
+                
+            if self.numRound < 100 and self.first_gas:
+                return 0
+            else:
+                self.first_gas = False
+                self.numRound = 0
+            
+            parameter = 100/5
+
             if self.numRound < parameter*1:
-                return 0.6
+                return 0.8
             elif self.numRound < parameter*2:
-                return 0.3 
+                return 0.4 
             elif self.numRound < parameter*3:
-                return 0.15
+                return 0.2
             elif self. numRound < parameter*4:
-                return 0.075
+                return 0.1
             else:
                 return 0
             
