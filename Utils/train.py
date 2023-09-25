@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import Utils.track_creating as tc
 
 class TrainRun :
     '''
@@ -48,7 +49,7 @@ class TrainRun :
             self.environment = gym.make(self.env_name,\
                                         render_mode=render_mode,\
                                         continuous=False,
-                                        lap_complete_percent = 0.03,\
+                                        lap_complete_percent = 0.01,\
                                         domain_randomize = False,                                       
                                         )
             
@@ -83,6 +84,15 @@ class TrainRun :
             setattr(self.environment, 'special_reset', special_reset)
             setattr(self.environment, 'reset', reset)
             
+
+            # Modificación de _create_track
+            def _create_track():
+              #res = self.environment.special_create_track()
+              print("modificamos")
+              return tc._create_track()
+
+            setattr(self.environment, '_create_track', _create_track)
+            # self.environment.reset()
             # Starting in frame 80
 
         else:
@@ -104,7 +114,7 @@ class TrainRun :
         Trains agent.
         '''
         # Creates environment
-        self.load_env(render_mode=None)
+        self.load_env(render_mode="human")
         # Creates episode
         episode = utils.Episode(environment=self.environment,\
                 agent=self.agent,\

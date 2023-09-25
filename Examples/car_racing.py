@@ -38,7 +38,7 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=False, epsilon=None)
+    agent = load_DQN(from_file=True, epsilon=None)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
@@ -46,7 +46,7 @@ def train():
         state_interpreter=interpeter,\
         agent=agent,\
         model_name='DQN',\
-        num_rounds=500 ,\
+        num_rounds=50 ,\
         num_episodes=100
         )
     # Show the untrained agent

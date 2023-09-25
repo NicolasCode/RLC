@@ -64,13 +64,13 @@ class AgentCS :
             parameter = 100/5
 
             if self.numRound < parameter*1:
-                return 0.8
+                return 0.6
             elif self.numRound < parameter*2:
-                return 0.4 
+                return 0.3 
             elif self.numRound < parameter*3:
-                return 0.2
+                return 0.15
             elif self. numRound < parameter*4:
-                return 0.1
+                return 0.075
             else:
                 return 0
             
@@ -326,9 +326,9 @@ class DQN(AgentCS) :
             ds_loader = self.create_DataLoader(next_state, reward, done)
             for batch_states, batch_actions, batch_updates in ds_loader:
                 # Transform tensors to gpu 
-                batch_actions = batch_actions.to("cuda")
-                batch_states = batch_states.to("cuda")
-                batch_updates = batch_updates.to("cuda")
+                batch_actions = batch_actions.to("cuda" if torch.cuda.is_available() else "cpu")
+                batch_states = batch_states.to("cuda" if torch.cuda.is_available() else "cpu")
+                batch_updates = batch_updates.to("cuda"  if torch.cuda.is_available() else "cpu")
                 # Update weights with batch
                 # print(f" batch updates -> {batch_updates}")
                 self.Q.learn(batch_states, batch_actions, batch_updates, self.alpha)
@@ -388,7 +388,7 @@ class DQN(AgentCS) :
         # Determines Q values for all actions
         with torch.no_grad():
             # Gets predicted Q values
-            tensor = torch.from_numpy(state).float().to("cuda")
+            tensor = torch.from_numpy(state).float().to("cuda" if torch.cuda.is_available() else "cpu")
             Qs = self.Q_hat.model(tensor)
             if len(Qs.shape) > 1:
                 Qs = Qs[0] 

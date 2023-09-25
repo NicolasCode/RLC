@@ -38,7 +38,7 @@ class NN_as_Q():
         self.losses = []
         self.model_file = path.join('data', 'ffn.pt')
         self.model_file_trained = path.join('data', 'ffn_trained.pt')
-        self.model = model.to("cuda")
+        self.model = model.to("cuda" if torch.cuda.is_available() else "cpu")
         # Save model for when reset is executed
         torch.save(self.model.state_dict(), self.model_file)
         # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=alpha)
@@ -47,7 +47,7 @@ class NN_as_Q():
     def predict(self, state, action, noise=False):
         with torch.no_grad():
             # Gets predicted Q values
-            tensor = torch.from_numpy(state).float().to("cuda")
+            tensor = torch.from_numpy(state).float().to("cuda" if torch.cuda.is_available() else "cpu")
             Qs = self.model(tensor)
             # Transforms to list
             if len(Qs.shape) > 1:
@@ -72,7 +72,7 @@ class NN_as_Q():
             # Confirm the number of actions
             nA = self.parameters["nA"]
             # Get the indices for the actions
-            mask = torch.tensor([i*nA + a for i, a in enumerate(action)], dtype=torch.long).to("cuda")
+            mask = torch.tensor([i*nA + a for i, a in enumerate(action)], dtype=torch.long).to()
             # print('==>', mask.shape)
             # Keep only the q values corresponding to the actions
             Y_hat = torch.take(qval, mask)
