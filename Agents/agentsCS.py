@@ -295,6 +295,28 @@ class ExperienceDataset(Dataset):
     def __getitem__(self, idx):
         return self.states[idx], self.actions[idx], self.updates[idx]
     
+
+class PPO():
+
+    def __init__(self, parameters:dict, policy):
+        self.policy, self.value = policy
+
+    def update(self, states, actions, rewards):
+        states = torch.tensor(states).to("cuda" is torch.cuda.is_available else "cpu")
+        actions = torch.tensor(actions, dtype=torch.int64).to("cuda" is torch.cuda.is_available else "cpu")
+        returns = torch.tensor(returns).to("cuda" is torch.cuda.is_available else "cpu")
+
+        # Compute advantages
+        values = self.value(states).squeeze()
+        advantages = returns - values
+
+        # use advantages to update policy
+        self.policy.update(states, actions, advantages)
+
+    def reset(self):
+        self.policy.reset()
+        self.value.reset()
+
 class DQN(AgentCS) :
     '''
     Implements the Deep Q Network with 
@@ -377,7 +399,7 @@ class DQN(AgentCS) :
         # batch_updates = torch.Tensor([batch_updates]).squeeze().detach()
         # print('batch_updates:', batch_updates)
         return batch_states, batch_actions, batch_updates
-
+    
 
 
     def argmaxQ(self, state):

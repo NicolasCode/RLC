@@ -179,6 +179,52 @@ class CNN_CarRacingL(torch.nn.Module):
 
         return out
 
+class CNN_CarRacingPPO(torch.nn.Module):
+    '''Large CNN ''' 
+    def __init__(self):
+        super().__init__()
+        
+        # shared layers
+        self.shared_layers = torch.nn.Sequential(
+            torch.nn.Conv2d(1, 10, kernel_size=3, stride=1, padding=1),
+            torch.nn.Conv2d(10, 10, kernel_size=3, stride=1, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(stride=2, kernel_size=2),
+
+            torch.nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1),
+            torch.nn.Conv2d(20, 20, kernel_size=3, stride=1, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(stride=2, kernel_size=2),
+        )
+            
+        # policy layers
+        self.policy_layers = torch.nn.Sequential(
+            torch.nn.Linear( 1280 , 254) ,
+            torch.nn.ReLU(),
+            torch.nn.Linear( 254 , 5 )
+        )
+    
+        # value layers
+        self.value_layers = torch.nn.Sequential(
+            torch.nn.Linear( 1280 , 254) ,
+            torch.nn.ReLU(),
+            torch.nn.Linear( 254 , 1 )
+        )
+
+    def forward(self, x_in):
+        if len(x_in.shape) == 3:
+            x_in = x_in.unsqueeze(dim=1)
+            
+        
+        out = self.shared_layers(x_in)
+        
+        out = torch.flatten(out, start_dim=1)
+
+        policy = self.policy_layers(out)
+        value = self.value_layers(out)
+
+        return policy, value
+
 ''' 
 # Create an instance of the CNN model
 model = CNN()
