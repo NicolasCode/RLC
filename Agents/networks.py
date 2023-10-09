@@ -181,49 +181,58 @@ class CNN_CarRacingL(torch.nn.Module):
 
 class CNN_CarRacingPPO(torch.nn.Module):
     '''Large CNN ''' 
-    def __init__(self):
+    def __init__(self, nA:int):
         super().__init__()
         
         # shared layers
         self.shared_layers = torch.nn.Sequential(
+            # First convolutional layer
             torch.nn.Conv2d(1, 10, kernel_size=3, stride=1, padding=1),
             torch.nn.Conv2d(10, 10, kernel_size=3, stride=1, padding=1),
             torch.nn.ReLU(),
             torch.nn.MaxPool2d(stride=2, kernel_size=2),
-
+            # Second convolutional layer
             torch.nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1),
             torch.nn.Conv2d(20, 20, kernel_size=3, stride=1, padding=1),
             torch.nn.ReLU(),
-            torch.nn.MaxPool2d(stride=2, kernel_size=2),
-        )
-            
+            torch.nn.MaxPool2d(stride=2, kernel_size=2))
         # policy layers
         self.policy_layers = torch.nn.Sequential(
             torch.nn.Linear( 1280 , 254) ,
             torch.nn.ReLU(),
-            torch.nn.Linear( 254 , 5 )
-        )
-    
+            torch.nn.Linear( 254 , nA ))
         # value layers
         self.value_layers = torch.nn.Sequential(
             torch.nn.Linear( 1280 , 254) ,
             torch.nn.ReLU(),
-            torch.nn.Linear( 254 , 1 )
-        )
+            torch.nn.Linear( 254 , 1 ))
 
     def forward(self, x_in):
         if len(x_in.shape) == 3:
             x_in = x_in.unsqueeze(dim=1)
-            
-        
         out = self.shared_layers(x_in)
-        
         out = torch.flatten(out, start_dim=1)
-
         policy = self.policy_layers(out)
         value = self.value_layers(out)
-
         return policy, value
+    
+    def policy(self, x_in):
+        '''Required for training'''
+        if len(x_in.shape) == 3:
+            x_in = x_in.unsqueeze(dim=1)
+        out = self.shared_layers(x_in)
+        out = torch.flatten(out, start_dim=1)
+        policy_logits = self.policy_layers(out)
+        return policy_logits
+
+    def value(self, obs):
+        '''Required for training'''
+        if len(x_in.shape) == 3:
+            x_in = x_in.unsqueeze(dim=1)
+        out = self.shared_layers(x_in)
+        out = torch.flatten(out, start_dim=1)
+        value = self.value_layers(out)
+        return value
 
 ''' 
 # Create an instance of the CNN model

@@ -296,15 +296,16 @@ class ExperienceDataset(Dataset):
         return self.states[idx], self.actions[idx], self.updates[idx]
     
 
+
 class PPO():
 
     def __init__(self, parameters:dict, policy):
         self.policy, self.value = policy
 
     def update(self, states, actions, rewards):
-        states = torch.tensor(states).to("cuda" is torch.cuda.is_available else "cpu")
-        actions = torch.tensor(actions, dtype=torch.int64).to("cuda" is torch.cuda.is_available else "cpu")
-        returns = torch.tensor(returns).to("cuda" is torch.cuda.is_available else "cpu")
+        states = torch.tensor(states).to("cuda" if torch.cuda.is_available else "cpu")
+        actions = torch.tensor(actions, dtype=torch.int64).to("cuda" if torch.cuda.is_available else "cpu")
+        returns = torch.tensor(returns).to("cuda" if torch.cuda.is_available else "cpu")
 
         # Compute advantages
         values = self.value(states).squeeze()
@@ -316,6 +317,8 @@ class PPO():
     def reset(self):
         self.policy.reset()
         self.value.reset()
+
+
 
 class DQN(AgentCS) :
     '''
@@ -337,12 +340,11 @@ class DQN(AgentCS) :
         k = self.len_exp
         # Obtain indices for batch of experience
         if n < k:
-            #agent only learns with the enough experience
+            #agent only learns with enough experience
             pass
         else:
             # mask = random.sample(range(n), self.len_mini_batch)
             # Get batch of experience
-            
             # print(f'reward -> {reward}')
             # print(f'done -> {done}')
             ds_loader = self.create_DataLoader(next_state, reward, done)
