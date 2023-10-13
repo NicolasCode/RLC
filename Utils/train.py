@@ -114,7 +114,7 @@ class TrainRun :
         Trains agent.
         '''
         # Creates environment
-        self.load_env(render_mode="human")
+        self.load_env(render_mode=None)
         # Creates episode
         episode = utils.Episode(environment=self.environment,\
                 agent=self.agent,\
@@ -125,9 +125,6 @@ class TrainRun :
         # Run simulation
         df = episode.simulate(num_episodes=self.num_episodes, file=self.file_csv)
         print(f'Data saved to {self.file_csv}')
-        # Save agent to file
-        self.save_agent()
-        print(f'Model saved to {self.agent.Q.model_file_trained}')
         # Plot results
         p = utils.Plot(df)
         if self.num_episodes == 1:
@@ -136,14 +133,15 @@ class TrainRun :
           p.plot_rewards(file=self.file_png) 
         print(f'Plot saved to {self.file_png}')
         # Save losses if agent uses NN
-        if hasattr(self.agent.Q, 'losses'):
-          losses = self.agent.Q.losses
-          fig, ax = plt.subplots(figsize=(4,3.5))
-          ax = sns.lineplot(x=range(len(losses)), y=losses)
-          ax.set_xlabel("Epoch",fontsize=14)
-          ax.set_ylabel("Loss",fontsize=14)
-          plt.savefig(self.file_losses, dpi=300, bbox_inches="tight")
-          print(f'Plot saved to {self.file_losses}')
+        
+        # if hasattr(self.agent.Q, 'losses'):
+        #   losses = self.agent.Q.losses
+        #   fig, ax = plt.subplots(figsize=(4,3.5))
+        #   ax = sns.lineplot(x=range(len(losses)), y=losses)
+        #   ax.set_xlabel("Epoch",fontsize=14)
+        #   ax.set_ylabel("Loss",fontsize=14)
+        #   plt.savefig(self.file_losses, dpi=300, bbox_inches="tight")
+        #   print(f'Plot saved to {self.file_losses}')
 
     def run(self, visual=True, learn=False, fast=True):
         '''

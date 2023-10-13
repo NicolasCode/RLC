@@ -225,7 +225,7 @@ class CNN_CarRacingPPO(torch.nn.Module):
         policy_logits = self.policy_layers(out)
         return policy_logits
 
-    def value(self, obs):
+    def value(self, x_in):
         '''Required for training'''
         if len(x_in.shape) == 3:
             x_in = x_in.unsqueeze(dim=1)

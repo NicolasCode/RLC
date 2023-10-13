@@ -1,6 +1,7 @@
 from Utils.train import TrainRun
 from Agents.agentsCS import DQN, OnlineQN
 from Agents.deepQ import Uniform_testQ, CNN, CNNL
+from Agents.BaseAgent import PPOAgent as PPO
 from Utils.interpreters import *
 from Utils.utils import Plot
 import pandas as pd
@@ -10,14 +11,15 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=True, epsilon=0)
+    agent = load_ppo()
+    # agent = load_DQN(from_file=True, epsilon=0)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter= interpeter,\
         agent=agent,\
-        model_name='OnlineQN',\
+        model_name='PPO',\
         num_rounds=250 ,\
         num_episodes=1
         )
@@ -38,14 +40,14 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_DQN(from_file=True, epsilon=None)
+    agent = load_ppo()
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter=interpeter,\
         agent=agent,\
-        model_name='DQN',\
+        model_name='PPO',\
         num_rounds=50 ,\
         num_episodes=100
         )
@@ -56,7 +58,31 @@ def train():
 
     save = True if input("save model? (y/n)  ->  ").lower() == 'y' else False
     if save:
-        act.agent.Q.save()
+        act.agent.save()
+
+def load_ppo(from_file = False, epsilon = None):
+   '''
+    Creates a PPO agent with the given parameters
+    '''
+   
+   #set parameters
+   parameters = {"numDims":2,\
+                "nA":5,\
+                "gamma":1,\
+                "epsilon":epsilon,\
+                "alpha_policy": 0.001,\
+                "alpha_value" : 0.001,\
+                "ppo_clip_val":0.2,\
+                "target_kl_div":0.01,\
+                "max_policy_train_iters":80,\
+                "value_train_iters":80,\
+                "ppo_epochs":16,\
+                "len_exp":16,\
+                 }
+   
+#    model = CNN_CarRacingPPO()
+
+   return PPO(parameters)
 
 def load_OnlineQN(from_file = False, epsilon = None):
     '''
