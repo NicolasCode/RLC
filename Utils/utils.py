@@ -62,7 +62,11 @@ class Episode :
             state = self.agent.states[-1]
             print(f'\tThe state is => {state.mean()}, {state.min()}, {state.max()}, {state.std()}')
             print(f'\tIs changing the state => {np.any(state != next_state)}')
-            print(f'\tNetwork Output => {self.agent.Q.model(torch.from_numpy(state).float())}')
+            if hasattr(self.agent, 'Q'):
+                print(f'\tNetwork Output => {self.agent.Q.model(torch.from_numpy(state).float())}')
+            if hasattr(self.agent, 'net'):
+                print(f'\tNetwork Output 1=> {self.agent.net(torch.from_numpy(state).float())[0].detach().numpy()}')
+                print(f'\tNetwork Output 2=> {self.agent.net(torch.from_numpy(state).float())[1].detach().numpy()}')
             print(f'\tAgent takes action => {action}')
             # print(f'\tThe state obtained is => {next_state}')
             print(f'\tThe reward obtained is => {reward}')

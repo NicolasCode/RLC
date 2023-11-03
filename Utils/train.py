@@ -49,7 +49,7 @@ class TrainRun :
             self.environment = gym.make(self.env_name,\
                                         render_mode=render_mode,\
                                         continuous=False,
-                                        lap_complete_percent = 0.01,\
+                                        lap_complete_percent = 0.08,\
                                         domain_randomize = False,                                       
                                         )
             
@@ -64,17 +64,22 @@ class TrainRun :
               # Modificación de reward y done
               # reward = min(0, reward)
               reward = -1
-              done = done or ((self.environment.tile_visited_count)/len(self.environment.track) > self.environment.lap_complete_percent)
-
-              if done:
-                 reward = 0
+              percent = (self.environment.tile_visited_count)/len(self.environment.track)  
+              target = self.environment.lap_complete_percent
+              done = done or (percent >= target)
+              # points = [target, target/2, target/4]
+              # print(self.environment.clock)
+              if (percent >= target):
+                 reward = 10
 
               return (state,reward,done,result[3],result[4])
                                           
             special_reset = self.environment.reset
             def reset():
               state = self.environment.special_reset(options={"randomize":True}, seed=1)
-              for i in range(80):
+              for i in range(90):
+                 self.environment.step(3)
+              for i in range(10):
                  self.environment.step(4)
               state = self.environment.step(4)
               return state

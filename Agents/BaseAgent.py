@@ -8,6 +8,7 @@ from torch.distributions.categorical import Categorical
 from torch.utils.data import Dataset, DataLoader
 from Agents.networks import CNN_CarRacingPPO
 from os import path
+from tqdm import tqdm
 
 
 class ExperienceDataset(Dataset):
@@ -63,8 +64,11 @@ class PPOAgent:
         self.gamma = self.parameters['gamma']
         self.ppo_clip_val = self.parameters['ppo_clip_val']
         self.target_kl_div = self.parameters['target_kl_div']
-        self.max_policy_train_iters = self.parameters['max_policy_train_iters']
-        self.value_train_iters = self.parameters['value_train_iters']
+        self.epochs = self.parameters['epochs']
+        # self.max_policy_train_iters = self.parameters['max_policy_train_iters']
+        self.max_policy_train_iters = 1
+        # self.value_train_iters = self.parameters['value_train_iters']
+        self.value_train_iters = 1
         self.len_mini_batch = self.parameters['len_exp']
         self.states = []
         self.actions = []
@@ -75,7 +79,8 @@ class PPOAgent:
         self.net = CNN_CarRacingPPO(self.nA)
         self.backup_net = deepcopy(self.net)
         parameters_policy = list(self.net.shared_layers.parameters()) + list(self.net.policy_layers.parameters())
-        parameters_values = list(self.net.shared_layers.parameters()) + list(self.net.value_layers.parameters())
+        # parameters_values = list(self.net.shared_layers.parameters()) + list(self.net.value_layers.parameters())
+        parameters_values = list(self.net.value_layers.parameters()) 
         self.policy_optim = torch.optim.Adam(parameters_policy, lr=self.parameters['alpha_policy'])
         self.value_optim = torch.optim.Adam(parameters_values, lr=self.parameters['alpha_value'])
 
@@ -127,16 +132,17 @@ class PPOAgent:
             # print("lens:")
             # print(len(states), len(actions), len(rewards), len(values), len(act_log_probs))
             ds_loader = self.create_DataLoader(states, actions, rewards[1:], values, act_log_probs)
-            for batch_states, batch_actions, batch_act_log_probs, batch_gaes, batch_returns in ds_loader:
-                # Transform tensors to gpu 
-                batch_actions = batch_actions.to("cuda" if torch.cuda.is_available() else "cpu")
-                batch_states = batch_states.to("cuda" if torch.cuda.is_available() else "cpu")
-                batch_act_log_probs = batch_act_log_probs.to("cuda"  if torch.cuda.is_available() else "cpu")
-                batch_gaes = batch_gaes.to("cuda"  if torch.cuda.is_available() else "cpu")
-                batch_returns = batch_returns.to("cuda"  if torch.cuda.is_available() else "cpu")
-                # Update weights with batch
-                self.train_policy(batch_states, batch_actions, batch_act_log_probs, batch_gaes)
-                self.train_value(batch_states, batch_returns)
+            for i in tqdm(range(self.epochs)):
+                for batch_states, batch_actions, batch_act_log_probs, batch_gaes, batch_returns in ds_loader:
+                    # Transform tensors to gpu 
+                    batch_actions = batch_actions.to("cuda" if torch.cuda.is_available() else "cpu")
+                    batch_states = batch_states.to("cuda" if torch.cuda.is_available() else "cpu")
+                    batch_act_log_probs = batch_act_log_probs.to("cuda"  if torch.cuda.is_available() else "cpu")
+                    batch_gaes = batch_gaes.to("cuda"  if torch.cuda.is_available() else "cpu")
+                    batch_returns = batch_returns.to("cuda"  if torch.cuda.is_available() else "cpu")
+                    # Update weights with batch
+                    self.train_policy(batch_states, batch_actions, batch_act_log_probs, batch_gaes)
+                    self.train_value(batch_states, batch_returns)
 
     def train_policy(self, obs, acts, old_log_probs, gaes):
         for _ in range(self.max_policy_train_iters):
@@ -165,11 +171,11 @@ class PPOAgent:
             value_loss.backward()
             self.value_optim.step()
 
-    def save(self) -> None:
-        torch.save(self.net.state_dict(), path.join('data', 'ppo_trained.pt'))
+    def save(self, name = "base") -> None:
+        torch.save(self.net.state_dict(), path.join('data', f'ppo_{name}_trained.pt'))
     
-    def load(self):
-        self.net.load_state_dict(torch.load(path.join('data', 'ppo_trained.pt')))
+    def load(self, name = "base"):
+        self.net.load_state_dict(torch.load(path.join('data', f'ppo_{name}_trained.pt')))
         self.net.eval()
         
     def create_DataLoader(self, states, actions, rewards, values, act_log_probs):

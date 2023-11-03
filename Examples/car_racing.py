@@ -20,10 +20,11 @@ def test():
         state_interpreter= interpeter,\
         agent=agent,\
         model_name='PPO',\
-        num_rounds=250 ,\
+        num_rounds=500 ,\
         num_episodes=1
         )
     # Show the untrained agent
+    act.agent.load(name="prototipe2_1")
     print('Showing the untrained agent...')
     act.run(visual=True)
     # act.test(to_df=True)
@@ -41,24 +42,27 @@ def train():
     '''
     # Create agent
     agent = load_ppo()
+
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
     act = TrainRun(\
         env_name = 'CarRacing-v2',\
         state_interpreter=interpeter,\
         agent=agent,\
-        model_name='PPO',\
-        num_rounds=50 ,\
+        model_name='PPO_8_percent',\
+        num_rounds=1000 ,\
         num_episodes=100
-        )
+        ) # maximun 10 episodes per training
     # Show the untrained agent
+
+    act.agent.load(name="prototipe2_1")
     print('Training agent...')
     act.train()    
     act.run()
 
     save = True if input("save model? (y/n)  ->  ").lower() == 'y' else False
     if save:
-        act.agent.save()
+        act.agent.save(name="prototipe2_1")
 
 def load_ppo(from_file = False, epsilon = None):
    '''
@@ -68,17 +72,17 @@ def load_ppo(from_file = False, epsilon = None):
    #set parameters
    parameters = {"numDims":2,\
                 "nA":5,\
-                "gamma":1,\
+                "gamma":0.98,\
                 "epsilon":epsilon,\
-                "alpha_policy": 0.001,\
-                "alpha_value" : 0.001,\
-                "ppo_clip_val":0.2,\
-                "target_kl_div":0.01,\
-                "max_policy_train_iters":80,\
-                "value_train_iters":80,\
-                "ppo_epochs":16,\
-                "len_exp":16,\
-                 }
+                "alpha_policy": 0.01,\
+                "alpha_value" : 0.003,\
+                "ppo_clip_val":0.1,\
+                "target_kl_div":0.2,\
+                "max_policy_train_iters":40,\
+                "value_train_iters":40,\
+                "len_exp":8,\
+                "epochs":300,\
+                 } # alpha policy > alpha value
    
 #    model = CNN_CarRacingPPO()
 
