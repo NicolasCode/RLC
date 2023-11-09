@@ -11,7 +11,7 @@ def test():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_ppo()
+    agent = load_DQN(from_file=True, epsilon=0)
     # agent = load_DQN(from_file=True, epsilon=0)
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
@@ -19,12 +19,12 @@ def test():
         env_name = 'CarRacing-v2',\
         state_interpreter= interpeter,\
         agent=agent,\
-        model_name='PPO',\
+        model_name='DQN',\
         num_rounds=500 ,\
         num_episodes=1
         )
     # Show the untrained agent
-    act.agent.load(name="prototipe2_1")
+    # act.agent.load(name="prototipe2_1")
     print('Showing the untrained agent...')
     act.run(visual=True)
     # act.test(to_df=True)
@@ -41,7 +41,7 @@ def train():
     Shows a random episode of the Mountain Car
     '''
     # Create agent
-    agent = load_ppo()
+    agent = load_DQN(from_file=False, epsilon=0.5)
 
     # Create train-and-run object
     interpeter = gym_interpreter_3(size=32)
@@ -49,20 +49,21 @@ def train():
         env_name = 'CarRacing-v2',\
         state_interpreter=interpeter,\
         agent=agent,\
-        model_name='PPO_8_percent',\
-        num_rounds=1000 ,\
-        num_episodes=100
+        model_name='DQN_8_percent',\
+        num_rounds=250 ,\
+        num_episodes=5
         ) # maximun 10 episodes per training
     # Show the untrained agent
 
-    act.agent.load(name="prototipe2_1")
+    # act.agent.load(name="prototipe2_1")
     print('Training agent...')
     act.train()    
     act.run()
 
     save = True if input("save model? (y/n)  ->  ").lower() == 'y' else False
     if save:
-        act.agent.save(name="prototipe2_1")
+        # act.agent.save(name="prototipe2_1")
+        act.agent.Q.save()
 
 def load_ppo(from_file = False, epsilon = None):
    '''
@@ -120,9 +121,9 @@ def load_DQN(from_file = False, epsilon = None):
                   "gamma":1,\
                   "epsilon":epsilon,\
                   "alpha":0.001,\
-                  "c": 16,\
-                  "len_exp":16,\
-                  "len_mini_batch":8,\
+                  "c": 32,\
+                  "len_exp":32,\
+                  "len_mini_batch":16,\
                     }
     # Create function to approximate Q
     # Q = Uniform_testQ(parameters=parameters)
