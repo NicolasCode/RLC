@@ -16,18 +16,19 @@ class AgentCS :
     '''
 
     def __init__(self, parameters:dict, Q):
+        self.max_len = 1024
         self.parameters = parameters
         self.numDims = self.parameters['numDims']
         self.nA = self.parameters['nA']
         self.gamma = self.parameters['gamma']
         self.epsilon = self.parameters['epsilon']
         self.alpha = self.parameters['alpha']
-        self.states = deque(maxlen=32)
-        self.actions = deque(maxlen=32)
+        self.states = deque(maxlen=self.max_len)
+        self.actions = deque(maxlen=self.max_len)
         self.total_reward = 0
-        self.rewards = deque(maxlen=32)
+        self.rewards = deque(maxlen=self.max_len)
         self.rewards.append(np.nan)
-        self.dones = deque(maxlen=32)
+        self.dones = deque(maxlen=self.max_len)
         self.dones.append(False)
         assert(hasattr(Q, 'predict')), 'Q must be an object with a predict() method'
         assert(hasattr(Q, 'learn')), 'Q must be an object with a learn() method'
@@ -83,12 +84,12 @@ class AgentCS :
         Keeps the same Q for more learning.
         '''
         self.numRound = 0
-        self.states = deque(maxlen=32)
-        self.actions = deque(maxlen=32)
-        self.rewards = deque(maxlen=32)
+        self.states = deque(maxlen=self.max_len)
+        self.actions = deque(maxlen=self.max_len)
+        self.rewards = deque(maxlen=self.max_len)
         self.rewards.append(np.nan)
         self.total_reward = 0
-        self.dones = deque(maxlen=32)
+        self.dones = deque(maxlen=self.max_len)
         self.dones.append(False)
 
     def reset(self):
@@ -268,6 +269,8 @@ class ExperienceDataset(Dataset):
     def __init__(self, agent, next_state, reward, done):
         self.agent = agent
 
+        # use a mask to limit the size of the dataset
+        
         states = [state for state in agent.states]
         self.states = np.array(states)
         self.actions = [action for action in agent.actions]
@@ -413,7 +416,7 @@ class DQN(AgentCS) :
         with torch.no_grad():
             # Gets predicted Q values
             tensor = torch.from_numpy(state).float().to("cuda" if torch.cuda.is_available() else "cpu")
-            Qs = self.Q_hat.model(tensor)
+            Qs = self.Q.model(tensor)
             if len(Qs.shape) > 1:
                 Qs = Qs[0] 
             # Transforms to list
