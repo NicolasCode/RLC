@@ -7,9 +7,12 @@ Uso:
     python evaluate_ppo.py --seeds 18 --gif images/x.gif  # graba un GIF de la vuelta
     python evaluate_ppo.py --human --seeds 18             # ver la vuelta en una ventana
 
-Una vuelta cuenta como completada cuando el entorno original de Gymnasium
-la declara terminada (`lap_finished`): el carro vuelve a la línea de salida
-habiendo pisado al menos el 95% de las baldosas de la pista.
+Se reportan dos criterios de vuelta:
+  * oficial: el entorno de Gymnasium la declara terminada (`lap_finished`). En
+    Gymnasium 1.x esto solo ocurre al pisar el 100% de las baldosas (ver
+    Utils/car_env.py, _on_finish_line_after_95).
+  * 95%: la regla documentada por Gymnasium, volver a la baldosa de salida
+    habiendo pisado al menos el 95% de la pista.
 '''
 import argparse
 import os
@@ -53,9 +56,14 @@ def plot_path(info, seed, filename):
     ax.plot(closed[:, 0], closed[:, 1], color='#bbbbbb', lw=14, solid_capstyle='round', label='pista')
     ax.plot(path[:, 0], path[:, 1], color='#d62728', lw=1.8, label='carro (PPO)')
     ax.scatter(*track[0], color='black', zorder=5, s=40, label='salida/meta')
-    lap = 'VUELTA COMPLETA' if info['lap'] else 'vuelta incompleta'
-    ax.set_title(f'Semilla {seed}: {lap} — {100 * info["tiles"] / info["track_len"]:.0f}% de la pista, '
-                 f'{info["frames"] / 50:.1f} s, retorno {info["raw_return"]:.0f}')
+    if info['lap']:
+        lap = f'VUELTA COMPLETA (100% de baldosas) en {info["frames"] / 50:.1f} s'
+    elif info['lap95']:
+        lap = f'VUELTA COMPLETA (regla 95%) en {info["lap95_frames"] / 50:.1f} s'
+    else:
+        lap = 'vuelta incompleta'
+    ax.set_title(f'Semilla {seed}: {lap}\n{100 * info["tiles"] / info["track_len"]:.1f}% de la pista, '
+                 f'episodio de {info["frames"] / 50:.1f} s, retorno {info["raw_return"]:.0f}')
     ax.set_aspect('equal')
     ax.axis('off')
     ax.legend(loc='lower right')
@@ -73,7 +81,9 @@ def main():
     p.add_argument('--plot', action='store_true', help='guarda la trayectoria en images/ppo_lap_seed_<s>.png')
     p.add_argument('--gif', default=None, help='guarda un GIF del primer episodio')
     p.add_argument('--human', action='store_true', help='muestra la carrera en una ventana')
+    p.add_argument('--torch-seed', type=int, default=0)
     args = p.parse_args()
+    torch.manual_seed(args.torch_seed)
 
     ck = torch.load(args.model, map_location='cpu', weights_only=False)
     cfg = ck.get('args', {})
@@ -94,10 +104,11 @@ def main():
         frames = [] if (args.gif and k == 0) else None
         info = run_episode(net, env, seed, greedy=not args.stochastic, frames_out=frames)
         pct = 100 * info['tiles'] / info['track_len']
-        results.append((seed, info['lap'], pct, info['raw_return'], info['frames']))
+        results.append((seed, info['lap'], pct, info['raw_return'], info['frames'], info['lap95']))
         dist = ' '.join(f'{n}:{c}' for n, c in zip(env.action_names, info['actions']))
-        print(f'semilla {seed:>5} | vuelta {"SI" if info["lap"] else "no"} | pista {pct:5.1f}% | '
-              f'retorno {info["raw_return"]:6.1f} | tiempo {info["frames"] / 50:5.1f} s | {dist}')
+        lap95 = f'SI ({info["lap95_frames"] / 50:4.1f} s)' if info['lap95'] else 'no        '
+        print(f'semilla {seed:>5} | vuelta {"SI" if info["lap"] else "no"} | vuelta95 {lap95} | '
+              f'pista {pct:5.1f}% | retorno {info["raw_return"]:6.1f} | tiempo {info["frames"] / 50:5.1f} s | {dist}')
         if args.plot:
             os.makedirs('images', exist_ok=True)
             plot_path(info, seed, os.path.join('images', f'ppo_lap_seed_{seed}.png'))
@@ -108,7 +119,9 @@ def main():
             print(f'GIF guardado en {args.gif}')
 
     laps = np.mean([r[1] for r in results])
+    laps95 = np.mean([r[5] for r in results])
     print(f'\nVueltas completadas: {int(laps * len(results))}/{len(results)} ({100 * laps:.0f}%) | '
+          f'regla 95%: {int(round(laps95 * len(results)))}/{len(results)} ({100 * laps95:.0f}%) | '
           f'pista media {np.mean([r[2] for r in results]):.1f}% | '
           f'retorno medio {np.mean([r[3] for r in results]):.1f}')
     env.close()

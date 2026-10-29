@@ -106,6 +106,7 @@ class RacingEnv(gym.Env):
         self.n_frames = 0
         self.no_progress = 0
         self.raw_return = 0.0
+        self.lap95_frames = None
         self.frames[:] = to_gray(obs)
         return self.frames.copy(), {}
 
@@ -122,6 +123,8 @@ class RacingEnv(gym.Env):
             reward += r
             progress |= r > 0
             self.n_frames += 1
+            if self.lap95_frames is None and self._on_finish_line_after_95():
+                self.lap95_frames = self.n_frames
             if term:
                 terminated = True
                 info.update(inf)
@@ -153,7 +156,25 @@ class RacingEnv(gym.Env):
         info['lap'] = bool(info.get('lap_finished', False))
         info['raw_return'] = self.raw_return
         info['frames'] = self.n_frames
+        if info['lap'] and self.lap95_frames is None:
+            # El 100% de las baldosas también cumple la regla del 95%
+            self.lap95_frames = self.n_frames
+        info['lap95'] = self.lap95_frames is not None
+        info['lap95_frames'] = self.lap95_frames if self.lap95_frames is not None else -1
         return self.frames.copy(), shaped * self.reward_scale, terminated, truncated, info
+
+    def _on_finish_line_after_95(self):
+        '''
+        Regla de vuelta tal como la documenta Gymnasium: volver a la baldosa de
+        salida habiendo visitado al menos el 95% de la pista. En Gymnasium 1.x
+        ese chequeo está dentro de `if not tile.road_visited`, y como la baldosa 0
+        se pisa al arrancar nunca se cumple: en la práctica el entorno solo
+        declara la vuelta al visitar el 100% de las baldosas. Aquí se mide aparte.
+        '''
+        car = self.env
+        if car.tile_visited_count < 0.95 * len(car.track):
+            return False
+        return any(t.idx == 0 for w in car.car.wheels for t in w.tiles)
 
     def render(self):
         return self.env.render()
