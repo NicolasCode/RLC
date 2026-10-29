@@ -1,0 +1,23 @@
+Modelo: models/dqn_racer/last.pt (entrenado 299008 decisiones = 1196032 frames)
+semilla    18 | vuelta no | vuelta95 SI (29.7 s) | pista  98.4% | retorno  677.6 | tiempo  60.0 s | nada:128 izq:131 der:73 gas:251 freno:21 izq+gas:75 der+gas:71
+semilla  1000 | vuelta no | vuelta95 SI (29.0 s) | pista  99.3% | retorno  686.3 | tiempo  60.0 s | nada:164 izq:124 der:58 gas:235 freno:21 izq+gas:76 der+gas:72
+semilla  1001 | vuelta SI | vuelta95 SI (31.1 s) | pista 100.0% | retorno  735.3 | tiempo  51.7 s | nada:112 izq:118 der:67 gas:201 freno:21 izq+gas:61 der+gas:66
+semilla  1002 | vuelta SI | vuelta95 SI (13.0 s) | pista 100.0% | retorno  738.1 | tiempo  50.9 s | nada:120 izq:121 der:62 gas:182 freno:19 izq+gas:61 der+gas:72
+semilla  1003 | vuelta no | vuelta95 SI (29.5 s) | pista  99.7% | retorno  690.0 | tiempo  60.0 s | nada:164 izq:143 der:71 gas:191 freno:16 izq+gas:82 der+gas:83
+semilla  1004 | vuelta SI | vuelta95 SI (28.1 s) | pista 100.0% | retorno  738.4 | tiempo  51.0 s | nada:122 izq:105 der:56 gas:200 freno:20 izq+gas:71 der+gas:64
+semilla  1005 | vuelta no | vuelta95 SI (47.7 s) | pista  97.2% | retorno  666.3 | tiempo  60.0 s | nada:96 izq:107 der:61 gas:285 freno:32 izq+gas:92 der+gas:77
+semilla  1006 | vuelta no | vuelta95 SI (13.1 s) | pista  98.9% | retorno  682.1 | tiempo  60.0 s | nada:175 izq:137 der:60 gas:204 freno:16 izq+gas:83 der+gas:75
+semilla  1007 | vuelta SI | vuelta95 SI (15.0 s) | pista 100.0% | retorno  720.8 | tiempo  54.5 s | nada:135 izq:128 der:72 gas:180 freno:17 izq+gas:70 der+gas:80
+semilla  1008 | vuelta no | vuelta95 SI (31.0 s) | pista  97.8% | retorno  671.5 | tiempo  60.0 s | nada:138 izq:125 der:60 gas:242 freno:22 izq+gas:80 der+gas:83
+semilla  1009 | vuelta SI | vuelta95 SI (12.4 s) | pista 100.0% | retorno  925.1 | tiempo  13.5 s | nada:30 izq:25 der:12 gas:75 freno:5 izq+gas:13 der+gas:9
+semilla  1010 | vuelta no | vuelta95 SI (32.3 s) | pista  97.6% | retorno  670.2 | tiempo  60.0 s | nada:139 izq:135 der:75 gas:219 freno:20 izq+gas:81 der+gas:81
+semilla  1011 | vuelta no | vuelta95 SI (14.3 s) | pista  99.7% | retorno  690.1 | tiempo  60.0 s | nada:150 izq:136 der:63 gas:230 freno:17 izq+gas:66 der+gas:88
+semilla  1012 | vuelta no | vuelta95 SI (41.5 s) | pista  98.0% | retorno  673.0 | tiempo  60.0 s | nada:139 izq:127 der:66 gas:236 freno:22 izq+gas:81 der+gas:79
+semilla  1013 | vuelta SI | vuelta95 SI (17.9 s) | pista 100.0% | retorno  747.7 | tiempo  49.4 s | nada:100 izq:103 der:68 gas:191 freno:20 izq+gas:67 der+gas:69
+semilla  1014 | vuelta no | vuelta95 SI (28.3 s) | pista  97.6% | retorno  669.6 | tiempo  60.0 s | nada:129 izq:122 der:70 gas:236 freno:23 izq+gas:86 der+gas:84
+semilla  1015 | vuelta SI | vuelta95 SI (31.9 s) | pista 100.0% | retorno  700.0 | tiempo  58.7 s | nada:110 izq:121 der:79 gas:242 freno:26 izq+gas:86 der+gas:70
+semilla  1016 | vuelta SI | vuelta95 SI (14.5 s) | pista 100.0% | retorno  766.4 | tiempo  45.4 s | nada:100 izq:96 der:56 gas:151 freno:17 izq+gas:77 der+gas:71
+semilla  1017 | vuelta no | vuelta95 SI (28.5 s) | pista  99.0% | retorno  682.9 | tiempo  60.0 s | nada:160 izq:142 der:68 gas:213 freno:18 izq+gas:75 der+gas:74
+semilla  1018 | vuelta no | vuelta95 SI (35.7 s) | pista  98.0% | retorno  673.8 | tiempo  60.0 s | nada:125 izq:119 der:76 gas:220 freno:26 izq+gas:94 der+gas:90
+semilla  1019 | vuelta SI | vuelta95 SI (12.4 s) | pista 100.0% | retorno  752.6 | tiempo  48.0 s | nada:128 izq:111 der:55 gas:150 freno:12 izq+gas:65 der+gas:79
+Vueltas completadas: 9/21 (43%) | regla 95%: 21/21 (100%) | pista media 99.1% | retorno medio 712.3

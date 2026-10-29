@@ -94,13 +94,12 @@ def main():
         for df, label, c in [(ppo, 'PPO', '#1f77b4'), (dqn, 'DQN (Double DQN)', '#ff7f0e')]:
             axes[0].plot(df['step'] / 1e3, smooth(df['tiles_pct']), label=label, color=c)
             axes[1].plot(df['step'] / 1e3, smooth(100 * df['lap_rate']), label=label, color=c)
-            axes[2].plot(df['minutes'], smooth(df['return']), label=label, color=c)
+            axes[2].plot(df['step'] / 1e3, smooth(df['return']), label=label, color=c)
         axes[0].set_ylabel('% de la pista recorrida')
         axes[1].set_ylabel('% de episodios con vuelta completa')
         axes[2].set_ylabel('Retorno del entorno')
-        axes[0].set_xlabel('Decisiones del agente (miles)')
-        axes[1].set_xlabel('Decisiones del agente (miles)')
-        axes[2].set_xlabel('Minutos de entrenamiento (4 CPUs)')
+        for ax in axes:
+            ax.set_xlabel('Decisiones del agente (miles)')
         for ax in axes:
             ax.grid(alpha=0.3)
         axes[0].legend()

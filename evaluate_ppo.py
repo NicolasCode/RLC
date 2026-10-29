@@ -27,6 +27,16 @@ from Agents.ppo_racer import ActorCritic
 from Utils.car_env import RacingEnv, ACTION_SETS
 
 
+class QGreedy(torch.nn.Module):
+    '''Adapta una red Q de DQN a la interfaz act() del actor-crítico.'''
+    def __init__(self, q):
+        super().__init__()
+        self.q = q
+
+    def act(self, x, greedy=True):
+        return self.q(x).argmax(-1), None, None, None
+
+
 def run_episode(net, env, seed, greedy, frames_out=None, gif_every=2):
     obs, _ = env.reset(seed=seed)
     car = env.env
@@ -49,12 +59,12 @@ def run_episode(net, env, seed, greedy, frames_out=None, gif_every=2):
     return info
 
 
-def plot_path(info, seed, filename):
+def plot_path(info, seed, filename, algo='PPO'):
     track, path = info['track'], info['path']
     fig, ax = plt.subplots(figsize=(7, 7))
     closed = np.vstack([track, track[:1]])
     ax.plot(closed[:, 0], closed[:, 1], color='#bbbbbb', lw=14, solid_capstyle='round', label='pista')
-    ax.plot(path[:, 0], path[:, 1], color='#d62728', lw=1.8, label='carro (PPO)')
+    ax.plot(path[:, 0], path[:, 1], color='#d62728', lw=1.8, label=f'carro ({algo})')
     ax.scatter(*track[0], color='black', zorder=5, s=40, label='salida/meta')
     if info['lap']:
         lap = f'VUELTA COMPLETA (100% de baldosas) en {info["frames"] / 50:.1f} s'
@@ -89,8 +99,15 @@ def main():
     cfg = ck.get('args', {})
     env_kwargs = dict(actions=cfg.get('actions', 'custom'), frame_skip=cfg.get('frame_skip', 4),
                       stack=cfg.get('stack', 4))
-    net = ActorCritic(len(ACTION_SETS[env_kwargs['actions']][0]), in_channels=env_kwargs['stack'])
-    net.load_state_dict(ck['model'])
+    n_actions = len(ACTION_SETS[env_kwargs['actions']][0])
+    if 'buffer_size' in cfg:
+        # Checkpoint de train_dqn.py: la política es la acción con mayor Q
+        from train_dqn import QNetwork
+        net = QGreedy(QNetwork(n_actions, in_channels=env_kwargs['stack']))
+        net.q.load_state_dict(ck['model'])
+    else:
+        net = ActorCritic(n_actions, in_channels=env_kwargs['stack'])
+        net.load_state_dict(ck['model'])
     net.eval()
     print(f'Modelo: {args.model} (entrenado {ck["global_step"]} decisiones = '
           f'{env_kwargs["frame_skip"] * ck["global_step"]} frames)')
@@ -111,7 +128,8 @@ def main():
               f'pista {pct:5.1f}% | retorno {info["raw_return"]:6.1f} | tiempo {info["frames"] / 50:5.1f} s | {dist}')
         if args.plot:
             os.makedirs('images', exist_ok=True)
-            plot_path(info, seed, os.path.join('images', f'ppo_lap_seed_{seed}.png'))
+            plot_path(info, seed, os.path.join('images', f'ppo_lap_seed_{seed}.png'),
+                      algo='DQN' if isinstance(net, QGreedy) else 'PPO')
         if frames:
             from PIL import Image
             imgs = [Image.fromarray(f).resize((300, 200)) for f in frames]

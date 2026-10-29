@@ -245,6 +245,74 @@ Cómo leer los resultados:
 > decisiones y frames, no tiempo.
 
 
-<!-- DQN -->
+## 6. ¿Por qué PPO sí dio la vuelta y el DQN anterior no?
 
-<!-- LIMITACIONES -->
+**Respuesta corta: no fue por ser PPO.** El DQN anterior fallaba por errores
+de implementación y de configuración (sección 2), no por el algoritmo. Para
+comprobarlo se escribió un DQN moderno (`train_dqn.py`) y se entrenó en
+**exactamente el mismo entorno nuevo**: mismas 7 acciones, frame skip, stack,
+fin anticipado y la misma CNN. **También aprendió a dar la vuelta.**
+
+![PPO vs DQN](../images/PPO_vs_DQN.png)
+
+| | PPO | DQN moderno |
+|---|---|---|
+| % de pista en entrenamiento a las 300k decisiones | 69% | **92%** |
+| Evaluación (21 pistas): vuelta oficial, 100% de baldosas | 4/21 (modelo de 390k) · 14/21 (final, 1.5M) | 9/21 (300k) |
+| Evaluación (21 pistas): regla del 95% | 14/21 (390k) · 19/21 (final) | **21/21** (300k) |
+| Tiempo mediano de vuelta | 21.3 s (390k) · **16.4 s** (final) | 28.5 s |
+| Gradiente por decisión | 4 muestras (4 épocas × 1) | 8 muestras (batch 64 cada 8 decisiones) |
+
+Detalle por pista: `experiments/evaluacion_dqn.txt`. Trayectoria del DQN en
+Monza: `images/dqn_vuelta_monza_seed_18.png`.
+
+Con el mismo número de decisiones, el DQN moderno aprendió **más** que PPO:
+reutiliza cada transición muchas veces gracias al replay buffer (50k). PPO,
+en cambio, usa cada dato 4 veces y lo descarta. El DQN maneja más
+conservador (vueltas de ~28 s); el PPO final, con 5× más entrenamiento, va
+casi al doble de velocidad. Con esta evidencia no se puede decir que un
+algoritmo sea mejor que el otro en CarRacing: ambos funcionan si están bien
+implementados.
+
+### Entonces, ¿qué diferencia al DQN que falló del que funcionó?
+
+| | DQN anterior | DQN moderno (`train_dqn.py`) |
+|---|---|---|
+| Replay buffer | 1024 transiciones (~20 s) | 50 000 transiciones |
+| Entrenamiento por paso | Recalcula los 1024 objetivos y entrena 64 minibatches en **cada** frame | 1 minibatch de 64 cada 8 decisiones |
+| Red objetivo | Se copia en cada paso cuando el buffer se llena (bug de `len % c`) | Se copia cada 1000 pasos de gradiente |
+| Objetivo | `Q_hat(s', a')` con `a'` ε-greedy (ε=0.5) | Double DQN: la red online elige `a'` y la objetivo la evalúa |
+| γ | 1 | 0.99 |
+| Exploración | ε = 0.5 fijo | ε de 1.0 a 0.05 en el primer 20% |
+| Pérdida | MSE | Huber + recorte del gradiente a 10 |
+| Entorno | 32×32, frame anterior al 1%, sin frame skip, gas 0.2, vuelta al 7% | El entorno nuevo de la sección 3 |
+
+En resumen, el carrito aprendió por tres cosas que valen para cualquier algoritmo:
+
+1. **Un entorno que deja aprender:** fin anticipado al salirse, frame skip, la
+   imagen completa a 96×96 y una definición de vuelta real.
+2. **Una implementación correcta del algoritmo**, sin bugs como la red objetivo
+   que se copia en cada paso o las 300 épocas sobre un solo episodio.
+3. **Hiperparámetros estándar** (lr 2.5e-4 o 1e-4, γ = 0.99) en vez de valores
+   extremos (lr 0.01, γ = 1, ε = 0.5).
+
+
+## 7. Limitaciones y siguientes pasos
+
+* **No todas las vueltas son "oficiales".** El modelo final pisa el 100% de
+  las baldosas en el 67% de las pistas. En las demás se salta 2–5 baldosas en
+  una curva cerrada y luego da vueltas buscando las que le faltan. Ideas para
+  arreglarlo: entrenar con más de 40 s por episodio, penalizar salirse de la
+  pista o seguir entrenando.
+* **Una sola semilla por experimento** (salvo las dos que se repitieron). Para
+  afirmaciones fuertes harían falta 3–5 semillas.
+* **Las ablaciones solo cubren el arranque** (100k decisiones). En particular,
+  falta comprobar si las acciones originales (gas 0.2) llegan a vueltas tan
+  rápidas como las del modelo final.
+* **CPU limitada.** Con GPU, o más núcleos para más entornos en paralelo, el
+  mismo entrenamiento tomaría una fracción del tiempo.
+* **El código anterior queda como estaba** (`Examples/car_racing.py`,
+  `Utils/train.py`, `Agents/agentsCS.py`, `Agents/BaseAgent.py`). Se documentó
+  por qué falla, pero no se reparó: el pipeline nuevo es independiente.
+  `Utils/train.py` sigue importando `Utils/track_creating.py`, que no existe.
+
