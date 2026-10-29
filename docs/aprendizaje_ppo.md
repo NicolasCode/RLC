@@ -194,7 +194,56 @@ Observaciones:
   el modelo final ambos modos rinden parecido.
 
 
-<!-- ABLACIONES -->
+## 5. ¿Qué aporta cada cambio? (ablaciones)
+
+Para no suponer, se midió: partiendo de la receta final, se **quita un cambio a
+la vez** y se entrena 100k decisiones, con el mismo ritmo de learning rate que
+el run principal (`--anneal-steps 1500000`). La línea negra son las primeras
+100k decisiones del run principal. Script: `experiments/run_ablations.sh`;
+gráfica y tabla: `python plot_experiments.py`.
+
+![Ablaciones](../images/PPO_ablaciones.png)
+
+<!-- TABLA_ABLACIONES -->
+
+Cómo leer los resultados:
+
+* **Fin anticipado: el cambio que más pesa al principio.** Sin él, el agente
+  pasa ~60k decisiones atascado en ~8% de la pista. Cada episodio malo dura
+  2000 frames en la hierba sumando −0.1 por frame (retorno ≈ −140), así que casi
+  toda la experiencia es basura repetida. Cortando a los 4 s sin progreso, cada
+  episodio inútil cuesta poco y la penalización le enseña a no salirse.
+* **Frame skip: cambia qué cuesta qué.** Por *decisión* (cada una cuesta un
+  paso de la red), sin frame skip se aprende menos: 42% vs 50%. Con frame
+  skip, γ = 0.99 cubre ~8 s de conducción en vez de ~2 s, y cada acción tiene
+  un efecto visible en la imagen. Por *frame* simulado es al revés: sin skip
+  se aprovecha mejor cada frame, pero los frames del skip son casi gratis
+  porque no se renderizan.
+* **Stack de 4 frames: casi no aporta en esta etapa** (49% vs 50%). La barra
+  inferior de la imagen de CarRacing ya muestra la velocidad, los sensores ABS,
+  el volante y el giroscopio, así que un solo frame ya trae la información de
+  movimiento. Esto explica en parte por qué el intérprete viejo (que casi
+  borraba el frame anterior) no era el problema principal.
+* **lr = 0.01: inestable.** Sube y se cae dos veces (24% → 11%, 52% → 34%).
+  El lr alto del PPO anterior era parte del problema.
+* **Acciones originales: sorpresa, aprenden *más rápido* al principio.**
+  Con el acelerador limitado a 0.2 el carro va más lento y se sale menos, así
+  que recorre más pista temprano (72% vs 50%). Las 7 acciones propias **no**
+  fueron la razón del éxito inicial. Lo que no se midió es si con gas 0.2 se
+  llega a vueltas de ~16 s como las del modelo final, que acelera a fondo en
+  las rectas; haría falta un run completo de 1.5M decisiones.
+
+<!-- SEMILLA2 -->
+
+> **Advertencias.** Cada configuración es una sola semilla: diferencias de
+> menos de ~10 puntos pueden ser ruido. 100k decisiones es el arranque del
+> aprendizaje; un cambio que no ayuda al principio puede ayudar al final, y al
+> revés. Los minutos no son comparables entre corridas: el run principal usó
+> 4 hilos y las ablaciones 2, porque a las ~3 h de uso continuo la máquina
+> virtual empezó a ir mucho más lenta con 4 hilos (una multiplicación de
+> matrices con 4 hilos tardaba 5.6× más que con 1). Por eso las gráficas usan
+> decisiones y frames, no tiempo.
+
 
 <!-- DQN -->
 
