@@ -26,3 +26,7 @@ run $OUT/sin_frame_skip      python3 train_ppo.py $COMMON --frame-skip 1
 run $OUT/lr_alto_0.01        python3 train_ppo.py $COMMON --lr 1e-2
 
 run models/dqn_racer python3 train_dqn.py --total-steps ${DQN_STEPS:-300000} --threads $THREADS
+
+# Segunda semilla para comprobar si las diferencias más grandes son reales o ruido
+run $OUT/receta_completa_s2     python3 train_ppo.py $COMMON --seed 2
+run $OUT/acciones_originales_s2 python3 train_ppo.py $COMMON --actions original --seed 2

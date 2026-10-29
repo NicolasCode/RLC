@@ -22,6 +22,7 @@ ABL = os.path.join('models', 'ablations')
 DQN = os.path.join('models', 'dqn_racer', 'progress.csv')
 
 NAMES = {
+    'receta_completa': 'receta completa',
     'acciones_originales': 'acciones originales (5, gas 0.2)',
     'sin_fin_anticipado': 'sin fin anticipado',
     'sin_stack_de_frames': 'sin stack (1 frame)',
@@ -52,26 +53,33 @@ def main():
     if runs:
         limit = max(pd.read_csv(r)['step'].iloc[-1] for r in runs)
         base = main_df[main_df['step'] <= limit]
-        rows.append(summary(base, 'receta completa'))
+        # (nombre, dataframe) — la receta completa con semilla 1 son las primeras
+        # decisiones del run principal (mismo ritmo de learning rate)
+        curves = [('receta_completa', base)]
+        curves += [(os.path.basename(os.path.dirname(r)), pd.read_csv(r)) for r in runs]
+        colors = {'receta_completa': 'black', 'acciones_originales': '#1f77b4',
+                  'lr_alto_0.01': '#ff7f0e', 'sin_fin_anticipado': '#2ca02c',
+                  'sin_frame_skip': '#d62728', 'sin_stack_de_frames': '#9467bd'}
         fig, axes = plt.subplots(1, 3, figsize=(16, 4.8))
-        for df, label, style in [(base, 'receta completa', dict(color='black', lw=2.5))] + \
-                [(pd.read_csv(r), NAMES.get(os.path.basename(os.path.dirname(r)),
-                                            os.path.basename(os.path.dirname(r))), {}) for r in runs]:
-            if label != 'receta completa':
-                rows.append(summary(df, label))
+        for name, df in curves:
+            key = name[:-3] if name.endswith('_s2') else name
+            label = NAMES.get(key, key) + (' (semilla 2)' if name.endswith('_s2') else '')
+            rows.append(summary(df, label))
+            style = dict(color=colors.get(key), lw=2.5 if key == 'receta_completa' else 1.5,
+                         ls='--' if name.endswith('_s2') else '-')
             axes[0].plot(df['step'] / 1e3, smooth(df['tiles_pct']), label=label, **style)
             axes[1].plot(df['frames'] / 1e6, smooth(df['tiles_pct']), label=label, **style)
-            axes[2].plot(df['minutes'], smooth(df['return']), label=label, **style)
+            axes[2].plot(df['step'] / 1e3, smooth(df['return']), label=label, **style)
         axes[0].set_xlabel('Decisiones del agente (miles)')
         axes[1].set_xlabel('Frames de simulación (millones)')
-        axes[2].set_xlabel('Minutos de entrenamiento (4 CPUs)')
+        axes[2].set_xlabel('Decisiones del agente (miles)')
         axes[0].set_ylabel('% de la pista recorrida')
         axes[1].set_ylabel('% de la pista recorrida')
         axes[2].set_ylabel('Retorno del entorno')
         for ax in axes:
             ax.grid(alpha=0.3)
         axes[0].legend(fontsize=8)
-        fig.suptitle('¿Qué aporta cada cambio? Receta completa vs. quitar un cambio a la vez')
+        fig.suptitle('¿Qué aporta cada cambio? Receta completa vs. quitar un cambio a la vez (100k decisiones)')
         fig.tight_layout()
         fig.savefig(os.path.join('images', 'PPO_ablaciones.png'), dpi=110)
         print('Guardado images/PPO_ablaciones.png')
