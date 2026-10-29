@@ -55,3 +55,7 @@ Thumbs.db
 models/ppo_racer/last.pt
 models/ppo_racer/best.pt
 models/ppo_racer/train.log
+models/ablations/*/last.pt
+models/ablations/*/best.pt
+models/dqn_racer/last.pt
+models/*.log

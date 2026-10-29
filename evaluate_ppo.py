@@ -21,14 +21,14 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from Agents.ppo_racer import ActorCritic
-from Utils.car_env import RacingEnv, ACTIONS, ACTION_NAMES
+from Utils.car_env import RacingEnv, ACTION_SETS
 
 
 def run_episode(net, env, seed, greedy, frames_out=None, gif_every=2):
     obs, _ = env.reset(seed=seed)
     car = env.env
     path = [tuple(car.car.hull.position)]
-    actions = np.zeros(len(ACTIONS), int)
+    actions = np.zeros(len(env.actions), int)
     done = False
     while not done:
         with torch.no_grad():
@@ -76,14 +76,18 @@ def main():
     args = p.parse_args()
 
     ck = torch.load(args.model, map_location='cpu', weights_only=False)
-    net = ActorCritic(len(ACTIONS))
+    cfg = ck.get('args', {})
+    env_kwargs = dict(actions=cfg.get('actions', 'custom'), frame_skip=cfg.get('frame_skip', 4),
+                      stack=cfg.get('stack', 4))
+    net = ActorCritic(len(ACTION_SETS[env_kwargs['actions']][0]), in_channels=env_kwargs['stack'])
     net.load_state_dict(ck['model'])
     net.eval()
-    print(f'Modelo: {args.model} (entrenado {ck["global_step"]} decisiones = {4 * ck["global_step"]} frames)')
+    print(f'Modelo: {args.model} (entrenado {ck["global_step"]} decisiones = '
+          f'{env_kwargs["frame_skip"] * ck["global_step"]} frames)')
 
     render_mode = 'human' if args.human else ('rgb_array' if args.gif else None)
     # En evaluación no hay fin anticipado: el carro tiene todo el tiempo (max-frames) para terminar.
-    env = RacingEnv(render_mode=render_mode, patience=10**9, max_frames=args.max_frames)
+    env = RacingEnv(render_mode=render_mode, patience=10**9, max_frames=args.max_frames, **env_kwargs)
 
     results = []
     for k, seed in enumerate(args.seeds):
@@ -91,7 +95,7 @@ def main():
         info = run_episode(net, env, seed, greedy=not args.stochastic, frames_out=frames)
         pct = 100 * info['tiles'] / info['track_len']
         results.append((seed, info['lap'], pct, info['raw_return'], info['frames']))
-        dist = ' '.join(f'{n}:{c}' for n, c in zip(ACTION_NAMES, info['actions']))
+        dist = ' '.join(f'{n}:{c}' for n, c in zip(env.action_names, info['actions']))
         print(f'semilla {seed:>5} | vuelta {"SI" if info["lap"] else "no"} | pista {pct:5.1f}% | '
               f'retorno {info["raw_return"]:6.1f} | tiempo {info["frames"] / 50:5.1f} s | {dist}')
         if args.plot:

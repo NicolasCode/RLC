@@ -9,7 +9,7 @@ Cambios respecto al CarRacing "crudo" (ver docs/aprendizaje_ppo.md):
     renderiza el último (renderizar es ~75% del costo de simulación).
   * Observación: 4 últimos frames en escala de grises (4, 96, 96) uint8.
   * Inicio: se saltan los primeros 48 frames (animación de zoom de la cámara).
-  * Fin anticipado: si el carro pasa `patience` decisiones sin pisar
+  * Fin anticipado: si el carro pasa `patience` frames sin pisar
     una baldosa nueva (se salió a la hierba o está quieto), el episodio
     termina con una penalización.
 '''
@@ -30,6 +30,18 @@ ACTIONS = np.array([
     [ 0.5, 0.5, 0.0],   # 6: derecha + acelerar suave
 ], dtype=np.float32)
 ACTION_NAMES = ['nada', 'izq', 'der', 'gas', 'freno', 'izq+gas', 'der+gas']
+
+# Las 5 acciones del modo discreto original de Gymnasium (solo para comparar)
+ORIGINAL_ACTIONS = np.array([
+    [ 0.0, 0.0, 0.0],   # 0: nada
+    [ 0.6, 0.0, 0.0],   # 1: derecha
+    [-0.6, 0.0, 0.0],   # 2: izquierda
+    [ 0.0, 0.2, 0.0],   # 3: acelerar (solo 0.2)
+    [ 0.0, 0.0, 0.8],   # 4: frenar
+], dtype=np.float32)
+ORIGINAL_ACTION_NAMES = ['nada', 'der', 'izq', 'gas0.2', 'freno']
+ACTION_SETS = {'custom': (ACTIONS, ACTION_NAMES),
+               'original': (ORIGINAL_ACTIONS, ORIGINAL_ACTION_NAMES)}
 
 
 class FastCarRacing(CarRacing):
@@ -59,12 +71,13 @@ class RacingEnv(gym.Env):
     def __init__(self,
                  frame_skip=4,
                  stack=4,
-                 patience=50,
+                 patience=200,
                  no_progress_penalty=-20.0,
                  max_frames=2000,
                  reward_scale=0.1,
                  render_mode=None,
-                 lap_complete_percent=0.95):
+                 lap_complete_percent=0.95,
+                 actions='custom'):
         self.env = FastCarRacing(continuous=True,
                                  render_mode=render_mode,
                                  lap_complete_percent=lap_complete_percent,
@@ -72,11 +85,12 @@ class RacingEnv(gym.Env):
         self.render_mode = render_mode
         self.frame_skip = frame_skip
         self.stack = stack
-        self.patience = patience
+        self.patience = patience  # en frames
+        self.actions, self.action_names = ACTION_SETS[actions]
         self.no_progress_penalty = no_progress_penalty
         self.max_frames = max_frames
         self.reward_scale = reward_scale
-        self.action_space = spaces.Discrete(len(ACTIONS))
+        self.action_space = spaces.Discrete(len(self.actions))
         self.observation_space = spaces.Box(0, 255, (stack, 96, 96), np.uint8)
         self.frames = np.zeros((stack, 96, 96), np.uint8)
 
@@ -97,14 +111,16 @@ class RacingEnv(gym.Env):
 
     def step(self, action):
         car = self.env
-        a = ACTIONS[int(action)]
+        a = self.actions[int(action)]
         reward = 0.0
+        progress = False
         terminated = truncated = False
         info = {}
         for k in range(self.frame_skip):
             car.skip_render = k < self.frame_skip - 1
             obs, r, term, _, inf = car.step(a)
             reward += r
+            progress |= r > 0
             self.n_frames += 1
             if term:
                 terminated = True
@@ -117,10 +133,10 @@ class RacingEnv(gym.Env):
         self.raw_return += reward
 
         # ¿Pisó baldosas nuevas? (cada baldosa da +1000/N > 0)
-        if reward > 0:
+        if progress:
             self.no_progress = 0
         else:
-            self.no_progress += 1
+            self.no_progress += k + 1
         shaped = reward
         if not terminated and self.no_progress >= self.patience:
             terminated = True

@@ -20,7 +20,7 @@ import torch
 import gymnasium as gym
 
 from Agents.ppo_racer import ActorCritic, PPO
-from Utils.car_env import make_env, ACTIONS
+from Utils.car_env import make_env, ACTION_SETS
 
 
 def parse_args():
@@ -36,6 +36,14 @@ def parse_args():
     p.add_argument('--epochs', type=int, default=4)
     p.add_argument('--minibatch-size', type=int, default=256)
     p.add_argument('--ent-coef', type=float, default=0.01)
+    p.add_argument('--anneal-steps', type=int, default=None,
+                   help='pasos en los que el lr baja a 0 (por defecto = total-steps)')
+    # Opciones del entorno (para medir el efecto de cada cambio)
+    p.add_argument('--actions', choices=['custom', 'original'], default='custom')
+    p.add_argument('--frame-skip', type=int, default=4)
+    p.add_argument('--stack', type=int, default=4)
+    p.add_argument('--patience', type=int, default=200,
+                   help='frames sin pisar baldosa nueva antes de cortar el episodio (0 = nunca)')
     p.add_argument('--seed', type=int, default=1)
     p.add_argument('--threads', type=int, default=4)
     p.add_argument('--out-dir', default=os.path.join('models', 'ppo_racer'))
@@ -50,11 +58,14 @@ def main():
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
 
+    env_kwargs = dict(actions=args.actions, frame_skip=args.frame_skip, stack=args.stack,
+                      patience=args.patience if args.patience > 0 else 10**9)
     envs = gym.vector.AsyncVectorEnv(
-        [make_env(seed=args.seed + i) for i in range(args.num_envs)],
+        [make_env(seed=args.seed + i, **env_kwargs) for i in range(args.num_envs)],
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
-    net = ActorCritic(len(ACTIONS))
+    n_actions = len(ACTION_SETS[args.actions][0])
+    net = ActorCritic(n_actions, in_channels=args.stack)
     ppo = PPO(net, lr=args.lr, gamma=args.gamma, gae_lambda=args.gae_lambda,
               clip=args.clip, epochs=args.epochs,
               minibatch_size=args.minibatch_size, ent_coef=args.ent_coef)
@@ -77,7 +88,7 @@ def main():
                          'lap_rate', 'pg_loss', 'v_loss', 'entropy', 'approx_kl', 'lr'])
 
     T, N = args.num_steps, args.num_envs
-    obs_buf = torch.zeros((T, N, 4, 96, 96), dtype=torch.uint8)
+    obs_buf = torch.zeros((T, N, args.stack, 96, 96), dtype=torch.uint8)
     act_buf = torch.zeros((T, N), dtype=torch.long)
     logp_buf = torch.zeros((T, N))
     rew_buf = torch.zeros((T, N))
@@ -91,9 +102,10 @@ def main():
     t0 = time.time()
     start_step = global_step
     batch = T * N
+    anneal = args.anneal_steps or args.total_steps
 
     while global_step < args.total_steps:
-        frac = 1.0 - global_step / args.total_steps
+        frac = max(1.0 - global_step / anneal, 0.0)
         ppo.set_lr(args.lr * frac)
 
         # ---------------- Rollout ----------------
@@ -132,14 +144,14 @@ def main():
         with torch.no_grad():
             next_value = net.value(obs)
         adv, ret = ppo.compute_gae(rew_buf, val_buf, done_buf, next_value)
-        stats = ppo.update(obs_buf.reshape(batch, 4, 96, 96), act_buf.reshape(batch),
+        stats = ppo.update(obs_buf.reshape(batch, args.stack, 96, 96), act_buf.reshape(batch),
                            logp_buf.reshape(batch), adv.reshape(batch), ret.reshape(batch))
 
         minutes = (time.time() - t0) / 60
         mean_ret = float(np.mean(ep_returns)) if ep_returns else float('nan')
         tiles = float(np.mean(ep_tiles)) * 100 if ep_tiles else float('nan')
         laps = float(np.mean(ep_laps)) if ep_laps else float('nan')
-        writer.writerow([global_step, global_step * 4, round(minutes, 2), episodes,
+        writer.writerow([global_step, global_step * args.frame_skip, round(minutes, 2), episodes,
                          round(mean_ret, 1), round(tiles, 1), round(laps, 3),
                          round(stats['pg_loss'], 4), round(stats['v_loss'], 4),
                          round(stats['entropy'], 3), round(stats['approx_kl'], 4),
