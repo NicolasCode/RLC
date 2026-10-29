@@ -44,7 +44,7 @@ una salida a la hierba con trompos: `images/ppo_primera_vuelta_seed_18.png`).
 ## 1. Cómo reproducirlo
 
 ```bash
-pip install "gymnasium[box2d]" torch opencv-python-headless matplotlib pandas
+pip install -r requirements-ppo.txt
 ```
 
 ```bash
@@ -125,10 +125,10 @@ había errores que impedían aprender por completo.
 ### 3.1 Entorno (`Utils/car_env.py`)
 
 1. **Gymnasium 1.x / `CarRacing-v3`** (Python 3.13). `CarRacing-v2` ya no existe; el entorno es el mismo.
-2. **Vuelta real:** `lap_complete_percent = 0.95`, el valor oficial. Para que una vuelta cuente hay que pisar el 95% de las baldosas y volver a la meta.
+2. **Vuelta real:** `lap_complete_percent = 0.95`, el valor oficial, en vez de 0.07. En teoría basta con pisar el 95% de las baldosas y volver a la meta; en la práctica Gymnasium 1.x exige el 100% (ver la nota de la sección "Resultado"). Se reportan ambos criterios.
 3. **7 acciones discretas propias** sobre el modo continuo: nada, izquierda, derecha, **gas 1.0**, freno 0.8, izquierda+gas 0.5 y derecha+gas 0.5.
 4. **Frame skip = 4:** cada decisión se repite 4 frames (12.5 decisiones por segundo). Además **solo se renderiza el último frame** (`FastCarRacing.skip_render`). Renderizar era ~75% del costo, así que la simulación va 3.7× más rápida.
-5. **Stack de 4 frames** en escala de grises de 96×96: la red ve el movimiento (velocidad y dirección de giro).
+5. **Stack de 4 frames** en escala de grises de 96×96: la red ve el movimiento (velocidad y dirección de giro). La ablación de la sección 5 muestra que al principio aporta poco, porque la barra de indicadores ya trae esa información.
 6. **Se salta el zoom inicial:** los primeros 48 frames son una animación de la cámara.
 7. **Fin anticipado:** si en **200 frames** (4 s) no pisa una baldosa nueva (está en la hierba, quieto o de reversa), el episodio termina con −20. El agente deja de perder tiempo en estados inútiles y aprende que salirse es malo.
 8. **Límite de 2000 frames** por episodio. Cortar por tiempo no es un final real: se hace *bootstrap* con el valor del último estado.
@@ -204,39 +204,53 @@ gráfica y tabla: `python plot_experiments.py`.
 
 ![Ablaciones](../images/PPO_ablaciones.png)
 
-<!-- TABLA_ABLACIONES -->
+Promedio de las últimas 10 actualizaciones (≈ las decisiones 90k–100k):
 
-Cómo leer los resultados:
+| Configuración | Semilla | Pista recorrida | Retorno |
+|---|---|---|---|
+| **Receta completa** | 1 | 50.5% | 419 |
+| **Receta completa** | 2 | 67.6% | 568 |
+| Acciones originales (5, gas 0.2) | 1 | 72.5% | 599 |
+| Acciones originales (5, gas 0.2) | 2 | 61.4% | 517 |
+| Sin stack (1 frame) | 1 | 49.1% | 397 |
+| Sin frame skip | 1 | 42.0% | 332 |
+| Sin fin anticipado | 1 | 39.6% | 184 |
+| lr = 0.01 | 1 | 35.8% | 274 |
 
-* **Fin anticipado: el cambio que más pesa al principio.** Sin él, el agente
-  pasa ~60k decisiones atascado en ~8% de la pista. Cada episodio malo dura
-  2000 frames en la hierba sumando −0.1 por frame (retorno ≈ −140), así que casi
-  toda la experiencia es basura repetida. Cortando a los 4 s sin progreso, cada
+**Lo primero: el ruido entre semillas es grande.** La misma receta completa
+da 50% o 68% según la semilla, ~17 puntos de diferencia. Por eso solo vale la
+pena hablar de efectos que se salgan claramente de ese rango o que se vean en
+la *forma* de la curva:
+
+* **Fin anticipado: el efecto más claro.** Sin él, el agente pasa ~60k
+  decisiones atascado en ~8% de la pista (la curva verde, plana). Ninguna otra
+  configuración tiene esa meseta. Cada episodio malo dura 2000 frames en la
+  hierba sumando −0.1 por frame (retorno ≈ −140), así que casi toda la
+  experiencia es basura repetida. Cortando a los 4 s sin progreso, cada
   episodio inútil cuesta poco y la penalización le enseña a no salirse.
-* **Frame skip: cambia qué cuesta qué.** Por *decisión* (cada una cuesta un
-  paso de la red), sin frame skip se aprende menos: 42% vs 50%. Con frame
-  skip, γ = 0.99 cubre ~8 s de conducción en vez de ~2 s, y cada acción tiene
-  un efecto visible en la imagen. Por *frame* simulado es al revés: sin skip
-  se aprovecha mejor cada frame, pero los frames del skip son casi gratis
-  porque no se renderizan.
-* **Stack de 4 frames: casi no aporta en esta etapa** (49% vs 50%). La barra
-  inferior de la imagen de CarRacing ya muestra la velocidad, los sensores ABS,
-  el volante y el giroscopio, así que un solo frame ya trae la información de
-  movimiento. Esto explica en parte por qué el intérprete viejo (que casi
-  borraba el frame anterior) no era el problema principal.
 * **lr = 0.01: inestable.** Sube y se cae dos veces (24% → 11%, 52% → 34%).
-  El lr alto del PPO anterior era parte del problema.
-* **Acciones originales: sorpresa, aprenden *más rápido* al principio.**
-  Con el acelerador limitado a 0.2 el carro va más lento y se sale menos, así
-  que recorre más pista temprano (72% vs 50%). Las 7 acciones propias **no**
-  fueron la razón del éxito inicial. Lo que no se midió es si con gas 0.2 se
-  llega a vueltas de ~16 s como las del modelo final, que acelera a fondo en
-  las rectas; haría falta un run completo de 1.5M decisiones.
+  Con lr 2.5e-4 ninguna corrida tiene caídas así. El lr alto del PPO anterior
+  era parte del problema.
+* **Frame skip: cambia qué cuesta qué.** Por *decisión* (cada una cuesta un
+  paso de la red), sin frame skip se aprende menos: 42%, por debajo de las dos
+  semillas de la receta. Con frame skip, γ = 0.99 cubre ~8 s de conducción en
+  vez de ~2 s, y cada acción tiene un efecto visible en la imagen. Por *frame*
+  simulado es al revés: sin skip se aprovecha mejor cada frame, pero los
+  frames del skip son casi gratis porque no se renderizan.
+* **Stack de 4 frames: sin efecto medible al principio** (49% vs 50–68%). La
+  barra inferior de la imagen de CarRacing ya muestra la velocidad, los
+  sensores ABS, el volante y el giroscopio, así que un solo frame ya trae
+  información de movimiento. Por eso el intérprete viejo (que casi borraba el
+  frame anterior) no era el problema principal.
+* **Acciones originales vs. las 7 propias: dentro del ruido.** 72% y 61% con
+  las originales contra 50% y 68% con las propias. Las 7 acciones **no** fueron
+  la razón del éxito; el acelerador débil del modo discreto original no
+  impedía aprender. Lo que no se midió es si con gas 0.2 se llega a vueltas de
+  ~16 s como las del modelo final, que acelera a fondo en las rectas; haría
+  falta un run completo de 1.5M decisiones.
 
-<!-- SEMILLA2 -->
-
-> **Advertencias.** Cada configuración es una sola semilla: diferencias de
-> menos de ~10 puntos pueden ser ruido. 100k decisiones es el arranque del
+> **Advertencias.** Salvo la receta completa y las acciones originales, cada
+> configuración tiene una sola semilla. 100k decisiones es el arranque del
 > aprendizaje; un cambio que no ayuda al principio puede ayudar al final, y al
 > revés. Los minutos no son comparables entre corridas: el run principal usó
 > 4 hilos y las ablaciones 2, porque a las ~3 h de uso continuo la máquina
@@ -289,8 +303,9 @@ implementados.
 
 En resumen, el carrito aprendió por tres cosas que valen para cualquier algoritmo:
 
-1. **Un entorno que deja aprender:** fin anticipado al salirse, frame skip, la
-   imagen completa a 96×96 y una definición de vuelta real.
+1. **Un entorno que deja aprender:** fin anticipado al salirse y frame skip
+   (los dos con efecto medido en la sección 5), más la imagen completa a
+   96×96 y una definición de vuelta real (no medidos por separado).
 2. **Una implementación correcta del algoritmo**, sin bugs como la red objetivo
    que se copia en cada paso o las 300 épocas sobre un solo episodio.
 3. **Hiperparámetros estándar** (lr 2.5e-4 o 1e-4, γ = 0.99) en vez de valores
@@ -304,8 +319,9 @@ En resumen, el carrito aprendió por tres cosas que valen para cualquier algorit
   una curva cerrada y luego da vueltas buscando las que le faltan. Ideas para
   arreglarlo: entrenar con más de 40 s por episodio, penalizar salirse de la
   pista o seguir entrenando.
-* **Una sola semilla por experimento** (salvo las dos que se repitieron). Para
-  afirmaciones fuertes harían falta 3–5 semillas.
+* **Pocas semillas.** Solo la receta completa y las acciones originales
+  tienen 2; el resto, 1. Con ~17 puntos de ruido entre semillas, para
+  afirmaciones fuertes harían falta 3–5 por configuración.
 * **Las ablaciones solo cubren el arranque** (100k decisiones). En particular,
   falta comprobar si las acciones originales (gas 0.2) llegan a vueltas tan
   rápidas como las del modelo final.
