@@ -2,6 +2,29 @@
 
 Machine learning methods to drive a car using reinforcement learning with robust seed consistency for reproducible results.
 
+## 🏁 PPO que da la vuelta completa
+
+![Vuelta en Monza](images/ppo_vuelta_monza_seed_18.gif)
+
+El agente PPO nuevo **completa la vuelta**: en Monza (semilla 18) la hace en
+~16 s, y en 20 pistas que nunca vio la completa en el 90% de los casos
+(regla del 95% de la pista) o en el 67% (criterio estricto de Gymnasium,
+100% de baldosas). Todo lo que se cambió, por qué el código anterior no
+aprendía, qué aporta cada cambio y la comparación con DQN están en
+**[docs/aprendizaje_ppo.md](docs/aprendizaje_ppo.md)**.
+
+```bash
+pip install -r requirements-ppo.txt
+```
+
+```bash
+python evaluate_ppo.py --model models/ppo_racer/ppo_racer_final.pt --seeds 18 --human
+```
+
+```bash
+python train_ppo.py --total-steps 1500000
+```
+
 ## 🎯 Características Principales
 
 - **Control Manual**: Conduce manualmente usando las teclas de flecha con grabación de video opcional
@@ -132,8 +155,9 @@ SEED_RANGE = range(51, 101)  # Explora semillas 51-100
 
 ## 📈 Resultados y Métricas
 
-- **DQN**: 8% de progreso promedio en CarRacing-v2
-- **PPO**: 8% de progreso promedio con mejor estabilidad
+- **DQN (código anterior)**: 8% de progreso promedio en CarRacing-v2
+- **PPO (código anterior)**: 8% de progreso promedio
+- **PPO nuevo (`train_ppo.py`)**: vuelta completa; 99% de la pista en promedio en 21 pistas de evaluación (ver [docs/aprendizaje_ppo.md](docs/aprendizaje_ppo.md))
 - **Consistencia**: 100% de reproducibilidad en generación de circuitos
 - **Exploración**: 50 semillas analizadas con ranking de complejidad
 

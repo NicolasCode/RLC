@@ -59,3 +59,4 @@ models/ablations/*/last.pt
 models/ablations/*/best.pt
 models/dqn_racer/last.pt
 models/*.log
+models/**/.terminado

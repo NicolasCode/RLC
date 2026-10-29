@@ -1,0 +1,92 @@
+== models/ppo_racer/ppo_racer_primera_vuelta.pt (acción más probable)
+semilla    18 | vuelta no | vuelta95 SI (19.4 s) | pista  98.1% | retorno  674.4 | tiempo  60.0 s | nada:609 izq:82 der:39 gas:20 freno:0 izq+gas:0 der+gas:0
+semilla  1000 | vuelta no | vuelta95 no         | pista   0.7% | retorno -300.0 | tiempo  60.0 s | nada:750 izq:0 der:0 gas:0 freno:0 izq+gas:0 der+gas:0
+semilla  1001 | vuelta no | vuelta95 SI (21.3 s) | pista  98.4% | retorno  677.6 | tiempo  60.0 s | nada:630 izq:75 der:28 gas:17 freno:0 izq+gas:0 der+gas:0
+semilla  1002 | vuelta no | vuelta95 SI (42.3 s) | pista  98.9% | retorno  681.8 | tiempo  60.0 s | nada:629 izq:80 der:25 gas:16 freno:0 izq+gas:0 der+gas:0
+semilla  1003 | vuelta no | vuelta95 SI (18.4 s) | pista  99.0% | retorno  683.3 | tiempo  60.0 s | nada:606 izq:95 der:30 gas:19 freno:0 izq+gas:0 der+gas:0
+semilla  1004 | vuelta no | vuelta95 SI (24.2 s) | pista  95.6% | retorno  649.7 | tiempo  60.0 s | nada:637 izq:73 der:28 gas:12 freno:0 izq+gas:0 der+gas:0
+semilla  1005 | vuelta no | vuelta95 no         | pista   0.6% | retorno -300.0 | tiempo  60.0 s | nada:750 izq:0 der:0 gas:0 freno:0 izq+gas:0 der+gas:0
+semilla  1006 | vuelta SI | vuelta95 SI (17.6 s) | pista 100.0% | retorno  833.9 | tiempo  31.8 s | nada:326 izq:41 der:15 gas:16 freno:0 izq+gas:0 der+gas:0
+semilla  1007 | vuelta no | vuelta95 SI (23.0 s) | pista  98.1% | retorno  674.1 | tiempo  60.0 s | nada:623 izq:79 der:33 gas:15 freno:0 izq+gas:0 der+gas:0
+semilla  1008 | vuelta SI | vuelta95 SI (21.1 s) | pista 100.0% | retorno  746.3 | tiempo  49.5 s | nada:501 izq:69 der:32 gas:17 freno:0 izq+gas:0 der+gas:0
+semilla  1009 | vuelta no | vuelta95 SI (45.6 s) | pista  99.3% | retorno  685.2 | tiempo  60.0 s | nada:642 izq:70 der:24 gas:14 freno:0 izq+gas:0 der+gas:0
+semilla  1010 | vuelta no | vuelta95 SI (21.3 s) | pista  97.6% | retorno  670.2 | tiempo  60.0 s | nada:602 izq:84 der:43 gas:21 freno:0 izq+gas:0 der+gas:0
+semilla  1011 | vuelta SI | vuelta95 SI (23.8 s) | pista 100.0% | retorno  783.9 | tiempo  41.9 s | nada:435 izq:55 der:20 gas:14 freno:0 izq+gas:0 der+gas:0
+semilla  1012 | vuelta no | vuelta95 SI (19.1 s) | pista  98.0% | retorno  673.0 | tiempo  60.0 s | nada:623 izq:76 der:33 gas:18 freno:0 izq+gas:0 der+gas:0
+semilla  1013 | vuelta no | vuelta95 no         | pista  90.3% | retorno  597.6 | tiempo  60.0 s | nada:635 izq:71 der:33 gas:11 freno:0 izq+gas:0 der+gas:0
+semilla  1014 | vuelta no | vuelta95 no         | pista  95.3% | retorno  645.9 | tiempo  60.0 s | nada:636 izq:71 der:30 gas:13 freno:0 izq+gas:0 der+gas:0
+semilla  1015 | vuelta no | vuelta95 no         | pista  93.1% | retorno  624.8 | tiempo  60.0 s | nada:605 izq:87 der:44 gas:14 freno:0 izq+gas:0 der+gas:0
+semilla  1016 | vuelta no | vuelta95 no         | pista   0.6% | retorno -300.0 | tiempo  60.0 s | nada:750 izq:0 der:0 gas:0 freno:0 izq+gas:0 der+gas:0
+semilla  1017 | vuelta SI | vuelta95 SI (19.6 s) | pista 100.0% | retorno  895.0 | tiempo  19.6 s | nada:188 izq:30 der:13 gas:15 freno:0 izq+gas:0 der+gas:0
+semilla  1018 | vuelta no | vuelta95 no         | pista  91.0% | retorno  603.8 | tiempo  60.0 s | nada:600 izq:86 der:48 gas:16 freno:0 izq+gas:0 der+gas:0
+semilla  1019 | vuelta no | vuelta95 SI (18.3 s) | pista  98.5% | retorno  677.7 | tiempo  60.0 s | nada:621 izq:91 der:23 gas:15 freno:0 izq+gas:0 der+gas:0
+Vueltas completadas: 4/21 (19%) | regla 95%: 14/21 (67%) | pista media 83.5% | retorno medio 551.3
+== models/ppo_racer/ppo_racer_primera_vuelta.pt (acciones muestreadas)
+semilla    18 | vuelta SI | vuelta95 SI (19.7 s) | pista 100.0% | retorno  895.3 | tiempo  19.7 s | nada:122 izq:45 der:29 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  1000 | vuelta SI | vuelta95 SI (42.9 s) | pista 100.0% | retorno  778.7 | tiempo  42.9 s | nada:220 izq:147 der:59 gas:108 freno:0 izq+gas:2 der+gas:1
+semilla  1001 | vuelta no | vuelta95 SI (40.5 s) | pista  99.0% | retorno  684.0 | tiempo  60.0 s | nada:341 izq:125 der:137 gas:142 freno:0 izq+gas:4 der+gas:1
+semilla  1002 | vuelta SI | vuelta95 SI (16.6 s) | pista 100.0% | retorno  756.3 | tiempo  47.3 s | nada:273 izq:126 der:84 gas:97 freno:1 izq+gas:8 der+gas:2
+semilla  1003 | vuelta SI | vuelta95 SI (51.9 s) | pista 100.0% | retorno  733.9 | tiempo  51.9 s | nada:246 izq:168 der:101 gas:131 freno:0 izq+gas:2 der+gas:1
+semilla  1004 | vuelta no | vuelta95 SI (19.4 s) | pista  99.3% | retorno  686.6 | tiempo  60.0 s | nada:318 izq:206 der:94 gas:122 freno:2 izq+gas:5 der+gas:3
+semilla  1005 | vuelta no | vuelta95 no         | pista  99.7% | retorno  690.8 | tiempo  60.0 s | nada:283 izq:204 der:113 gas:142 freno:2 izq+gas:4 der+gas:2
+semilla  1006 | vuelta SI | vuelta95 SI (36.6 s) | pista 100.0% | retorno  809.8 | tiempo  36.6 s | nada:218 izq:80 der:62 gas:94 freno:0 izq+gas:2 der+gas:2
+semilla  1007 | vuelta SI | vuelta95 SI (18.8 s) | pista 100.0% | retorno  899.3 | tiempo  18.8 s | nada:99 izq:51 der:31 gas:55 freno:0 izq+gas:0 der+gas:0
+semilla  1008 | vuelta SI | vuelta95 SI (34.8 s) | pista 100.0% | retorno  784.7 | tiempo  41.8 s | nada:228 izq:80 der:104 gas:108 freno:0 izq+gas:2 der+gas:1
+semilla  1009 | vuelta SI | vuelta95 SI (25.1 s) | pista 100.0% | retorno  777.3 | tiempo  43.1 s | nada:268 izq:130 der:41 gas:93 freno:2 izq+gas:3 der+gas:2
+semilla  1010 | vuelta SI | vuelta95 SI (19.8 s) | pista 100.0% | retorno  792.5 | tiempo  40.3 s | nada:239 izq:112 der:54 gas:89 freno:1 izq+gas:7 der+gas:2
+semilla  1011 | vuelta SI | vuelta95 SI (42.7 s) | pista 100.0% | retorno  773.5 | tiempo  44.0 s | nada:280 izq:106 der:55 gas:105 freno:0 izq+gas:3 der+gas:1
+semilla  1012 | vuelta SI | vuelta95 SI (41.1 s) | pista 100.0% | retorno  787.7 | tiempo  41.1 s | nada:264 izq:99 der:60 gas:88 freno:0 izq+gas:3 der+gas:0
+semilla  1013 | vuelta no | vuelta95 SI (44.5 s) | pista  99.7% | retorno  691.9 | tiempo  60.0 s | nada:299 izq:180 der:141 gas:127 freno:0 izq+gas:2 der+gas:1
+semilla  1014 | vuelta SI | vuelta95 SI (28.7 s) | pista 100.0% | retorno  849.6 | tiempo  28.7 s | nada:131 izq:122 der:40 gas:61 freno:0 izq+gas:4 der+gas:1
+semilla  1015 | vuelta SI | vuelta95 SI (56.6 s) | pista 100.0% | retorno  705.8 | tiempo  57.5 s | nada:339 izq:165 der:93 gas:114 freno:1 izq+gas:4 der+gas:4
+semilla  1016 | vuelta no | vuelta95 no         | pista  98.7% | retorno  680.6 | tiempo  60.0 s | nada:307 izq:221 der:73 gas:138 freno:1 izq+gas:6 der+gas:4
+semilla  1017 | vuelta SI | vuelta95 SI (19.2 s) | pista 100.0% | retorno  838.9 | tiempo  30.9 s | nada:209 izq:71 der:37 gas:62 freno:1 izq+gas:4 der+gas:2
+semilla  1018 | vuelta no | vuelta95 no         | pista  93.9% | retorno  632.9 | tiempo  60.0 s | nada:303 izq:175 der:126 gas:143 freno:0 izq+gas:3 der+gas:0
+semilla  1019 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  845.5 | tiempo  29.4 s | nada:182 izq:68 der:37 gas:79 freno:1 izq+gas:1 der+gas:0
+Vueltas completadas: 15/21 (71%) | regla 95%: 18/21 (86%) | pista media 99.5% | retorno medio 766.5
+== models/ppo_racer/ppo_racer_final.pt (acción más probable)
+semilla    18 | vuelta no | vuelta95 SI (16.4 s) | pista  99.0% | retorno  684.0 | tiempo  60.0 s | nada:143 izq:383 der:99 gas:122 freno:0 izq+gas:0 der+gas:3
+semilla  1000 | vuelta no | vuelta95 SI (18.0 s) | pista  97.3% | retorno  665.9 | tiempo  60.0 s | nada:116 izq:555 der:24 gas:54 freno:0 izq+gas:0 der+gas:1
+semilla  1001 | vuelta no | vuelta95 SI (19.8 s) | pista  97.8% | retorno  671.2 | tiempo  60.0 s | nada:180 izq:394 der:72 gas:103 freno:0 izq+gas:0 der+gas:1
+semilla  1002 | vuelta SI | vuelta95 SI (15.2 s) | pista 100.0% | retorno  778.6 | tiempo  42.8 s | nada:176 izq:144 der:93 gas:123 freno:0 izq+gas:0 der+gas:0
+semilla  1003 | vuelta SI | vuelta95 SI (15.9 s) | pista 100.0% | retorno  784.4 | tiempo  41.8 s | nada:180 izq:167 der:69 gas:107 freno:0 izq+gas:0 der+gas:0
+semilla  1004 | vuelta SI | vuelta95 SI (16.0 s) | pista 100.0% | retorno  913.5 | tiempo  16.0 s | nada:117 izq:34 der:15 gas:34 freno:0 izq+gas:0 der+gas:0
+semilla  1005 | vuelta no | vuelta95 no         | pista  90.8% | retorno  601.8 | tiempo  60.0 s | nada:106 izq:543 der:37 gas:63 freno:0 izq+gas:0 der+gas:1
+semilla  1006 | vuelta SI | vuelta95 SI (13.9 s) | pista 100.0% | retorno  733.0 | tiempo  52.0 s | nada:274 izq:168 der:75 gas:133 freno:0 izq+gas:0 der+gas:0
+semilla  1007 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  909.4 | tiempo  16.8 s | nada:115 izq:38 der:16 gas:42 freno:0 izq+gas:0 der+gas:0
+semilla  1008 | vuelta SI | vuelta95 SI (16.5 s) | pista 100.0% | retorno  714.7 | tiempo  55.8 s | nada:259 izq:153 der:133 gas:150 freno:0 izq+gas:0 der+gas:3
+semilla  1009 | vuelta SI | vuelta95 SI (13.9 s) | pista 100.0% | retorno  727.8 | tiempo  53.0 s | nada:273 izq:191 der:60 gas:136 freno:0 izq+gas:0 der+gas:2
+semilla  1010 | vuelta SI | vuelta95 SI (35.0 s) | pista 100.0% | retorno  743.1 | tiempo  50.2 s | nada:229 izq:167 der:96 gas:134 freno:0 izq+gas:0 der+gas:2
+semilla  1011 | vuelta SI | vuelta95 SI (16.0 s) | pista 100.0% | retorno  913.5 | tiempo  16.0 s | nada:118 izq:34 der:12 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  1012 | vuelta SI | vuelta95 SI (32.6 s) | pista 100.0% | retorno  744.6 | tiempo  49.7 s | nada:250 izq:139 der:99 gas:132 freno:0 izq+gas:0 der+gas:2
+semilla  1013 | vuelta no | vuelta95 SI (20.3 s) | pista  97.0% | retorno  665.0 | tiempo  60.0 s | nada:290 izq:175 der:139 gas:146 freno:0 izq+gas:0 der+gas:0
+semilla  1014 | vuelta SI | vuelta95 SI (15.8 s) | pista 100.0% | retorno  914.4 | tiempo  15.8 s | nada:101 izq:37 der:19 gas:40 freno:0 izq+gas:0 der+gas:0
+semilla  1015 | vuelta no | vuelta95 SI (18.0 s) | pista  99.0% | retorno  683.7 | tiempo  60.0 s | nada:191 izq:190 der:82 gas:113 freno:172 izq+gas:0 der+gas:2
+semilla  1016 | vuelta SI | vuelta95 SI (16.6 s) | pista 100.0% | retorno  898.7 | tiempo  19.0 s | nada:115 izq:48 der:23 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  1017 | vuelta SI | vuelta95 SI (15.4 s) | pista 100.0% | retorno  760.5 | tiempo  46.5 s | nada:235 izq:152 der:68 gas:124 freno:0 izq+gas:0 der+gas:3
+semilla  1018 | vuelta no | vuelta95 no         | pista  97.1% | retorno  665.0 | tiempo  60.0 s | nada:152 izq:381 der:91 gas:125 freno:0 izq+gas:0 der+gas:1
+semilla  1019 | vuelta SI | vuelta95 SI (14.4 s) | pista 100.0% | retorno  920.6 | tiempo  14.4 s | nada:99 izq:32 der:13 gas:36 freno:0 izq+gas:0 der+gas:0
+Vueltas completadas: 14/21 (67%) | regla 95%: 19/21 (90%) | pista media 99.0% | retorno medio 766.4
+== models/ppo_racer/ppo_racer_final.pt (acciones muestreadas)
+semilla    18 | vuelta no | vuelta95 SI (16.7 s) | pista  99.0% | retorno  684.0 | tiempo  60.0 s | nada:175 izq:293 der:92 gas:146 freno:7 izq+gas:17 der+gas:20
+semilla  1000 | vuelta SI | vuelta95 SI (16.4 s) | pista 100.0% | retorno  911.2 | tiempo  16.4 s | nada:94 izq:39 der:20 gas:47 freno:0 izq+gas:2 der+gas:3
+semilla  1001 | vuelta SI | vuelta95 SI (46.5 s) | pista 100.0% | retorno  761.2 | tiempo  46.5 s | nada:243 izq:125 der:78 gas:124 freno:0 izq+gas:5 der+gas:6
+semilla  1002 | vuelta SI | vuelta95 SI (28.9 s) | pista 100.0% | retorno  848.2 | tiempo  28.9 s | nada:121 izq:78 der:67 gas:87 freno:2 izq+gas:1 der+gas:6
+semilla  1003 | vuelta no | vuelta95 no         | pista  94.0% | retorno  633.3 | tiempo  60.0 s | nada:314 izq:122 der:129 gas:164 freno:1 izq+gas:9 der+gas:11
+semilla  1004 | vuelta SI | vuelta95 SI (15.9 s) | pista 100.0% | retorno  905.7 | tiempo  17.5 s | nada:83 izq:42 der:29 gas:58 freno:1 izq+gas:6 der+gas:0
+semilla  1005 | vuelta no | vuelta95 SI (41.1 s) | pista  99.4% | retorno  687.7 | tiempo  60.0 s | nada:205 izq:216 der:115 gas:169 freno:4 izq+gas:17 der+gas:24
+semilla  1006 | vuelta no | vuelta95 SI (14.1 s) | pista  98.6% | retorno  678.6 | tiempo  60.0 s | nada:178 izq:307 der:84 gas:143 freno:6 izq+gas:16 der+gas:16
+semilla  1007 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  909.6 | tiempo  16.8 s | nada:91 izq:39 der:17 gas:54 freno:1 izq+gas:2 der+gas:6
+semilla  1008 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  754.2 | tiempo  47.9 s | nada:171 izq:135 der:91 gas:165 freno:3 izq+gas:17 der+gas:17
+semilla  1009 | vuelta SI | vuelta95 SI (13.8 s) | pista 100.0% | retorno  923.7 | tiempo  13.8 s | nada:77 izq:33 der:13 gas:48 freno:0 izq+gas:1 der+gas:1
+semilla  1010 | vuelta no | vuelta95 SI (29.6 s) | pista  98.2% | retorno  676.2 | tiempo  60.0 s | nada:174 izq:322 der:80 gas:136 freno:4 izq+gas:19 der+gas:15
+semilla  1011 | vuelta SI | vuelta95 SI (15.6 s) | pista 100.0% | retorno  754.7 | tiempo  47.7 s | nada:193 izq:114 der:79 gas:168 freno:5 izq+gas:15 der+gas:23
+semilla  1012 | vuelta no | vuelta95 SI (15.6 s) | pista  98.6% | retorno  679.7 | tiempo  60.0 s | nada:268 izq:173 der:76 gas:178 freno:5 izq+gas:23 der+gas:27
+semilla  1013 | vuelta no | vuelta95 SI (46.2 s) | pista  98.1% | retorno  675.7 | tiempo  60.0 s | nada:210 izq:182 der:143 gas:167 freno:1 izq+gas:20 der+gas:27
+semilla  1014 | vuelta SI | vuelta95 SI (15.4 s) | pista 100.0% | retorno  916.0 | tiempo  15.4 s | nada:79 izq:38 der:17 gas:56 freno:0 izq+gas:2 der+gas:1
+semilla  1015 | vuelta SI | vuelta95 SI (17.5 s) | pista 100.0% | retorno  808.4 | tiempo  37.0 s | nada:137 izq:115 der:53 gas:127 freno:4 izq+gas:6 der+gas:21
+semilla  1016 | vuelta SI | vuelta95 SI (16.4 s) | pista 100.0% | retorno  723.5 | tiempo  54.0 s | nada:189 izq:173 der:105 gas:169 freno:5 izq+gas:8 der+gas:26
+semilla  1017 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  880.6 | tiempo  22.5 s | nada:102 izq:59 der:28 gas:80 freno:2 izq+gas:6 der+gas:5
+semilla  1018 | vuelta no | vuelta95 no         | pista  93.6% | retorno  630.0 | tiempo  60.0 s | nada:252 izq:137 der:161 gas:167 freno:0 izq+gas:15 der+gas:18
+semilla  1019 | vuelta SI | vuelta95 SI (33.9 s) | pista 100.0% | retorno  820.9 | tiempo  34.3 s | nada:134 izq:79 der:47 gas:133 freno:2 izq+gas:11 der+gas:24
+Vueltas completadas: 13/21 (62%) | regla 95%: 19/21 (90%) | pista media 99.0% | retorno medio 774.4

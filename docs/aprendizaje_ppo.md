@@ -5,7 +5,39 @@ avanzar (≈5–8% de la pista) a **completar vueltas enteras** en CarRacing, cu
 aporta cada cambio (medido, no supuesto), y por qué PPO lo logró donde el DQN
 anterior no.
 
-<!-- RESULTADOS -->
+## Resultado
+
+![Vuelta en Monza](../images/ppo_vuelta_monza_seed_18.gif)
+
+**Sí, el carrito aprendió a dar la vuelta.** El modelo final
+(`models/ppo_racer/ppo_racer_final.pt`) se entrenó 1.5M decisiones (6M frames,
+2 h 53 min en 4 CPUs). Se evaluó en Monza (semilla 18) y en **20 pistas que
+nunca vio** (semillas 1000–1019), con hasta 60 s por intento:
+
+| Modelo | Vuelta oficial de Gymnasium (100% de baldosas) | Vuelta con la regla del 95% | Tiempo mediano de vuelta | Pista recorrida |
+|---|---|---|---|---|
+| Inicio (pesos aleatorios) | 0/21 | 0/21 | — | ~5% |
+| Primer modelo que dio la vuelta (390k decisiones, 43 min) | 4/21 | 14/21 | 21.3 s | 83.5% |
+| **Final (1.5M decisiones)** | **14/21 (67%)** | **19/21 (90%)** | **16.4 s** | **99.0%** |
+
+(Evaluación con la acción más probable; el detalle por pista, y con acciones
+muestreadas, está en `experiments/evaluacion_final.txt`.)
+
+En Monza, la vuelta de la animación dura **16.2 s** con retorno 892 (la
+primera vuelta en Monza, a los 43 min de entrenamiento, tardó 36 s e incluía
+una salida a la hierba con trompos: `images/ppo_primera_vuelta_seed_18.png`).
+
+![Trayectoria en Monza](../images/ppo_vuelta_monza_seed_18.png)
+
+> **Ojo con la definición de "vuelta".** Gymnasium documenta que una vuelta
+> termina al volver a la salida con el 95% de las baldosas pisadas. Pero en
+> Gymnasium 1.x ese chequeo está dentro de `if not tile.road_visited` y la
+> baldosa de salida ya se pisa al arrancar, así que **nunca se cumple**: el
+> entorno solo declara la vuelta al pisar el **100%** de las baldosas. Por eso
+> se reportan los dos criterios. La mayoría de las "no vueltas oficiales" son
+> vueltas completas en ~16 s a las que les faltaron 2–5 baldosas en una curva
+> cerrada (ver `RacingEnv._on_finish_line_after_95` en `Utils/car_env.py`).
+
 
 ---
 
@@ -124,7 +156,43 @@ de cada episodio), con 4 épocas (no 300), un lr 40× menor, ventajas
 normalizadas, la pérdida de valor entrena toda la red y hay bonus de entropía
 para que siga explorando.
 
-<!-- ENTRENAMIENTO -->
+## 4. Cómo fue el entrenamiento
+
+![Curva de aprendizaje](../images/PPO_racer_learning.png)
+
+Datos completos en `models/ppo_racer/progress.csv` (una fila por cada
+actualización de PPO, es decir, cada 1024 decisiones).
+
+| Hito | Decisiones | Frames | Minutos |
+|---|---|---|---|
+| Recorre el 25% de la pista | 42k | 168k | 4.4 |
+| Primera vuelta completa (en entrenamiento) | 71k | 283k | 7.4 |
+| Recorre el 50% de la pista | 75k | 299k | 7.9 |
+| Recorre el 75% | 262k | 1.05M | 29 |
+| Recorre el 90% | 379k | 1.52M | 41 |
+| Primera vuelta en Monza (evaluación) | 390k | 1.56M | 43 |
+| Final: 95% de la pista, retorno 847 | 1.5M | 6M | 173 |
+
+Observaciones:
+
+* **Lo más rápido es aprender a acelerar y seguir la pista:** en 8 minutos pasa
+  del 5% al 50%. Lo lento es pulir las curvas cerradas, donde se sale y pierde
+  baldosas.
+* **La curva tiene caídas** (por ejemplo a los ~1.8M y ~2.8M frames). Es normal
+  en PPO: una actualización empeora la política y las siguientes la corrigen.
+  El decaimiento del learning rate hace que al final sea más estable.
+* **La tasa de vueltas en entrenamiento (15–40%) subestima al agente.** En
+  entrenamiento los episodios se cortan a los 40 s, las acciones son
+  aleatorias (se muestrean de la política) y hace falta el 100% de las
+  baldosas. En evaluación, con 60 s, la misma política da la vuelta en el
+  67% de las pistas (100%) o en el 90% (regla del 95%).
+* **La entropía baja de 1.94 (azar puro con 7 acciones) a ~0.65:** la política
+  se vuelve más decidida, sin colapsar a una sola acción.
+* **Política estocástica vs. la acción más probable:** a mitad del
+  entrenamiento, tomar siempre la acción más probable hacía que el carro se
+  quedara girando en círculos (29% de la pista frente a 67% muestreando). Con
+  el modelo final ambos modos rinden parecido.
+
 
 <!-- ABLACIONES -->
 

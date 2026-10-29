@@ -1,0 +1,9 @@
+# Dependencias del pipeline PPO (train_ppo.py / evaluate_ppo.py), probado con Python 3.13.
+# requirements.txt conserva las versiones del código anterior (gymnasium 0.29 / CarRacing-v2).
+gymnasium[box2d]==1.4.0
+torch==2.15.0
+numpy==2.5.3
+opencv-python-headless==5.0.0.93
+matplotlib==3.11.2
+pandas==3.0.5
+pillow==12.3.0
