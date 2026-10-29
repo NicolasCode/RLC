@@ -50,3 +50,8 @@ Thumbs.db
 *.mov
 *.wmv
 *.csv
+
+# Checkpoints de entrenamiento PPO (el modelo final se guarda aparte)
+models/ppo_racer/last.pt
+models/ppo_racer/best.pt
+models/ppo_racer/train.log
