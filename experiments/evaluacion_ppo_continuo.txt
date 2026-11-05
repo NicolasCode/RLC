@@ -1,0 +1,24 @@
+Modelo: models/v2_acciones_continuas/ppo_continuo_final.pt (entrenado 1500160 decisiones = 6000640 frames)
+semilla    18 | vuelta SI | vuelta95 SI (22.3 s) | pista 100.0% | retorno  881.9 | tiempo  22.3 s | |dirección| media 0.41 | acelera 91% (media 0.29) | frena 7%
+semilla  1000 | vuelta no | vuelta95 no         | pista  61.8% | retorno  310.9 | tiempo  60.0 s | |dirección| media 0.25 | acelera 96% (media 0.26) | frena 3%
+semilla  1001 | vuelta no | vuelta95 SI (29.6 s) | pista  99.0% | retorno  684.0 | tiempo  60.0 s | |dirección| media 0.46 | acelera 86% (media 0.33) | frena 13%
+semilla  1002 | vuelta SI | vuelta95 SI (32.6 s) | pista 100.0% | retorno  829.7 | tiempo  32.6 s | |dirección| media 0.44 | acelera 87% (media 0.31) | frena 11%
+semilla  1003 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  867.6 | tiempo  25.1 s | |dirección| media 0.43 | acelera 89% (media 0.34) | frena 9%
+semilla  1004 | vuelta SI | vuelta95 SI (15.8 s) | pista 100.0% | retorno  883.4 | tiempo  22.0 s | |dirección| media 0.43 | acelera 87% (media 0.32) | frena 10%
+semilla  1005 | vuelta no | vuelta95 SI (17.8 s) | pista  99.1% | retorno  684.7 | tiempo  60.0 s | |dirección| media 0.50 | acelera 85% (media 0.34) | frena 14%
+semilla  1006 | vuelta no | vuelta95 no         | pista  95.4% | retorno  646.4 | tiempo  60.0 s | |dirección| media 0.31 | acelera 97% (media 0.26) | frena 3%
+semilla  1007 | vuelta SI | vuelta95 SI (16.2 s) | pista 100.0% | retorno  907.1 | tiempo  17.3 s | |dirección| media 0.40 | acelera 90% (media 0.33) | frena 9%
+semilla  1008 | vuelta no | vuelta95 SI (15.9 s) | pista  98.7% | retorno  681.0 | tiempo  60.0 s | |dirección| media 0.48 | acelera 87% (media 0.33) | frena 12%
+semilla  1009 | vuelta SI | vuelta95 SI (29.4 s) | pista 100.0% | retorno  780.2 | tiempo  42.5 s | |dirección| media 0.47 | acelera 89% (media 0.32) | frena 10%
+semilla  1010 | vuelta SI | vuelta95 SI (20.2 s) | pista 100.0% | retorno  887.3 | tiempo  21.3 s | |dirección| media 0.40 | acelera 86% (media 0.29) | frena 11%
+semilla  1011 | vuelta no | vuelta95 no         | pista  94.7% | retorno  640.4 | tiempo  60.0 s | |dirección| media 0.38 | acelera 27% (media 0.08) | frena 72%
+semilla  1012 | vuelta SI | vuelta95 SI (15.0 s) | pista 100.0% | retorno  751.9 | tiempo  48.3 s | |dirección| media 0.51 | acelera 87% (media 0.32) | frena 10%
+semilla  1013 | vuelta SI | vuelta95 SI (19.7 s) | pista 100.0% | retorno  831.3 | tiempo  32.7 s | |dirección| media 0.46 | acelera 86% (media 0.32) | frena 12%
+semilla  1014 | vuelta SI | vuelta95 SI (15.3 s) | pista 100.0% | retorno  891.8 | tiempo  20.3 s | |dirección| media 0.45 | acelera 89% (media 0.33) | frena 10%
+semilla  1015 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  825.4 | tiempo  33.6 s | |dirección| media 0.46 | acelera 84% (media 0.31) | frena 14%
+semilla  1016 | vuelta no | vuelta95 SI (16.2 s) | pista  99.4% | retorno  687.1 | tiempo  60.0 s | |dirección| media 0.49 | acelera 87% (media 0.34) | frena 12%
+semilla  1017 | vuelta no | vuelta95 no         | pista  38.6% | retorno   78.8 | tiempo  60.0 s | |dirección| media 0.18 | acelera 99% (media 0.27) | frena 1%
+semilla  1018 | vuelta no | vuelta95 SI (18.8 s) | pista  98.5% | retorno  679.6 | tiempo  60.0 s | |dirección| media 0.46 | acelera 84% (media 0.32) | frena 13%
+semilla  1019 | vuelta SI | vuelta95 SI (13.7 s) | pista 100.0% | retorno  860.2 | tiempo  26.5 s | |dirección| media 0.46 | acelera 88% (media 0.33) | frena 11%
+
+Vueltas completadas: 12/21 (57%) | regla 95%: 17/21 (81%) | pista media 94.5% | retorno medio 728.1

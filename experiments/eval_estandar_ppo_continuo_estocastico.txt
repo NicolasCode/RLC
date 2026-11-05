@@ -1,0 +1,103 @@
+Modelo: models/v2_acciones_continuas/ppo_continuo_final.pt (entrenado 1500160 decisiones = 6000640 frames)
+semilla  2000 | vuelta no | vuelta95 SI (17.3 s) | pista  96.3% | retorno  861.0 | tiempo  19.0 s | |dirección| media 0.47 | acelera 84% (media 0.35) | frena 14%
+semilla  2001 | vuelta no | vuelta95 SI (14.6 s) | pista  98.6% | retorno  883.5 | tiempo  19.0 s | |dirección| media 0.44 | acelera 87% (media 0.36) | frena 10%
+semilla  2002 | vuelta no | vuelta95 no         | pista  95.1% | retorno  847.8 | tiempo  19.0 s | |dirección| media 0.44 | acelera 86% (media 0.38) | frena 14%
+semilla  2003 | vuelta no | vuelta95 SI (14.2 s) | pista  95.3% | retorno  850.5 | tiempo  19.0 s | |dirección| media 0.44 | acelera 87% (media 0.37) | frena 9%
+semilla  2004 | vuelta no | vuelta95 no         | pista  59.3% | retorno  490.7 | tiempo  19.0 s | |dirección| media 0.39 | acelera 82% (media 0.29) | frena 15%
+semilla  2005 | vuelta no | vuelta95 SI (14.6 s) | pista  97.2% | retorno  870.0 | tiempo  19.0 s | |dirección| media 0.48 | acelera 86% (media 0.35) | frena 11%
+semilla  2006 | vuelta no | vuelta95 no         | pista  76.3% | retorno  662.6 | tiempo  19.0 s | |dirección| media 0.42 | acelera 81% (media 0.30) | frena 14%
+semilla  2007 | vuelta SI | vuelta95 SI (15.2 s) | pista 100.0% | retorno  916.7 | tiempo  15.2 s | |dirección| media 0.45 | acelera 89% (media 0.36) | frena 10%
+semilla  2008 | vuelta no | vuelta95 SI (17.3 s) | pista  98.0% | retorno  878.1 | tiempo  19.0 s | |dirección| media 0.48 | acelera 85% (media 0.36) | frena 12%
+semilla  2009 | vuelta SI | vuelta95 SI (14.9 s) | pista 100.0% | retorno  917.9 | tiempo  14.9 s | |dirección| media 0.47 | acelera 83% (media 0.35) | frena 12%
+semilla  2010 | vuelta no | vuelta95 SI (18.1 s) | pista  99.7% | retorno  894.9 | tiempo  19.0 s | |dirección| media 0.42 | acelera 86% (media 0.34) | frena 11%
+semilla  2011 | vuelta no | vuelta95 SI (17.4 s) | pista  98.7% | retorno  884.9 | tiempo  19.0 s | |dirección| media 0.46 | acelera 83% (media 0.35) | frena 15%
+semilla  2012 | vuelta no | vuelta95 no         | pista  92.5% | retorno  822.4 | tiempo  19.0 s | |dirección| media 0.45 | acelera 84% (media 0.38) | frena 14%
+semilla  2013 | vuelta SI | vuelta95 SI (16.8 s) | pista 100.0% | retorno  909.6 | tiempo  16.8 s | |dirección| media 0.47 | acelera 86% (media 0.34) | frena 10%
+semilla  2014 | vuelta no | vuelta95 SI (16.9 s) | pista  99.7% | retorno  894.6 | tiempo  19.0 s | |dirección| media 0.45 | acelera 85% (media 0.36) | frena 13%
+semilla  2015 | vuelta no | vuelta95 SI (17.5 s) | pista  99.0% | retorno  888.8 | tiempo  19.0 s | |dirección| media 0.46 | acelera 87% (media 0.34) | frena 10%
+semilla  2016 | vuelta SI | vuelta95 SI (15.3 s) | pista 100.0% | retorno  916.2 | tiempo  15.3 s | |dirección| media 0.47 | acelera 85% (media 0.36) | frena 10%
+semilla  2017 | vuelta no | vuelta95 no         | pista  94.7% | retorno  845.2 | tiempo  19.0 s | |dirección| media 0.45 | acelera 86% (media 0.35) | frena 13%
+semilla  2018 | vuelta no | vuelta95 no         | pista  93.3% | retorno  832.1 | tiempo  19.0 s | |dirección| media 0.43 | acelera 85% (media 0.35) | frena 13%
+semilla  2019 | vuelta no | vuelta95 SI (15.2 s) | pista  99.0% | retorno  888.1 | tiempo  19.0 s | |dirección| media 0.45 | acelera 87% (media 0.34) | frena 11%
+semilla  2020 | vuelta no | vuelta95 SI (17.5 s) | pista  99.1% | retorno  889.4 | tiempo  19.0 s | |dirección| media 0.48 | acelera 85% (media 0.34) | frena 12%
+semilla  2021 | vuelta no | vuelta95 SI (16.3 s) | pista  96.6% | retorno  864.0 | tiempo  19.0 s | |dirección| media 0.44 | acelera 85% (media 0.35) | frena 12%
+semilla  2022 | vuelta no | vuelta95 no         | pista  79.6% | retorno  695.9 | tiempo  19.0 s | |dirección| media 0.41 | acelera 84% (media 0.32) | frena 13%
+semilla  2023 | vuelta no | vuelta95 SI (15.4 s) | pista  99.3% | retorno  890.9 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.35) | frena 12%
+semilla  2024 | vuelta no | vuelta95 SI (15.4 s) | pista  96.8% | retorno  865.4 | tiempo  19.0 s | |dirección| media 0.49 | acelera 90% (media 0.38) | frena 8%
+semilla  2025 | vuelta no | vuelta95 no         | pista  96.9% | retorno  865.7 | tiempo  19.0 s | |dirección| media 0.43 | acelera 81% (media 0.33) | frena 16%
+semilla  2026 | vuelta no | vuelta95 SI (15.8 s) | pista  97.0% | retorno  868.1 | tiempo  19.0 s | |dirección| media 0.48 | acelera 85% (media 0.35) | frena 13%
+semilla  2027 | vuelta no | vuelta95 SI (17.5 s) | pista  95.3% | retorno  850.6 | tiempo  19.0 s | |dirección| media 0.46 | acelera 83% (media 0.33) | frena 12%
+semilla  2028 | vuelta no | vuelta95 no         | pista  94.4% | retorno  842.5 | tiempo  19.0 s | |dirección| media 0.46 | acelera 82% (media 0.35) | frena 13%
+semilla  2029 | vuelta no | vuelta95 SI (17.3 s) | pista  97.0% | retorno  867.8 | tiempo  19.0 s | |dirección| media 0.44 | acelera 86% (media 0.36) | frena 11%
+semilla  2030 | vuelta no | vuelta95 SI (16.3 s) | pista  96.5% | retorno  863.3 | tiempo  19.0 s | |dirección| media 0.46 | acelera 87% (media 0.35) | frena 11%
+semilla  2031 | vuelta no | vuelta95 no         | pista  86.9% | retorno  767.7 | tiempo  19.0 s | |dirección| media 0.45 | acelera 77% (media 0.30) | frena 19%
+semilla  2032 | vuelta no | vuelta95 SI (18.1 s) | pista  98.1% | retorno  880.1 | tiempo  19.0 s | |dirección| media 0.44 | acelera 86% (media 0.35) | frena 11%
+semilla  2033 | vuelta no | vuelta95 SI (15.1 s) | pista  97.3% | retorno  869.6 | tiempo  19.0 s | |dirección| media 0.49 | acelera 86% (media 0.37) | frena 12%
+semilla  2034 | vuelta no | vuelta95 no         | pista  95.3% | retorno  849.5 | tiempo  19.0 s | |dirección| media 0.49 | acelera 87% (media 0.36) | frena 11%
+semilla  2035 | vuelta no | vuelta95 SI (15.0 s) | pista  95.3% | retorno  851.5 | tiempo  19.0 s | |dirección| media 0.44 | acelera 87% (media 0.37) | frena 11%
+semilla  2036 | vuelta no | vuelta95 no         | pista  66.1% | retorno  559.2 | tiempo  19.0 s | |dirección| media 0.40 | acelera 82% (media 0.31) | frena 13%
+semilla  2037 | vuelta no | vuelta95 no         | pista  91.9% | retorno  816.7 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.33) | frena 12%
+semilla  2038 | vuelta no | vuelta95 SI (18.2 s) | pista  95.2% | retorno  850.1 | tiempo  19.0 s | |dirección| media 0.47 | acelera 85% (media 0.34) | frena 11%
+semilla  2039 | vuelta no | vuelta95 no         | pista  94.6% | retorno  843.9 | tiempo  19.0 s | |dirección| media 0.47 | acelera 85% (media 0.37) | frena 11%
+semilla  2040 | vuelta SI | vuelta95 SI (14.0 s) | pista 100.0% | retorno  923.3 | tiempo  14.0 s | |dirección| media 0.43 | acelera 89% (media 0.37) | frena 10%
+semilla  2041 | vuelta SI | vuelta95 SI (18.0 s) | pista 100.0% | retorno  903.7 | tiempo  18.0 s | |dirección| media 0.47 | acelera 86% (media 0.33) | frena 12%
+semilla  2042 | vuelta SI | vuelta95 SI (15.0 s) | pista 100.0% | retorno  917.9 | tiempo  15.0 s | |dirección| media 0.45 | acelera 86% (media 0.33) | frena 13%
+semilla  2043 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  914.7 | tiempo  15.7 s | |dirección| media 0.46 | acelera 86% (media 0.34) | frena 12%
+semilla  2044 | vuelta no | vuelta95 no         | pista  93.9% | retorno  837.1 | tiempo  19.0 s | |dirección| media 0.44 | acelera 82% (media 0.33) | frena 13%
+semilla  2045 | vuelta SI | vuelta95 SI (15.4 s) | pista 100.0% | retorno  910.5 | tiempo  16.5 s | |dirección| media 0.42 | acelera 87% (media 0.37) | frena 12%
+semilla  2046 | vuelta SI | vuelta95 SI (13.4 s) | pista 100.0% | retorno  924.8 | tiempo  13.4 s | |dirección| media 0.45 | acelera 85% (media 0.33) | frena 11%
+semilla  2047 | vuelta no | vuelta95 SI (16.3 s) | pista  98.5% | retorno  883.0 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.37) | frena 12%
+semilla  2048 | vuelta no | vuelta95 SI (13.7 s) | pista  98.5% | retorno  881.7 | tiempo  19.0 s | |dirección| media 0.45 | acelera 86% (media 0.35) | frena 11%
+semilla  2049 | vuelta no | vuelta95 no         | pista  92.8% | retorno  826.2 | tiempo  19.0 s | |dirección| media 0.42 | acelera 84% (media 0.34) | frena 13%
+semilla  2050 | vuelta no | vuelta95 SI (18.2 s) | pista  97.2% | retorno  870.8 | tiempo  19.0 s | |dirección| media 0.47 | acelera 86% (media 0.34) | frena 12%
+semilla  2051 | vuelta no | vuelta95 SI (16.1 s) | pista  98.3% | retorno  881.5 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.36) | frena 12%
+semilla  2052 | vuelta no | vuelta95 no         | pista  64.5% | retorno  542.2 | tiempo  19.0 s | |dirección| media 0.39 | acelera 86% (media 0.30) | frena 11%
+semilla  2053 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  904.7 | tiempo  17.6 s | |dirección| media 0.45 | acelera 84% (media 0.35) | frena 12%
+semilla  2054 | vuelta no | vuelta95 no         | pista  93.2% | retorno  830.1 | tiempo  19.0 s | |dirección| media 0.44 | acelera 85% (media 0.34) | frena 12%
+semilla  2055 | vuelta no | vuelta95 SI (17.3 s) | pista  96.3% | retorno  860.7 | tiempo  19.0 s | |dirección| media 0.47 | acelera 84% (media 0.38) | frena 15%
+semilla  2056 | vuelta SI | vuelta95 SI (15.5 s) | pista 100.0% | retorno  910.3 | tiempo  16.5 s | |dirección| media 0.44 | acelera 87% (media 0.35) | frena 9%
+semilla  2057 | vuelta no | vuelta95 no         | pista  66.8% | retorno  565.8 | tiempo  19.0 s | |dirección| media 0.46 | acelera 87% (media 0.34) | frena 11%
+semilla  2058 | vuelta no | vuelta95 no         | pista  94.4% | retorno  842.3 | tiempo  19.0 s | |dirección| media 0.47 | acelera 89% (media 0.36) | frena 10%
+semilla  2059 | vuelta no | vuelta95 SI (18.7 s) | pista  98.4% | retorno  882.1 | tiempo  19.0 s | |dirección| media 0.47 | acelera 82% (media 0.32) | frena 15%
+semilla  2060 | vuelta no | vuelta95 SI (18.3 s) | pista  96.9% | retorno  867.9 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.36) | frena 13%
+semilla  2061 | vuelta no | vuelta95 SI (17.6 s) | pista  98.7% | retorno  885.8 | tiempo  19.0 s | |dirección| media 0.44 | acelera 85% (media 0.35) | frena 13%
+semilla  2062 | vuelta no | vuelta95 SI (17.4 s) | pista  99.0% | retorno  887.9 | tiempo  19.0 s | |dirección| media 0.48 | acelera 83% (media 0.32) | frena 14%
+semilla  2063 | vuelta no | vuelta95 no         | pista  97.8% | retorno  876.8 | tiempo  19.0 s | |dirección| media 0.42 | acelera 86% (media 0.35) | frena 12%
+semilla  2064 | vuelta no | vuelta95 SI (18.1 s) | pista  97.8% | retorno  876.1 | tiempo  19.0 s | |dirección| media 0.48 | acelera 85% (media 0.35) | frena 13%
+semilla  2065 | vuelta no | vuelta95 no         | pista  94.5% | retorno  843.7 | tiempo  19.0 s | |dirección| media 0.43 | acelera 85% (media 0.35) | frena 11%
+semilla  2066 | vuelta no | vuelta95 no         | pista  94.6% | retorno  844.4 | tiempo  19.0 s | |dirección| media 0.48 | acelera 83% (media 0.35) | frena 13%
+semilla  2067 | vuelta no | vuelta95 SI (16.6 s) | pista  97.3% | retorno  870.4 | tiempo  19.0 s | |dirección| media 0.48 | acelera 84% (media 0.35) | frena 14%
+semilla  2068 | vuelta no | vuelta95 SI (16.1 s) | pista  98.6% | retorno  884.1 | tiempo  19.0 s | |dirección| media 0.44 | acelera 88% (media 0.36) | frena 10%
+semilla  2069 | vuelta no | vuelta95 SI (14.8 s) | pista  98.6% | retorno  884.0 | tiempo  19.0 s | |dirección| media 0.46 | acelera 87% (media 0.38) | frena 10%
+semilla  2070 | vuelta no | vuelta95 SI (15.6 s) | pista  97.5% | retorno  872.5 | tiempo  19.0 s | |dirección| media 0.45 | acelera 84% (media 0.36) | frena 15%
+semilla  2071 | vuelta no | vuelta95 no         | pista  70.2% | retorno  600.3 | tiempo  19.0 s | |dirección| media 0.45 | acelera 68% (media 0.24) | frena 28%
+semilla  2072 | vuelta no | vuelta95 SI (17.2 s) | pista  98.7% | retorno  885.0 | tiempo  19.0 s | |dirección| media 0.43 | acelera 87% (media 0.35) | frena 11%
+semilla  2073 | vuelta no | vuelta95 SI (13.2 s) | pista  98.2% | retorno  879.1 | tiempo  19.0 s | |dirección| media 0.48 | acelera 89% (media 0.39) | frena 9%
+semilla  2074 | vuelta no | vuelta95 no         | pista  94.4% | retorno  842.7 | tiempo  19.0 s | |dirección| media 0.46 | acelera 85% (media 0.34) | frena 12%
+semilla  2075 | vuelta no | vuelta95 SI (16.9 s) | pista  98.9% | retorno  887.2 | tiempo  19.0 s | |dirección| media 0.43 | acelera 87% (media 0.36) | frena 13%
+semilla  2076 | vuelta no | vuelta95 no         | pista  93.2% | retorno  831.0 | tiempo  19.0 s | |dirección| media 0.45 | acelera 84% (media 0.32) | frena 13%
+semilla  2077 | vuelta no | vuelta95 no         | pista  94.5% | retorno  843.4 | tiempo  19.0 s | |dirección| media 0.42 | acelera 84% (media 0.34) | frena 13%
+semilla  2078 | vuelta SI | vuelta95 SI (18.1 s) | pista 100.0% | retorno  903.6 | tiempo  18.1 s | |dirección| media 0.45 | acelera 86% (media 0.31) | frena 11%
+semilla  2079 | vuelta no | vuelta95 SI (17.5 s) | pista  95.3% | retorno  851.0 | tiempo  19.0 s | |dirección| media 0.43 | acelera 86% (media 0.36) | frena 12%
+semilla  2080 | vuelta no | vuelta95 SI (16.2 s) | pista  98.2% | retorno  880.1 | tiempo  19.0 s | |dirección| media 0.47 | acelera 86% (media 0.35) | frena 13%
+semilla  2081 | vuelta no | vuelta95 SI (16.7 s) | pista  96.4% | retorno  862.3 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.35) | frena 14%
+semilla  2082 | vuelta no | vuelta95 no         | pista  93.5% | retorno  833.4 | tiempo  19.0 s | |dirección| media 0.40 | acelera 85% (media 0.34) | frena 13%
+semilla  2083 | vuelta no | vuelta95 SI (15.0 s) | pista  98.6% | retorno  884.2 | tiempo  19.0 s | |dirección| media 0.50 | acelera 86% (media 0.37) | frena 11%
+semilla  2084 | vuelta no | vuelta95 SI (16.9 s) | pista  99.4% | retorno  892.1 | tiempo  19.0 s | |dirección| media 0.47 | acelera 86% (media 0.33) | frena 11%
+semilla  2085 | vuelta SI | vuelta95 SI (14.6 s) | pista 100.0% | retorno  920.1 | tiempo  14.6 s | |dirección| media 0.41 | acelera 90% (media 0.37) | frena 8%
+semilla  2086 | vuelta no | vuelta95 no         | pista  96.6% | retorno  863.0 | tiempo  19.0 s | |dirección| media 0.45 | acelera 87% (media 0.37) | frena 10%
+semilla  2087 | vuelta no | vuelta95 no         | pista  88.7% | retorno  786.3 | tiempo  19.0 s | |dirección| media 0.42 | acelera 84% (media 0.33) | frena 12%
+semilla  2088 | vuelta SI | vuelta95 SI (14.2 s) | pista 100.0% | retorno  921.1 | tiempo  14.2 s | |dirección| media 0.41 | acelera 87% (media 0.36) | frena 11%
+semilla  2089 | vuelta no | vuelta95 SI (16.6 s) | pista  98.6% | retorno  884.0 | tiempo  19.0 s | |dirección| media 0.49 | acelera 85% (media 0.37) | frena 11%
+semilla  2090 | vuelta no | vuelta95 SI (15.7 s) | pista  97.9% | retorno  876.8 | tiempo  19.0 s | |dirección| media 0.47 | acelera 83% (media 0.39) | frena 15%
+semilla  2091 | vuelta no | vuelta95 SI (14.3 s) | pista  97.1% | retorno  868.3 | tiempo  19.0 s | |dirección| media 0.47 | acelera 86% (media 0.37) | frena 11%
+semilla  2092 | vuelta no | vuelta95 no         | pista  89.6% | retorno  794.1 | tiempo  19.0 s | |dirección| media 0.44 | acelera 82% (media 0.32) | frena 13%
+semilla  2093 | vuelta no | vuelta95 SI (14.6 s) | pista  98.4% | retorno  881.1 | tiempo  19.0 s | |dirección| media 0.46 | acelera 84% (media 0.34) | frena 13%
+semilla  2094 | vuelta SI | vuelta95 SI (16.4 s) | pista 100.0% | retorno  911.6 | tiempo  16.4 s | |dirección| media 0.44 | acelera 86% (media 0.34) | frena 10%
+semilla  2095 | vuelta no | vuelta95 no         | pista  99.3% | retorno  890.9 | tiempo  19.0 s | |dirección| media 0.45 | acelera 85% (media 0.35) | frena 13%
+semilla  2096 | vuelta no | vuelta95 SI (17.8 s) | pista  95.9% | retorno  857.5 | tiempo  19.0 s | |dirección| media 0.45 | acelera 84% (media 0.35) | frena 15%
+semilla  2097 | vuelta SI | vuelta95 SI (14.5 s) | pista 100.0% | retorno  920.4 | tiempo  14.5 s | |dirección| media 0.43 | acelera 88% (media 0.37) | frena 9%
+semilla  2098 | vuelta SI | vuelta95 SI (15.6 s) | pista 100.0% | retorno  914.9 | tiempo  15.6 s | |dirección| media 0.44 | acelera 87% (media 0.35) | frena 10%
+semilla  2099 | vuelta no | vuelta95 SI (14.2 s) | pista  98.4% | retorno  880.2 | tiempo  19.0 s | |dirección| media 0.48 | acelera 84% (media 0.37) | frena 13%
+
+Vueltas completadas: 18/100 (18%) | regla 95%: 68/100 (68%) | pista media 95.2% | retorno medio 852.6
