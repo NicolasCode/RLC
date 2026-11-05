@@ -103,6 +103,8 @@ def main():
     p.add_argument('--gif', default=None, help='guarda un GIF del primer episodio')
     p.add_argument('--human', action='store_true', help='muestra la carrera en una ventana')
     p.add_argument('--torch-seed', type=int, default=0)
+    p.add_argument('--beta-mode', action='store_true',
+                   help='PPO continuo: usar la moda de la Beta (y no la media) como acción determinista')
     args = p.parse_args()
     torch.manual_seed(args.torch_seed)
 
@@ -120,6 +122,7 @@ def main():
     elif env_kwargs['actions'] == 'continuous':
         net = BetaActorCritic(CONTINUOUS_DIM, in_channels=env_kwargs['stack'])
         net.load_state_dict(ck['model'])
+        net.greedy_mode = 'mode' if args.beta_mode else 'mean'
     elif 'buffer_size' in cfg:
         n_actions = len(ACTION_SETS[env_kwargs['actions']][0])
         # Checkpoint de train_dqn.py: la política es la acción con mayor Q

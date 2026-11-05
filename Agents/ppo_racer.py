@@ -68,6 +68,7 @@ class BetaActorCritic(ActorCritic):
     def __init__(self, action_dim:int, in_channels:int=4):
         super().__init__(2 * action_dim, in_channels)
         self.action_dim = action_dim
+        self.greedy_mode = 'mean'  # acción "determinista": media o moda de la Beta
 
     def distribution(self, x):
         out, value = self.forward(x)
@@ -78,7 +79,14 @@ class BetaActorCritic(ActorCritic):
     def act(self, x, action=None, greedy=False):
         dist, value = self.distribution(x)
         if action is None:
-            action = dist.mean if greedy else dist.sample()
+            if not greedy:
+                action = dist.sample()
+            elif self.greedy_mode == 'mode':
+                # Moda de la Beta (alfa, beta > 1): la acción más probable
+                c1, c0 = dist.concentration1, dist.concentration0
+                action = (c1 - 1) / (c1 + c0 - 2).clamp(min=1e-6)
+            else:
+                action = dist.mean
         a = action.clamp(1e-6, 1 - 1e-6)
         return action, dist.log_prob(a).sum(-1), dist.entropy().sum(-1), value
 

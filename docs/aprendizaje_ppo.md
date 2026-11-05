@@ -337,3 +337,99 @@ En resumen, el carrito aprendió por tres cosas que valen para cualquier algorit
   por qué falla, pero no se reparó: el pipeline nuevo es independiente.
   `Utils/train.py` sigue importando `Utils/track_creating.py`, que no existe.
 
+
+
+## 8. Acciones continuas: PPO con política Beta y TD3
+
+Los modelos de las secciones anteriores se guardaron en
+[`models/v1_acciones_discretas/`](../models/v1_acciones_discretas/README.md).
+Después se repitió **el mismo procedimiento** (mismo entorno, CNN, fin
+anticipado, frame skip y presupuesto) con **acciones continuas**:
+dirección ∈ [−1, 1] y un eje acelerador/freno ∈ [−1, 1], donde los
+positivos aceleran y los negativos frenan (`continuous_to_car` en
+`Utils/car_env.py`). Modelos y ficha:
+[`models/v2_acciones_continuas/`](../models/v2_acciones_continuas/README.md).
+Script: `bash experiments/run_continuas.sh`.
+
+* **PPO → PPO con política Beta** (`train_ppo.py --actions continuous`,
+  `BetaActorCritic` en `Agents/ppo_racer.py`). Es la técnica de Petrazzini &
+  Antonelo (2021), que reportan 913 en CarRacing. La Beta vive en (0, 1),
+  igual que una acción acotada, así que no hay que recortar muestras como con
+  una gaussiana. Resto de hiperparámetros: idénticos a PPO discreto.
+* **DQN → TD3** (`train_td3.py`). DQN no admite acciones continuas: elige
+  `argmax_a Q(s, a)` y necesita una lista finita de acciones. TD3 (Fujimoto et
+  al. 2018) es su extensión continua directa: conserva el replay buffer, la
+  red objetivo y Double Q-learning (dos críticos) y añade un actor que produce
+  la acción. Igual que en el DQN: replay de 50k, minibatch de 64 cada 8
+  decisiones, lr 1e-4, Huber y 300k decisiones. Como en SAC-AE/DrQ, la CNN
+  solo la entrena el crítico.
+
+![Discretas vs continuas](../images/discretas_vs_continuas.png)
+
+### Durante el entrenamiento: las continuas aprenden más rápido
+
+Pista recorrida / retorno, media de las últimas 10 actualizaciones:
+
+| Decisiones | PPO discreto | PPO continuo | DQN discreto | TD3 continuo |
+|---|---|---|---|---|
+| 100k | 49% / 405 | **65% / 530** | 38% / 301 | 38% / 299 |
+| 200k | 57% / 476 | **73% / 611** | 77% / 673 | **98% / 884** |
+| 300k | 69% / 591 | **76% / 642** | 92% / 818 | 93% / 835 |
+| 750k | 89% / 781 | **93% / 814** | — | — |
+| 1.5M | 91% / 809 | **96% / 852** | — | — |
+
+PPO continuo va por delante del discreto durante todo el entrenamiento y con
+menos caídas. TD3 tarda en arrancar: el actor y los críticos tienen que
+ponerse de acuerdo. Pero entre 100k y 200k decisiones salta de 38% a 98% de
+la pista, mucho antes que el DQN.
+
+### En la evaluación estándar: no superan a las discretas
+
+100 pistas nuevas, 1000 frames, puntaje bruto (registros en
+`experiments/eval_estandar_*.txt`):
+
+| Modelo | Puntaje | Episodios ≥ 900 | Vuelta (regla 95%) |
+|---|---|---|---|
+| **PPO discreto** (acción más probable) | **864.7 ± 73.5** | **27** | **84** |
+| PPO continuo (muestreando la Beta) | 847.8 ± 80.8 | 15 | 68 |
+| PPO continuo (media de la Beta) | 833.6 ± 87.3 | 4 | 61 |
+| PPO continuo (moda de la Beta) | 798.1 ± 141.9 | 5 | 56 |
+| DQN discreto (acción de mayor Q) | 846.3 ± 71.7 | 10 | 58 |
+| TD3 continuo (actor) | 814.4 ± 112.2 | 13 | 41 |
+
+En Monza y las 20 pistas de la sección "Resultado", **TD3 es el que más
+vueltas oficiales completa** (18/21, al 100% de baldosas), aunque más lento
+(mediana de 23.4 s, frente a 16.4 s del PPO discreto). Con el límite de 1000
+frames (20 s) del protocolo estándar, esas vueltas lentas no terminan a
+tiempo y eso le baja el puntaje.
+
+### Por qué no mejoraron (hipótesis)
+
+* **La métrica de entrenamiento no es la de evaluación.** En entrenamiento
+  la política es estocástica, hay fin anticipado y el límite es de 2000
+  frames. La evaluación estándar premia ir rápido y no fallar ninguna curva
+  en 1000 frames. Las políticas continuas aprendieron a ser más
+  *conservadoras*: en Monza, PPO continuo acelera con una media de 0.29–0.36,
+  y el discreto usa el acelerador a fondo en las rectas.
+* **Qué acción usar al evaluar** importa mucho con la Beta: muestrear rinde
+  más que la media o la moda. La media empuja las acciones hacia el centro
+  (menos gas). Para la moda, la política no está entrenada para que sea
+  buena: PPO optimiza la acción muestreada.
+* **TD3 tiende a saturar la dirección** (|dirección| media de 0.92 en
+  Monza): conduce casi "a golpes" de volante. Es un comportamiento conocido
+  de los actores deterministas con tanh.
+* **Diferencias con Petrazzini & Antonelo (913):** no se pudo leer su
+  artículo completo, así que se desconoce su repetición de acción,
+  preprocesamiento, ejes de acción y número de semillas. Ellos usan acelerador
+  y freno separados; nosotros los juntamos en un eje. Su presupuesto es de 5M
+  pasos.
+* **Una sola semilla por configuración.** Con el ruido entre semillas medido
+  en la sección 5 (~17 puntos de pista a las 100k decisiones), una diferencia
+  de 17 puntos de puntaje (865 vs 848) no es concluyente.
+
+**Conclusión:** con este procedimiento, pasar a acciones continuas **acelera
+el aprendizaje** (sobre todo TD3 frente a DQN) pero **no mejora el resultado
+final** en el protocolo estándar. El mejor modelo sigue siendo el PPO
+discreto (864.7). Para pasar 900 parecen hacer falta otros cambios, como
+entrenar más, evaluar más rápido (penalizar el tiempo) o usar varias
+semillas, más que el tipo de acción.

@@ -272,6 +272,12 @@ los 48 frames de zoom inicial, así que se corrió con 952 frames y se restaron
 | **PPO, acción más probable** | **864.7 ± 73.5** | 27/100 | 84/100 |
 | PPO, acciones muestreadas | 833.2 ± 116.9 | 22/100 | 68/100 |
 | DQN moderno (300k decisiones), acción de mayor Q | 846.3 ± 71.7 | 10/100 | 58/100 |
+| PPO continuo, política Beta (1.5M decisiones), muestreada | 847.8 ± 80.8 | 15/100 | 68/100 |
+| TD3 continuo (300k decisiones), actor | 814.4 ± 112.2 | 13/100 | 41/100 |
+
+Las dos últimas filas son el mismo procedimiento con **acciones continuas**
+(dirección y un eje acelerador/freno), para probar la sugerencia de [6]. Ver
+`docs/aprendizaje_ppo.md`, sección 8.
 
 ## 6. Comparativa
 
@@ -290,7 +296,9 @@ la columna "Evaluación".
 | [6] | Petrazzini & Antonelo 2021 | PPO, gaussiana | CNN | v0 | 897 ± 41 | no verificado | A |
 | — | **Este trabajo** | **PPO, 7 acciones** | **CNN Nature (3 conv)** | **v3** | **864.7 ± 73.5** | **100 pistas nuevas** | — |
 | [11] | wpiszlogin | DDPG | CNN 3 capas + preproc. manual | v0 | 848 | no indicado | C |
+| — | **Este trabajo** | **PPO continuo, política Beta** | **CNN Nature** | **v3** | **847.8 ± 80.8** | **100 pistas nuevas** | — |
 | — | **Este trabajo** | **DQN moderno (Double DQN)** | **CNN Nature** | **v3** | **846.3 ± 71.7** | **100 pistas nuevas** | — |
+| — | **Este trabajo** | **TD3 continuo** | **CNN Nature** | **v3** | **814.4 ± 112.2** | **100 pistas nuevas** | — |
 | [1] | Gym leaderboard (en [1]) | no indicado | no indicado | v0 | 838 ± 11 | no indicado | T |
 | [6] | Petrazzini & Antonelo 2021 | PPO base | CNN | v0 | 740 ± 86 | no verificado | A |
 | [9] | Khan & Elibol 2017 | A3C discreto | CNN | v0 | 652 ± 10 | 100 episodios | T |
@@ -327,9 +335,15 @@ difíciles, donde el carro se sale en una curva cerrada (mínimo 408).
 
 **Lo que hacen los mejores y nosotros no.**
 1. **Acciones continuas con política Beta.** En [6], pasar del PPO base a
-   PPO-Beta sube de 740 a 913, y [7]/[8] usan la misma idea. Nuestras 7
-   acciones discretas limitan la finura del control: el carro solo puede girar
-   a fondo o a medias. Es el candidato más claro para cerrar la brecha.
+   PPO-Beta sube de 740 a 913, y [7]/[8] usan la misma idea. **Lo probamos y
+   no cerró la brecha.** Con el mismo procedimiento, PPO-Beta aprendió más
+   rápido durante el entrenamiento (65% vs 49% de la pista a las 100k
+   decisiones) pero obtuvo 847.8 en la evaluación estándar, frente a 864.7 del
+   discreto. TD3 (la versión continua de DQN) aprendió mucho más rápido que DQN
+   pero obtuvo 814.4, frente a 846.3. En nuestras condiciones, la ventaja de la
+   Beta en [6] no se debe solo al tipo de acción. Pueden influir su
+   presupuesto (5M pasos), acelerador y freno separados u otros detalles que
+   no pudimos verificar.
 2. **Más presupuesto o más paralelismo.** La reproducción del agente de
    atención usó 32 CPUs durante 4 días (~3 000 CPU-hora); nosotros usamos unas
    12 CPU-hora. World Models y la neuroevolución evalúan miles de episodios
@@ -401,14 +415,17 @@ por gradiente (~850–870). No supera el umbral de 900 que alcanzan los modelos
 del mundo, la neuroevolución con atención y PPO-Beta. A partir de la
 literatura, los pasos con más probabilidad de cerrar la brecha son:
 
-1. **Acciones continuas con política Beta** [6, 7].
-2. **Más entrenamiento** (≥ 5M pasos de agente, como [6]) y **3–5 semillas**.
+1. **Más entrenamiento** (≥ 5M pasos de agente, como [6]) y **3–5 semillas**.
+2. **Acciones continuas con política Beta** [6, 7], combinadas con lo
+   anterior. Por sí solas aceleraron el aprendizaje pero no mejoraron el
+   puntaje final (sección 5).
 3. **Memoria** (LSTM o una pila más larga) para anticipar curvas [1].
 4. Mantener el **protocolo estándar de 100 pistas** para comparar.
 
 Como aportes propios a la literatura revisada quedan: medir el efecto aislado
-del fin anticipado, comparar PPO y DQN en igualdad de condiciones y detectar
-que la regla de vuelta del 95% no funciona en Gymnasium 1.x.
+del fin anticipado, comparar PPO y DQN en igualdad de condiciones (y sus
+versiones continuas, PPO-Beta y TD3) y detectar que la regla de vuelta del 95%
+no funciona en Gymnasium 1.x.
 
 ---
 

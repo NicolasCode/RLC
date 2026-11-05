@@ -15,6 +15,10 @@ aprendía, qué aporta cada cambio y la comparación con DQN están en
 La revisión de la literatura (World Models, PPO-Beta, DQN, A3C, DDPG, etc.) y
 la comparación con este agente están en **[docs/estado_del_arte.md](docs/estado_del_arte.md)**.
 
+Modelos guardados y documentados: [`models/v1_acciones_discretas/`](models/v1_acciones_discretas/README.md)
+(PPO y DQN, 7 acciones) y [`models/v2_acciones_continuas/`](models/v2_acciones_continuas/README.md)
+(PPO con política Beta y TD3).
+
 ```bash
 pip install -r requirements-ppo.txt
 ```
