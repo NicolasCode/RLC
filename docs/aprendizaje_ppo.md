@@ -23,6 +23,11 @@ nunca vio** (semillas 1000–1019), con hasta 60 s por intento:
 (Evaluación con la acción más probable; el detalle por pista, y con acciones
 muestreadas, está en `experiments/evaluacion_final.txt`.)
 
+Con el **protocolo estándar de la literatura** (100 pistas nuevas, 1000
+frames, puntaje bruto) el modelo final obtiene **864.7 ± 73.5**. Es bueno,
+pero no llega al umbral de "resuelto" (900). La comparación con otros
+trabajos está en [`docs/estado_del_arte.md`](estado_del_arte.md).
+
 En Monza, la vuelta de la animación dura **16.2 s** con retorno 892 (la
 primera vuelta en Monza, a los 43 min de entrenamiento, tardó 36 s e incluía
 una salida a la hierba con trompos: `images/ppo_primera_vuelta_seed_18.png`).

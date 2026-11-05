@@ -12,6 +12,8 @@ El agente PPO nuevo **completa la vuelta**: en Monza (semilla 18) la hace en
 100% de baldosas). Todo lo que se cambió, por qué el código anterior no
 aprendía, qué aporta cada cambio y la comparación con DQN están en
 **[docs/aprendizaje_ppo.md](docs/aprendizaje_ppo.md)**.
+La revisión de la literatura (World Models, PPO-Beta, DQN, A3C, DDPG, etc.) y
+la comparación con este agente están en **[docs/estado_del_arte.md](docs/estado_del_arte.md)**.
 
 ```bash
 pip install -r requirements-ppo.txt

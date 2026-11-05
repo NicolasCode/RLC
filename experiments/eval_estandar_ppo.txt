@@ -1,0 +1,103 @@
+Modelo: models/ppo_racer/ppo_racer_final.pt (entrenado 1500160 decisiones = 6000640 frames)
+semilla  2000 | vuelta no | vuelta95 SI (15.9 s) | pista  98.0% | retorno  877.9 | tiempo  19.0 s | nada:112 izq:50 der:27 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2001 | vuelta SI | vuelta95 SI (14.9 s) | pista 100.0% | retorno  918.4 | tiempo  14.9 s | nada:117 izq:28 der:8 gas:34 freno:0 izq+gas:0 der+gas:0
+semilla  2002 | vuelta no | vuelta95 no         | pista  68.4% | retorno  581.6 | tiempo  19.0 s | nada:146 izq:29 der:27 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2003 | vuelta SI | vuelta95 SI (14.6 s) | pista 100.0% | retorno  919.6 | tiempo  14.6 s | nada:108 izq:30 der:11 gas:34 freno:0 izq+gas:0 der+gas:0
+semilla  2004 | vuelta no | vuelta95 SI (16.1 s) | pista  98.0% | retorno  877.9 | tiempo  19.0 s | nada:105 izq:54 der:28 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2005 | vuelta SI | vuelta95 SI (15.2 s) | pista 100.0% | retorno  916.8 | tiempo  15.2 s | nada:122 izq:28 der:8 gas:33 freno:0 izq+gas:0 der+gas:0
+semilla  2006 | vuelta no | vuelta95 no         | pista  74.0% | retorno  639.2 | tiempo  19.0 s | nada:122 izq:50 der:37 gas:29 freno:0 izq+gas:0 der+gas:0
+semilla  2007 | vuelta no | vuelta95 SI (14.9 s) | pista  97.8% | retorno  875.8 | tiempo  19.0 s | nada:119 izq:49 der:20 gas:49 freno:0 izq+gas:0 der+gas:1
+semilla  2008 | vuelta no | vuelta95 SI (18.7 s) | pista  95.7% | retorno  854.8 | tiempo  19.0 s | nada:101 izq:55 der:31 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2009 | vuelta SI | vuelta95 SI (14.5 s) | pista 100.0% | retorno  905.5 | tiempo  17.4 s | nada:143 izq:31 der:6 gas:37 freno:0 izq+gas:0 der+gas:1
+semilla  2010 | vuelta SI | vuelta95 SI (18.8 s) | pista 100.0% | retorno  899.2 | tiempo  18.8 s | nada:89 izq:60 der:35 gas:52 freno:0 izq+gas:0 der+gas:0
+semilla  2011 | vuelta no | vuelta95 SI (16.3 s) | pista  97.4% | retorno  871.7 | tiempo  19.0 s | nada:131 izq:43 der:18 gas:46 freno:0 izq+gas:0 der+gas:0
+semilla  2012 | vuelta no | vuelta95 SI (14.7 s) | pista  99.6% | retorno  894.0 | tiempo  19.0 s | nada:117 izq:47 der:27 gas:47 freno:0 izq+gas:0 der+gas:0
+semilla  2013 | vuelta no | vuelta95 SI (15.9 s) | pista  98.7% | retorno  885.1 | tiempo  19.0 s | nada:140 izq:37 der:15 gas:46 freno:0 izq+gas:0 der+gas:0
+semilla  2014 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  908.2 | tiempo  17.0 s | nada:117 izq:39 der:15 gas:42 freno:0 izq+gas:0 der+gas:0
+semilla  2015 | vuelta no | vuelta95 SI (16.6 s) | pista  98.1% | retorno  879.2 | tiempo  19.0 s | nada:146 izq:34 der:13 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2016 | vuelta SI | vuelta95 SI (14.8 s) | pista 100.0% | retorno  918.7 | tiempo  14.8 s | nada:112 izq:28 der:8 gas:38 freno:0 izq+gas:0 der+gas:0
+semilla  2017 | vuelta SI | vuelta95 SI (15.9 s) | pista 100.0% | retorno  913.9 | tiempo  15.9 s | nada:117 izq:32 der:14 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2018 | vuelta no | vuelta95 SI (17.6 s) | pista  97.9% | retorno  877.5 | tiempo  19.0 s | nada:133 izq:41 der:19 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2019 | vuelta no | vuelta95 no         | pista  97.0% | retorno  868.1 | tiempo  19.0 s | nada:118 izq:48 der:21 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2020 | vuelta no | vuelta95 SI (17.8 s) | pista  98.5% | retorno  883.3 | tiempo  19.0 s | nada:132 izq:42 der:20 gas:44 freno:0 izq+gas:0 der+gas:0
+semilla  2021 | vuelta no | vuelta95 SI (15.4 s) | pista  99.3% | retorno  891.2 | tiempo  19.0 s | nada:112 izq:44 der:28 gas:54 freno:0 izq+gas:0 der+gas:0
+semilla  2022 | vuelta no | vuelta95 no         | pista  74.4% | retorno  643.7 | tiempo  19.0 s | nada:128 izq:44 der:30 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2023 | vuelta no | vuelta95 SI (15.2 s) | pista  98.3% | retorno  880.4 | tiempo  19.0 s | nada:97 izq:57 der:33 gas:50 freno:0 izq+gas:0 der+gas:1
+semilla  2024 | vuelta SI | vuelta95 SI (14.4 s) | pista 100.0% | retorno  920.8 | tiempo  14.4 s | nada:110 izq:26 der:8 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2025 | vuelta SI | vuelta95 SI (13.5 s) | pista 100.0% | retorno  924.5 | tiempo  13.5 s | nada:98 izq:29 der:8 gas:35 freno:0 izq+gas:0 der+gas:0
+semilla  2026 | vuelta SI | vuelta95 SI (15.6 s) | pista 100.0% | retorno  915.1 | tiempo  15.6 s | nada:111 izq:35 der:13 gas:37 freno:0 izq+gas:0 der+gas:0
+semilla  2027 | vuelta no | vuelta95 no         | pista  51.5% | retorno  413.3 | tiempo  19.0 s | nada:65 izq:63 der:60 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2028 | vuelta no | vuelta95 no         | pista  94.4% | retorno  842.5 | tiempo  19.0 s | nada:112 izq:50 der:30 gas:46 freno:0 izq+gas:0 der+gas:0
+semilla  2029 | vuelta no | vuelta95 SI (17.7 s) | pista  95.6% | retorno  854.3 | tiempo  19.0 s | nada:111 izq:51 der:23 gas:53 freno:0 izq+gas:0 der+gas:0
+semilla  2030 | vuelta SI | vuelta95 SI (15.2 s) | pista 100.0% | retorno  917.0 | tiempo  15.2 s | nada:102 izq:35 der:17 gas:37 freno:0 izq+gas:0 der+gas:0
+semilla  2031 | vuelta no | vuelta95 no         | pista  94.4% | retorno  842.5 | tiempo  19.0 s | nada:116 izq:44 der:28 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2032 | vuelta no | vuelta95 SI (17.0 s) | pista  98.8% | retorno  886.3 | tiempo  19.0 s | nada:118 izq:45 der:22 gas:52 freno:0 izq+gas:0 der+gas:1
+semilla  2033 | vuelta no | vuelta95 SI (14.7 s) | pista  99.2% | retorno  889.2 | tiempo  19.0 s | nada:112 izq:53 der:24 gas:47 freno:0 izq+gas:0 der+gas:2
+semilla  2034 | vuelta SI | vuelta95 SI (13.3 s) | pista 100.0% | retorno  925.4 | tiempo  13.3 s | nada:106 izq:25 der:6 gas:30 freno:0 izq+gas:0 der+gas:0
+semilla  2035 | vuelta SI | vuelta95 SI (15.2 s) | pista 100.0% | retorno  900.4 | tiempo  18.6 s | nada:136 izq:37 der:17 gas:43 freno:0 izq+gas:0 der+gas:0
+semilla  2036 | vuelta no | vuelta95 SI (15.8 s) | pista  97.3% | retorno  871.2 | tiempo  19.0 s | nada:117 izq:70 der:15 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2037 | vuelta SI | vuelta95 SI (16.1 s) | pista 100.0% | retorno  912.9 | tiempo  16.1 s | nada:96 izq:42 der:23 gas:40 freno:0 izq+gas:0 der+gas:0
+semilla  2038 | vuelta SI | vuelta95 SI (16.6 s) | pista 100.0% | retorno  910.8 | tiempo  16.6 s | nada:85 izq:48 der:29 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2039 | vuelta SI | vuelta95 SI (14.7 s) | pista 100.0% | retorno  919.2 | tiempo  14.7 s | nada:132 izq:21 der:2 gas:29 freno:0 izq+gas:0 der+gas:0
+semilla  2040 | vuelta no | vuelta95 SI (15.4 s) | pista  98.3% | retorno  880.7 | tiempo  19.0 s | nada:128 izq:39 der:20 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2041 | vuelta no | vuelta95 SI (16.5 s) | pista  98.0% | retorno  878.7 | tiempo  19.0 s | nada:121 izq:45 der:23 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2042 | vuelta SI | vuelta95 SI (14.2 s) | pista 100.0% | retorno  921.7 | tiempo  14.2 s | nada:95 izq:33 der:13 gas:37 freno:0 izq+gas:0 der+gas:0
+semilla  2043 | vuelta no | vuelta95 no         | pista  92.0% | retorno  817.7 | tiempo  19.0 s | nada:122 izq:46 der:20 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2044 | vuelta no | vuelta95 no         | pista  90.0% | retorno  798.3 | tiempo  19.0 s | nada:116 izq:49 der:27 gas:46 freno:0 izq+gas:0 der+gas:0
+semilla  2045 | vuelta no | vuelta95 SI (15.2 s) | pista  95.1% | retorno  848.5 | tiempo  19.0 s | nada:111 izq:51 der:23 gas:53 freno:0 izq+gas:0 der+gas:0
+semilla  2046 | vuelta SI | vuelta95 SI (13.2 s) | pista 100.0% | retorno  926.0 | tiempo  13.2 s | nada:94 izq:28 der:7 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2047 | vuelta no | vuelta95 SI (15.2 s) | pista  98.9% | retorno  886.6 | tiempo  19.0 s | nada:118 izq:48 der:20 gas:52 freno:0 izq+gas:0 der+gas:0
+semilla  2048 | vuelta SI | vuelta95 SI (13.9 s) | pista 100.0% | retorno  915.8 | tiempo  15.3 s | nada:113 izq:35 der:10 gas:34 freno:0 izq+gas:0 der+gas:0
+semilla  2049 | vuelta no | vuelta95 SI (17.1 s) | pista  98.4% | retorno  882.8 | tiempo  19.0 s | nada:121 izq:46 der:20 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2050 | vuelta no | vuelta95 SI (17.2 s) | pista  98.1% | retorno  880.1 | tiempo  19.0 s | nada:115 izq:52 der:22 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2051 | vuelta no | vuelta95 SI (16.6 s) | pista  98.3% | retorno  881.5 | tiempo  19.0 s | nada:115 izq:56 der:22 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2052 | vuelta no | vuelta95 SI (14.4 s) | pista  99.6% | retorno  893.8 | tiempo  19.0 s | nada:132 izq:45 der:12 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2053 | vuelta no | vuelta95 SI (15.0 s) | pista  98.2% | retorno  879.2 | tiempo  19.0 s | nada:119 izq:59 der:15 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2054 | vuelta no | vuelta95 SI (16.1 s) | pista  99.7% | retorno  895.1 | tiempo  19.0 s | nada:129 izq:43 der:21 gas:45 freno:0 izq+gas:0 der+gas:0
+semilla  2055 | vuelta no | vuelta95 SI (16.3 s) | pista  98.3% | retorno  881.1 | tiempo  19.0 s | nada:133 izq:40 der:16 gas:48 freno:0 izq+gas:0 der+gas:1
+semilla  2056 | vuelta no | vuelta95 SI (17.5 s) | pista  96.1% | retorno  859.0 | tiempo  19.0 s | nada:102 izq:56 der:24 gas:56 freno:0 izq+gas:0 der+gas:0
+semilla  2057 | vuelta no | vuelta95 no         | pista  88.7% | retorno  784.9 | tiempo  19.0 s | nada:112 izq:45 der:29 gas:52 freno:0 izq+gas:0 der+gas:0
+semilla  2058 | vuelta no | vuelta95 SI (15.8 s) | pista  98.4% | retorno  881.8 | tiempo  19.0 s | nada:127 izq:42 der:18 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2059 | vuelta no | vuelta95 SI (18.8 s) | pista  95.1% | retorno  849.8 | tiempo  19.0 s | nada:117 izq:47 der:24 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2060 | vuelta no | vuelta95 SI (17.7 s) | pista  95.7% | retorno  855.6 | tiempo  19.0 s | nada:121 izq:50 der:21 gas:46 freno:0 izq+gas:0 der+gas:0
+semilla  2061 | vuelta no | vuelta95 no         | pista  94.9% | retorno  847.7 | tiempo  19.0 s | nada:111 izq:54 der:25 gas:48 freno:0 izq+gas:0 der+gas:0
+semilla  2062 | vuelta SI | vuelta95 SI (15.7 s) | pista 100.0% | retorno  914.8 | tiempo  15.7 s | nada:109 izq:38 der:16 gas:33 freno:0 izq+gas:0 der+gas:0
+semilla  2063 | vuelta no | vuelta95 SI (17.1 s) | pista  99.4% | retorno  892.4 | tiempo  19.0 s | nada:132 izq:46 der:20 gas:40 freno:0 izq+gas:0 der+gas:0
+semilla  2064 | vuelta no | vuelta95 no         | pista  94.3% | retorno  841.1 | tiempo  19.0 s | nada:108 izq:50 der:27 gas:53 freno:0 izq+gas:0 der+gas:0
+semilla  2065 | vuelta SI | vuelta95 SI (17.1 s) | pista 100.0% | retorno  908.1 | tiempo  17.1 s | nada:110 izq:39 der:24 gas:41 freno:0 izq+gas:0 der+gas:0
+semilla  2066 | vuelta no | vuelta95 no         | pista  94.9% | retorno  847.4 | tiempo  19.0 s | nada:105 izq:49 der:36 gas:48 freno:0 izq+gas:0 der+gas:0
+semilla  2067 | vuelta no | vuelta95 SI (15.8 s) | pista  99.0% | retorno  887.6 | tiempo  19.0 s | nada:114 izq:56 der:18 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2068 | vuelta no | vuelta95 SI (15.0 s) | pista  96.9% | retorno  866.9 | tiempo  19.0 s | nada:114 izq:47 der:23 gas:53 freno:0 izq+gas:0 der+gas:1
+semilla  2069 | vuelta no | vuelta95 SI (16.1 s) | pista  99.3% | retorno  890.9 | tiempo  19.0 s | nada:107 izq:59 der:26 gas:45 freno:0 izq+gas:0 der+gas:1
+semilla  2070 | vuelta no | vuelta95 SI (15.2 s) | pista  99.3% | retorno  890.5 | tiempo  19.0 s | nada:105 izq:55 der:27 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2071 | vuelta no | vuelta95 SI (15.0 s) | pista  97.2% | retorno  870.2 | tiempo  19.0 s | nada:116 izq:51 der:24 gas:47 freno:0 izq+gas:0 der+gas:0
+semilla  2072 | vuelta no | vuelta95 no         | pista  94.7% | retorno  845.4 | tiempo  19.0 s | nada:120 izq:44 der:22 gas:52 freno:0 izq+gas:0 der+gas:0
+semilla  2073 | vuelta SI | vuelta95 SI (14.3 s) | pista 100.0% | retorno  921.3 | tiempo  14.3 s | nada:107 izq:27 der:7 gas:38 freno:0 izq+gas:0 der+gas:0
+semilla  2074 | vuelta no | vuelta95 SI (16.0 s) | pista  99.0% | retorno  888.5 | tiempo  19.0 s | nada:118 izq:47 der:23 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2075 | vuelta no | vuelta95 SI (15.9 s) | pista  98.6% | retorno  883.7 | tiempo  19.0 s | nada:118 izq:53 der:17 gas:50 freno:0 izq+gas:0 der+gas:0
+semilla  2076 | vuelta no | vuelta95 no         | pista  84.9% | retorno  747.9 | tiempo  19.0 s | nada:103 izq:53 der:33 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2077 | vuelta no | vuelta95 SI (16.2 s) | pista  99.0% | retorno  887.7 | tiempo  19.0 s | nada:109 izq:53 der:28 gas:48 freno:0 izq+gas:0 der+gas:0
+semilla  2078 | vuelta no | vuelta95 SI (17.7 s) | pista  95.7% | retorno  855.7 | tiempo  19.0 s | nada:119 izq:49 der:23 gas:47 freno:0 izq+gas:0 der+gas:0
+semilla  2079 | vuelta no | vuelta95 SI (16.7 s) | pista  97.5% | retorno  873.2 | tiempo  19.0 s | nada:128 izq:43 der:20 gas:47 freno:0 izq+gas:0 der+gas:0
+semilla  2080 | vuelta no | vuelta95 SI (16.7 s) | pista  97.9% | retorno  876.5 | tiempo  19.0 s | nada:118 izq:46 der:17 gas:57 freno:0 izq+gas:0 der+gas:0
+semilla  2081 | vuelta no | vuelta95 SI (16.2 s) | pista  95.4% | retorno  852.5 | tiempo  19.0 s | nada:98 izq:60 der:29 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2082 | vuelta no | vuelta95 SI (15.5 s) | pista  99.0% | retorno  888.6 | tiempo  19.0 s | nada:121 izq:45 der:23 gas:49 freno:0 izq+gas:0 der+gas:0
+semilla  2083 | vuelta no | vuelta95 SI (15.2 s) | pista  99.3% | retorno  891.1 | tiempo  19.0 s | nada:143 izq:37 der:14 gas:44 freno:0 izq+gas:0 der+gas:0
+semilla  2084 | vuelta no | vuelta95 SI (16.0 s) | pista  98.4% | retorno  882.5 | tiempo  19.0 s | nada:124 izq:43 der:18 gas:53 freno:0 izq+gas:0 der+gas:0
+semilla  2085 | vuelta no | vuelta95 SI (15.1 s) | pista  99.7% | retorno  894.3 | tiempo  19.0 s | nada:141 izq:37 der:15 gas:44 freno:0 izq+gas:0 der+gas:1
+semilla  2086 | vuelta SI | vuelta95 SI (14.1 s) | pista 100.0% | retorno  922.1 | tiempo  14.1 s | nada:101 izq:29 der:10 gas:36 freno:0 izq+gas:0 der+gas:0
+semilla  2087 | vuelta no | vuelta95 no         | pista  79.9% | retorno  698.2 | tiempo  19.0 s | nada:108 izq:49 der:41 gas:40 freno:0 izq+gas:0 der+gas:0
+semilla  2088 | vuelta SI | vuelta95 SI (14.0 s) | pista 100.0% | retorno  922.2 | tiempo  14.0 s | nada:91 izq:32 der:14 gas:39 freno:0 izq+gas:0 der+gas:0
+semilla  2089 | vuelta SI | vuelta95 SI (15.3 s) | pista 100.0% | retorno  916.5 | tiempo  15.3 s | nada:102 izq:34 der:14 gas:42 freno:0 izq+gas:0 der+gas:0
+semilla  2090 | vuelta no | vuelta95 SI (17.8 s) | pista  97.2% | retorno  869.8 | tiempo  19.0 s | nada:112 izq:52 der:23 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2091 | vuelta SI | vuelta95 SI (14.8 s) | pista 100.0% | retorno  918.6 | tiempo  14.8 s | nada:122 izq:25 der:5 gas:34 freno:0 izq+gas:0 der+gas:0
+semilla  2092 | vuelta no | vuelta95 SI (14.2 s) | pista  98.2% | retorno  879.8 | tiempo  19.0 s | nada:116 izq:54 der:20 gas:48 freno:0 izq+gas:0 der+gas:0
+semilla  2093 | vuelta no | vuelta95 SI (13.4 s) | pista  98.8% | retorno  885.0 | tiempo  19.0 s | nada:132 izq:50 der:13 gas:43 freno:0 izq+gas:0 der+gas:0
+semilla  2094 | vuelta no | vuelta95 SI (16.4 s) | pista  97.5% | retorno  873.0 | tiempo  19.0 s | nada:126 izq:43 der:18 gas:51 freno:0 izq+gas:0 der+gas:0
+semilla  2095 | vuelta SI | vuelta95 SI (15.1 s) | pista 100.0% | retorno  917.4 | tiempo  15.1 s | nada:119 izq:30 der:9 gas:32 freno:0 izq+gas:0 der+gas:0
+semilla  2096 | vuelta no | vuelta95 SI (16.0 s) | pista  98.0% | retorno  877.8 | tiempo  19.0 s | nada:97 izq:53 der:32 gas:56 freno:0 izq+gas:0 der+gas:0
+semilla  2097 | vuelta SI | vuelta95 SI (14.2 s) | pista 100.0% | retorno  922.1 | tiempo  14.2 s | nada:93 izq:32 der:12 gas:40 freno:0 izq+gas:0 der+gas:0
+semilla  2098 | vuelta no | vuelta95 SI (15.3 s) | pista  99.0% | retorno  887.6 | tiempo  19.0 s | nada:141 izq:43 der:13 gas:41 freno:0 izq+gas:0 der+gas:0
+semilla  2099 | vuelta no | vuelta95 SI (14.3 s) | pista  99.2% | retorno  888.4 | tiempo  19.0 s | nada:122 izq:45 der:24 gas:47 freno:0 izq+gas:0 der+gas:0
+
+Vueltas completadas: 28/100 (29%) | regla 95%: 84/100 (84%) | pista media 96.6% | retorno medio 869.5
