@@ -10,7 +10,7 @@ anterior no.
 ![Vuelta en Monza](../images/ppo_vuelta_monza_seed_18.gif)
 
 **Sí, el carrito aprendió a dar la vuelta.** El modelo final
-(`models/ppo_racer/ppo_racer_final.pt`) se entrenó 1.5M decisiones (6M frames,
+(`models/v1_acciones_discretas/ppo_discreto_final.pt`) se entrenó 1.5M decisiones (6M frames,
 2 h 53 min en 4 CPUs). Se evaluó en Monza (semilla 18) y en **20 pistas que
 nunca vio** (semillas 1000–1019), con hasta 60 s por intento:
 
@@ -57,7 +57,7 @@ python train_ppo.py --total-steps 1500000
 ```
 
 ```bash
-python evaluate_ppo.py --model models/ppo_racer/ppo_racer_final.pt --seeds 18 --stochastic --plot --gif images/ppo_vuelta_seed_18.gif
+python evaluate_ppo.py --model models/v1_acciones_discretas/ppo_discreto_final.pt --seeds 18 --stochastic --plot --gif images/ppo_vuelta_seed_18.gif
 ```
 
 ```bash

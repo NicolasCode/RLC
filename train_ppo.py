@@ -19,8 +19,8 @@ import numpy as np
 import torch
 import gymnasium as gym
 
-from Agents.ppo_racer import ActorCritic, PPO
-from Utils.car_env import make_env, ACTION_SETS
+from Agents.ppo_racer import ActorCritic, BetaActorCritic, PPO
+from Utils.car_env import make_env, ACTION_SETS, CONTINUOUS_DIM
 
 
 def parse_args():
@@ -39,7 +39,8 @@ def parse_args():
     p.add_argument('--anneal-steps', type=int, default=None,
                    help='pasos en los que el lr baja a 0 (por defecto = total-steps)')
     # Opciones del entorno (para medir el efecto de cada cambio)
-    p.add_argument('--actions', choices=['custom', 'original'], default='custom')
+    p.add_argument('--actions', choices=['custom', 'original', 'continuous'], default='custom',
+                   help='continuous = política Beta sobre (dirección, acelerador/freno)')
     p.add_argument('--frame-skip', type=int, default=4)
     p.add_argument('--stack', type=int, default=4)
     p.add_argument('--patience', type=int, default=200,
@@ -64,8 +65,11 @@ def main():
         [make_env(seed=args.seed + i, **env_kwargs) for i in range(args.num_envs)],
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
-    n_actions = len(ACTION_SETS[args.actions][0])
-    net = ActorCritic(n_actions, in_channels=args.stack)
+    continuous = args.actions == 'continuous'
+    if continuous:
+        net = BetaActorCritic(CONTINUOUS_DIM, in_channels=args.stack)
+    else:
+        net = ActorCritic(len(ACTION_SETS[args.actions][0]), in_channels=args.stack)
     ppo = PPO(net, lr=args.lr, gamma=args.gamma, gae_lambda=args.gae_lambda,
               clip=args.clip, epochs=args.epochs,
               minibatch_size=args.minibatch_size, ent_coef=args.ent_coef)
@@ -89,7 +93,8 @@ def main():
 
     T, N = args.num_steps, args.num_envs
     obs_buf = torch.zeros((T, N, args.stack, 96, 96), dtype=torch.uint8)
-    act_buf = torch.zeros((T, N), dtype=torch.long)
+    act_shape = (T, N, CONTINUOUS_DIM) if continuous else (T, N)
+    act_buf = torch.zeros(act_shape, dtype=torch.float32 if continuous else torch.long)
     logp_buf = torch.zeros((T, N))
     rew_buf = torch.zeros((T, N))
     done_buf = torch.zeros((T, N))
@@ -115,7 +120,9 @@ def main():
             with torch.no_grad():
                 action, logp, _, value = net.act(obs)
             obs_buf[t], act_buf[t], logp_buf[t], val_buf[t] = obs, action, logp, value
-            next_obs, reward, term, trunc, info = envs.step(action.numpy())
+            # La Beta da acciones en (0, 1); el entorno las espera en [-1, 1]
+            env_action = 2 * action.numpy() - 1 if continuous else action.numpy()
+            next_obs, reward, term, trunc, info = envs.step(env_action)
             reward = torch.as_tensor(reward, dtype=torch.float32)
 
             # Si se cortó por tiempo (no es un final real) usamos el valor del
@@ -144,7 +151,7 @@ def main():
         with torch.no_grad():
             next_value = net.value(obs)
         adv, ret = ppo.compute_gae(rew_buf, val_buf, done_buf, next_value)
-        stats = ppo.update(obs_buf.reshape(batch, args.stack, 96, 96), act_buf.reshape(batch),
+        stats = ppo.update(obs_buf.reshape(batch, args.stack, 96, 96), act_buf.reshape(batch, *act_shape[2:]),
                            logp_buf.reshape(batch), adv.reshape(batch), ret.reshape(batch))
 
         minutes = (time.time() - t0) / 60

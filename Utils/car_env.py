@@ -4,7 +4,8 @@ Entorno CarRacing preparado para que un agente PPO aprenda rápido.
 Cambios respecto al CarRacing "crudo" (ver docs/aprendizaje_ppo.md):
   * Acciones: 7 acciones discretas construidas sobre el modo continuo
     (el modo discreto original solo da 0.2 de acelerador y no permite
-    girar y acelerar a la vez).
+    girar y acelerar a la vez), o acciones continuas (dirección,
+    acelerador/freno) con actions='continuous'.
   * Frame skip: cada decisión del agente se repite 4 frames y solo se
     renderiza el último (renderizar es ~75% del costo de simulación).
   * Observación: 4 últimos frames en escala de grises (4, 96, 96) uint8.
@@ -41,7 +42,21 @@ ORIGINAL_ACTIONS = np.array([
 ], dtype=np.float32)
 ORIGINAL_ACTION_NAMES = ['nada', 'der', 'izq', 'gas0.2', 'freno']
 ACTION_SETS = {'custom': (ACTIONS, ACTION_NAMES),
-               'original': (ORIGINAL_ACTIONS, ORIGINAL_ACTION_NAMES)}
+               'original': (ORIGINAL_ACTIONS, ORIGINAL_ACTION_NAMES),
+               # Acciones continuas: vector (dirección, acelerador/freno) en [-1, 1]^2
+               'continuous': (None, ['dirección', 'acel/freno'])}
+CONTINUOUS_DIM = 2
+
+
+def continuous_to_car(action):
+    '''
+    (dirección, acelerador/freno) en [-1, 1]^2 -> (dirección, gas, freno) del
+    CarRacing continuo. Valores positivos del segundo eje aceleran y negativos
+    frenan (hasta 0.8, el mismo freno de las acciones discretas): así no se
+    puede acelerar y frenar a la vez.
+    '''
+    steer, accel = np.clip(np.asarray(action, dtype=np.float32), -1.0, 1.0)
+    return np.array([steer, max(accel, 0.0), 0.8 * max(-accel, 0.0)], dtype=np.float32)
 
 
 class FastCarRacing(CarRacing):
@@ -90,7 +105,11 @@ class RacingEnv(gym.Env):
         self.no_progress_penalty = no_progress_penalty
         self.max_frames = max_frames
         self.reward_scale = reward_scale
-        self.action_space = spaces.Discrete(len(self.actions))
+        self.continuous = actions == 'continuous'
+        if self.continuous:
+            self.action_space = spaces.Box(-1.0, 1.0, (CONTINUOUS_DIM,), np.float32)
+        else:
+            self.action_space = spaces.Discrete(len(self.actions))
         self.observation_space = spaces.Box(0, 255, (stack, 96, 96), np.uint8)
         self.frames = np.zeros((stack, 96, 96), np.uint8)
 
@@ -112,7 +131,7 @@ class RacingEnv(gym.Env):
 
     def step(self, action):
         car = self.env
-        a = self.actions[int(action)]
+        a = continuous_to_car(action) if self.continuous else self.actions[int(action)]
         reward = 0.0
         progress = False
         terminated = truncated = False

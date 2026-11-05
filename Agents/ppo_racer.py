@@ -1,5 +1,7 @@
 '''
-PPO (Proximal Policy Optimization) para CarRacing con acciones discretas.
+PPO (Proximal Policy Optimization) para CarRacing con acciones discretas
+(ActorCritic, distribución categórica) o continuas (BetaActorCritic,
+distribución Beta como en Petrazzini & Antonelo 2021).
 
 Basado en la receta estándar de PPO para Atari (CleanRL / Schulman et al. 2017):
   * Red actor-crítico con la CNN de "Nature DQN".
@@ -11,6 +13,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.distributions.categorical import Categorical
+from torch.distributions.beta import Beta
 
 
 def layer_init(layer, std=np.sqrt(2), bias=0.0):
@@ -52,6 +55,32 @@ class ActorCritic(nn.Module):
         if action is None:
             action = logits.argmax(-1) if greedy else dist.sample()
         return action, dist.log_prob(action), dist.entropy(), value
+
+
+class BetaActorCritic(ActorCritic):
+    '''
+    Misma CNN, pero el actor da los parámetros (alfa, beta) de una
+    distribución Beta independiente por cada dimensión de la acción.
+    La Beta vive en (0, 1), igual que una acción acotada: no hay que recortar
+    muestras como con una gaussiana. Con alfa, beta >= 1 la densidad es
+    unimodal. Las acciones se devuelven en (0, 1); el entorno recibe 2a - 1.
+    '''
+    def __init__(self, action_dim:int, in_channels:int=4):
+        super().__init__(2 * action_dim, in_channels)
+        self.action_dim = action_dim
+
+    def distribution(self, x):
+        out, value = self.forward(x)
+        params = nn.functional.softplus(out) + 1.0
+        alpha, beta = params[:, :self.action_dim], params[:, self.action_dim:]
+        return Beta(alpha, beta), value
+
+    def act(self, x, action=None, greedy=False):
+        dist, value = self.distribution(x)
+        if action is None:
+            action = dist.mean if greedy else dist.sample()
+        a = action.clamp(1e-6, 1 - 1e-6)
+        return action, dist.log_prob(a).sum(-1), dist.entropy().sum(-1), value
 
 
 class PPO:

@@ -60,3 +60,6 @@ models/ablations/*/best.pt
 models/dqn_racer/last.pt
 models/*.log
 models/**/.terminado
+models/ppo_continuo/last.pt
+models/ppo_continuo/best.pt
+models/td3_continuo/last.pt

@@ -23,8 +23,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-from Agents.ppo_racer import ActorCritic
-from Utils.car_env import RacingEnv, ACTION_SETS
+from Agents.ppo_racer import ActorCritic, BetaActorCritic
+from Utils.car_env import RacingEnv, ACTION_SETS, CONTINUOUS_DIM
 
 
 class QGreedy(torch.nn.Module):
@@ -41,13 +41,17 @@ def run_episode(net, env, seed, greedy, frames_out=None, gif_every=2):
     obs, _ = env.reset(seed=seed)
     car = env.env
     path = [tuple(car.car.hull.position)]
-    actions = np.zeros(len(env.actions), int)
+    actions = [] if env.continuous else np.zeros(len(env.actions), int)
     done = False
     while not done:
         with torch.no_grad():
             a, _, _, _ = net.act(torch.from_numpy(obs).unsqueeze(0), greedy=greedy)
-        a = int(a)
-        actions[a] += 1
+        if env.continuous:
+            a = 2 * a[0].numpy() - 1  # (0, 1) -> [-1, 1]
+            actions.append(a)
+        else:
+            a = int(a)
+            actions[a] += 1
         obs, _, term, trunc, info = env.step(a)
         path.append(tuple(car.car.hull.position))
         if frames_out is not None and len(path) % gif_every == 0:
@@ -55,7 +59,14 @@ def run_episode(net, env, seed, greedy, frames_out=None, gif_every=2):
         done = term or trunc
     info['path'] = np.array(path)
     info['track'] = np.array([(x, y) for _, _, x, y in car.track])
-    info['actions'] = actions
+    if env.continuous:
+        acts = np.array(actions)
+        info['action_summary'] = (f'|dirección| media {np.abs(acts[:, 0]).mean():.2f} | '
+                                  f'acelera {100 * (acts[:, 1] > 0).mean():.0f}% '
+                                  f'(media {acts[:, 1].clip(0).mean():.2f}) | '
+                                  f'frena {100 * (acts[:, 1] < -0.05).mean():.0f}%')
+    else:
+        info['action_summary'] = ' '.join(f'{n}:{c}' for n, c in zip(env.action_names, actions))
     return info
 
 
@@ -99,14 +110,24 @@ def main():
     cfg = ck.get('args', {})
     env_kwargs = dict(actions=cfg.get('actions', 'custom'), frame_skip=cfg.get('frame_skip', 4),
                       stack=cfg.get('stack', 4))
-    n_actions = len(ACTION_SETS[env_kwargs['actions']][0])
-    if 'buffer_size' in cfg:
+    if 'actor' in ck:
+        # Checkpoint de train_td3.py: acciones continuas deterministas
+        from train_td3 import Encoder, Actor, TD3Policy
+        env_kwargs['actions'] = 'continuous'
+        net = TD3Policy(Encoder(env_kwargs['stack']), Actor(CONTINUOUS_DIM))
+        net.encoder.load_state_dict(ck['encoder'])
+        net.actor.load_state_dict(ck['actor'])
+    elif env_kwargs['actions'] == 'continuous':
+        net = BetaActorCritic(CONTINUOUS_DIM, in_channels=env_kwargs['stack'])
+        net.load_state_dict(ck['model'])
+    elif 'buffer_size' in cfg:
+        n_actions = len(ACTION_SETS[env_kwargs['actions']][0])
         # Checkpoint de train_dqn.py: la política es la acción con mayor Q
         from train_dqn import QNetwork
         net = QGreedy(QNetwork(n_actions, in_channels=env_kwargs['stack']))
         net.q.load_state_dict(ck['model'])
     else:
-        net = ActorCritic(n_actions, in_channels=env_kwargs['stack'])
+        net = ActorCritic(len(ACTION_SETS[env_kwargs['actions']][0]), in_channels=env_kwargs['stack'])
         net.load_state_dict(ck['model'])
     net.eval()
     print(f'Modelo: {args.model} (entrenado {ck["global_step"]} decisiones = '
@@ -122,14 +143,16 @@ def main():
         info = run_episode(net, env, seed, greedy=not args.stochastic, frames_out=frames)
         pct = 100 * info['tiles'] / info['track_len']
         results.append((seed, info['lap'], pct, info['raw_return'], info['frames'], info['lap95']))
-        dist = ' '.join(f'{n}:{c}' for n, c in zip(env.action_names, info['actions']))
+        dist = info['action_summary']
         lap95 = f'SI ({info["lap95_frames"] / 50:4.1f} s)' if info['lap95'] else 'no        '
         print(f'semilla {seed:>5} | vuelta {"SI" if info["lap"] else "no"} | vuelta95 {lap95} | '
               f'pista {pct:5.1f}% | retorno {info["raw_return"]:6.1f} | tiempo {info["frames"] / 50:5.1f} s | {dist}')
         if args.plot:
             os.makedirs('images', exist_ok=True)
             plot_path(info, seed, os.path.join('images', f'ppo_lap_seed_{seed}.png'),
-                      algo='DQN' if isinstance(net, QGreedy) else 'PPO')
+                      algo='DQN' if isinstance(net, QGreedy) else
+                      'TD3' if 'actor' in ck else
+                      'PPO continuo' if env.continuous else 'PPO')
         if frames:
             from PIL import Image
             imgs = [Image.fromarray(f).resize((300, 200)) for f in frames]

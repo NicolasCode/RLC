@@ -20,7 +20,7 @@ pip install -r requirements-ppo.txt
 ```
 
 ```bash
-python evaluate_ppo.py --model models/ppo_racer/ppo_racer_final.pt --seeds 18 --human
+python evaluate_ppo.py --model models/v1_acciones_discretas/ppo_discreto_final.pt --seeds 18 --human
 ```
 
 ```bash
